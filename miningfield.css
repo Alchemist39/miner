@@ -1,0 +1,153 @@
+* {
+	border: 1px solid red;
+}
+html, body {
+	margin: 0;
+	padding: 0;
+}
+
+.miningField {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	background-image: url('images/fleet.jpg');
+}
+	.miningField > .controlPanel {
+			width: 20%;
+			display: flex;
+			flex-direction: column;
+			font-size: 2vmax;
+			align-items: center;
+			height: 100%;
+			justify-content: space-between;
+			background-image: url('images/artefacts.jpg');
+			background-repeat: no-repeat;
+			background-position: center center;
+		}
+
+			.miningField > .controlPanel > div {
+				height: 100%;
+				width: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 2vmax;
+				background-image: url('images/green_button.png'); 
+				background-repeat: no-repeat;
+				background-position: center center;
+				cursor: pointer;
+				color: #fff;
+			}
+
+				.miningField > .controlPanel > div:hover {
+					filter: brightness(1.4);
+				}
+	.miningField > .battleField {
+		width: 80%;
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		justify-content: center;
+		align-items: center;
+		font-size: 1vmax;
+	}	
+
+		.miningField > .battleField > .locationName {
+			display: flex;
+			margin: 0;
+			width: 40%;
+			height: 40px;
+			justify-content: center;
+			align-items: center;
+			color: white;
+		}
+		.miningField > .battleField > .localStatus {
+			color: green;
+		}
+
+		.miningField > .battleField > .mainField {
+			height: 73%;
+			width: 100%;
+			position: relative;
+		}
+			.smallAsteroid1, .smallAsteroid2, .smallAsteroid3, .mediumAsteroid1,
+			.mediumAsteroid2, .bigAsteroid1, .playersShip {
+				position: absolute;
+				cursor: pointer;
+			}
+			.miningField > .battleField > .mainField > .playersShip {
+				background-image: url('images/i/wasp.png'); 
+				background-repeat: no-repeat;
+				background-position: center center;
+				width: 115px;
+				height: 115px;
+				left: 46%;
+				top: 46%;
+			}
+
+			.miningField > .battleField > .mainField > .smallAsteroid1 {
+				width: 50px;
+				height: 50px;
+				left: 26%;
+				top: 5%;
+			}
+			.miningField > .battleField > .mainField > .smallAsteroid2 {
+				width: 50px;
+				height: 50px;
+				left: 35%;
+				top: 10%;
+			}
+			.miningField > .battleField > .mainField > .smallAsteroid3 {
+				width: 50px;
+				height: 50px;
+				left: 50%;
+				top: 15%;
+			}
+			.miningField > .battleField > .mainField > .mediumAsteroid1 {
+				width: 75px;
+				height: 75px;
+				left: 65%;
+				top: 3%;
+			}
+			.miningField > .battleField > .mainField > .mediumAsteroid2 {
+				width: 75px;
+				height: 75px;
+				left: 85%;
+				top: 70%;
+			}
+			.miningField > .battleField > .mainField > .bigAsteroid1 {
+				width: 100px;
+				height: 100px;
+				left: 14%;
+				top: 42%;
+			}
+		.miningField > .battleField > .hold {
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			height: 65px;
+			justify-content: center;
+			align-items: center;
+		}
+		.miningField > .battleField > .hold > .holdText {
+			color: white;
+		}
+			.miningField > .battleField > .hold > .holdBorder {
+				height: 40px;
+				width: 80%;
+				position: relative;
+				background-color: grey;
+			}
+				.miningField > .battleField > .hold > .holdBorder > .holdStatus {
+					display: flex;
+					justify-content: center;
+					align-content: center;
+					position: absolute;
+					top: 20%;
+					left: 46%;
+				}
+				.miningField > .battleField > .hold > .holdBorder > .holdBar {
+					height: 100%;
+					width: 45%;
+					background-color: wheat;
+				}
