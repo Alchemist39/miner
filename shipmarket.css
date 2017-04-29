@@ -179,7 +179,7 @@ html, body {
 				flex-shrink: 0;
 			}
 				 .containerDescription {
-					height: 18%;
+					height: 78%;
 					width: 100%;
 					display: flex;
 					flex-direction: column;
@@ -192,17 +192,7 @@ html, body {
 					flex-shrink: 0;
 				}
 					.containerDescription > p {
-						height: 78%;
-						width: 100%;
-						display: flex;
-						flex-direction: column;
-						align-items: center;
-						font-size: 1vmax;
-						cursor: pointer;
-						color: #fff;
-						justify-content: center;
-						margin: auto;
-						flex-shrink: 0;
+						margin: auto;					
 					}
 				.descriptionName {
 					margin: 0;
