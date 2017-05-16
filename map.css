@@ -17,10 +17,9 @@
 		width: 12%;
 		height: 11%;
 		display: flex;
-		font-size: 7vh;
+		font-size: 2vw;
 		color: white;
 		justify-content: center;
-		align-content: center;
 		background-image: url('images/green_button.png');
 	}
 	 .stationButton {
