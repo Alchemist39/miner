@@ -21,3 +21,7 @@ inventoryButton.onclick = function() {
 		inventory.style.display = 'flex';
 	}
 }
+/*
+inventoryButton.onclick = function() {
+
+}*/

@@ -1,0 +1,24 @@
+.controllPanel {
+	width: 20%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	height: 100%;
+	justify-content: space-between;
+	background-image: url('images/artefacts.jpg');
+}
+	.controllPanel > div {
+		height: 100%;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 2vmax;
+		background-image: url('images/green_button.png'); 
+		cursor: pointer;
+		color: #fff;
+	}
+
+		.controllPanel div:hover {
+			filter: brightness(1.4);
+		}
