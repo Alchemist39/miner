@@ -1,0 +1,9 @@
+* {
+	border: 1px solid red;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+html, body {
+	margin: 0;
+	padding: 0;
+}

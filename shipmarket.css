@@ -1,11 +1,11 @@
-.station {
+.shipmarket {
 	width: 100%;
 	height: 100%;
-	display: flex;
+	display: none;
 	background-image: url('images/ground.jpg');
 }
 
-	.station > .marketContainer {
+	.shipmarket > .marketContainer {
 		width: 20%;
 		display: flex;
 		flex-wrap: wrap;
@@ -14,7 +14,7 @@
 		justify-content: space-between;
 		background-image: url('images/artefacts.jpg');
 	}	
-	.station > .hungarContainer {
+	.shipmarket > .hungarContainer {
 		width: 80%;
 		display: flex;
 		flex-direction: column;
@@ -22,7 +22,7 @@
 		justify-content: center;
 		align-items: center;
 	}	
-		.station > .hungarContainer > .stationName {
+		.shipmarket > .hungarContainer > .shipmarketName {
 			display: flex;
 			margin: 0;
 			width: 40%;
@@ -32,7 +32,7 @@
 			align-items: center;
 			color: white;
 		}
-		.station > .marketContainer > div {
+		.shipmarket > .marketContainer > div {
 			width: 48%;
 			height: 16%;
 			display: flex;
@@ -43,12 +43,12 @@
 			cursor: pointer;
 			color: #66cce2;
 		}
-			.station > .marketContainer > .back {
+			.shipmarket > .marketContainer > .back {
 				width: 100%;
 				background-image: url('images/orange_button.png');
 				
 			}
-			.station > .marketContainer > div:hover {
+			.shipmarket > .marketContainer > div:hover {
 				filter: brightness(1.4);
 			}
 			.wasp {
@@ -82,7 +82,7 @@
 				background-image: url('images/i/reaper.png');
 			}
 
-	.station > .hungarContainer {
+	.shipmarket > .hungarContainer {
 		width: 60%;
 		display: flex;
 		flex-direction: column;
@@ -90,53 +90,53 @@
 		justify-content: center;
 		align-items: center;
 	}
-		.station > .hungarContainer > .newShip {
+		.shipmarket > .hungarContainer > .newShip {
 			width: 1100px;
 			height: 460px;
 			background-image: url('images/dreadnought.png');
 			position: relative;	
 			margin: auto;
 		}
-			.station > .hungarContainer > .newShip > div {
+			.shipmarket > .hungarContainer > .newShip > div {
 				position: absolute;
 			}
-			.station > .hungarContainer > .newShip > .weaponPlace1 {
+			.shipmarket > .hungarContainer > .newShip > .weaponPlace1 {
 				width: 145px;
 				height: 65px;
 				left: 300px;
 				top: 12px;
 			}
-			.station > .hungarContainer > .newShip > .weaponPlace2 {
+			.shipmarket > .hungarContainer > .newShip > .weaponPlace2 {
 				width: 176px;
 				height: 86px;
 				left: 405px;
 				top: 320px;
 			}
-			.station > .hungarContainer > .newShip > .weaponPlace3 {
+			.shipmarket > .hungarContainer > .newShip > .weaponPlace3 {
 				width: 145px;
 				height: 65px;
 				left: 403px;
 				top: 131px;
 			}
-			.station > .hungarContainer > .newShip > .weaponPlace4 {
+			.shipmarket > .hungarContainer > .newShip > .weaponPlace4 {
 				width: 75px;
 				height: 50px;
 				left: 985px;
 				top: 175px;
 			}
-			.station > .hungarContainer > .newShip > .weaponPlace5 {
+			.shipmarket > .hungarContainer > .newShip > .weaponPlace5 {
 				width: 81px;
 				height: 39px;
 				left: 1000px;
 				top: 320px;
 			}
-			.station > .hungarContainer > .newShip > .weaponPlace6 {
+			.shipmarket > .hungarContainer > .newShip > .weaponPlace6 {
 				width: 81px;
 				height: 39px;
 				left: 989px;
 				top: 363px;
 			}
-		.station > .shipDescription {
+		.shipmarket > .shipDescription {
 			width: 20%;
 			display: flex;
 			flex-direction: column;
@@ -144,7 +144,7 @@
 			height: 100%;
 			background-image: url('images/artefacts.jpg');
 		}
-			.station > .shipDescription > div {
+			.shipmarket > .shipDescription > div {
 				height: 33%;
 				width: 100%;
 				display: flex;
