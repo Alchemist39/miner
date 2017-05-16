@@ -74,11 +74,18 @@ class Station {
 	}
 
 	// изменение стиля инвентаря видимый-невидимый
-	inventoryAppear() {
+	/*inventoryAppear() {
 		if (this.inventoryContainerElement.style.opacity == 0) {
 			this.inventoryContainerElement.style.opacity = 1;
 		} else {
 			this.inventoryContainerElement.style.opacity = 0;
+		}
+	}*/
+	inventoryAppear() {
+		if (this.inventoryContainerElement.style.left == '-100%') {
+			this.inventoryContainerElement.style.left = '0%';
+		} else {
+			this.inventoryContainerElement.style.left = '-100%';
 		}
 	}
 }

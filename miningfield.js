@@ -1,22 +1,11 @@
-'use strict'
+'use strict';
 
 class Miningfield {
 	constructor(station) {
 		this.station = station;
 		this.miningFieldElement = createAndAppend(document.body, 'div', 'miningField', '');
 		// див карты (см коментарии к карте в station.js)
-		this.mapElement = createAndAppend(document.body, 'div', 'map', '');
-		this.stationButtonElement = createAndAppend(this.mapElement, 'div', 'stationButton', '');
-		this.field_342Element = createAndAppend(this.mapElement, 'div', 'field_342', '');
-		this.mapCloseElement = createAndAppend(this.mapElement, 'div', 'closeMap', 'Закрыть');
-		this.stationButtonElement.onclick = function() {
-			this.station.stationElement.style.display = 'flex';
-			this.miningFieldElement.style.display = 'none';
-			this.mapElement.style.visibility = 'hidden';
-		}.bind(this);
-		this.field_342Element.onclick = function() {
-			this.mapElement.style.visibility = 'hidden';
-		}.bind(this);
+		var map = new Map(station, this.miningFieldElement);
 		//левая контрольная панель с меню
 		this.controllPanelElement = createAndAppend(this.miningFieldElement, 'div', 'controllPanel', '');
 		this.courierElement = createAndAppend(this.controllPanelElement, 'div', 'courier', 'Разгрузка');
@@ -26,10 +15,7 @@ class Miningfield {
 		this.starMapElement = createAndAppend(this.controllPanelElement, 'div', 'starMap', 'Карта');
 		this.starMapElement.onclick = function() {
 			this.mapElement.style.visibility = 'visible';
-		}.bind(this);
-		this.mapCloseElement.onclick = function() {
-			this.mapElement.style.visibility = 'hidden';
-		}.bind(this);
+		}.bind(map);
 		//див поля боя
 		this.battleFieldElement = createAndAppend(this.miningFieldElement, 'div', 'battleField', '');
 		this.locationNameElement = createAndAppend(this.battleFieldElement,	'div',	'locationName',	'Пояс астероидов №342');

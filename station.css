@@ -56,8 +56,10 @@
 			flex-wrap: wrap;
 			justify-content: space-between;
 			align-items: flex-start;
-			opacity: 0;
-			transition: opacity 1s;
+			left: -100%;
+			position: relative;
+			z-index: 1;
+			transition: left 3s;
 		}	
 
 			.inventoryContainer > .inventorySlot {
