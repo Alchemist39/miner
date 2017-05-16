@@ -1,0 +1,39 @@
+.map {
+	width: 80%;
+	height: 80%;
+	top: 10%;
+	left: 10%;
+	z-index: 5;
+	position: absolute;
+	background-image: url('images/space.jpg');
+	visibility: hidden;
+}
+	.closeMap, .stationButton, .field_342 {
+		cursor: pointer;
+		position: absolute;
+	}
+	.closeMap {			
+		left: 88%;
+		width: 12%;
+		height: 11%;
+		display: flex;
+		font-size: 7vh;
+		color: white;
+		justify-content: center;
+		align-content: center;
+		background-image: url('images/green_button.png');
+	}
+	 .stationButton {
+		left: 40%;
+		top: 30%;
+		width: 40px;
+		height: 40px;
+		background-image: url('images/artefacts.png');
+	}
+	 .field_342 {
+		left: 80%;
+		top: 50%;
+		width: 40px;
+		height: 40px;	
+		background-image: url('images/asteroid2.png');
+	}

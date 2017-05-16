@@ -1,5 +1,7 @@
 * {
 	border: 1px solid red;
+	background-repeat: no-repeat;
+	background-position: center center;
 }
 html, body {
 	margin: 0;
@@ -10,56 +12,9 @@ html, body {
 	width: 100%;
 	height: 100%;
 	display: flex;
+	background-image: url('images/ground.jpg');
 }	
-	.map {
-		width: 80%;
-		height: 80%;
-		top: 10%;
-		left: 10%;
-		z-index: 5;
-		position: absolute;
-		background-image: url('images/space.jpg');
-		background-repeat: no-repeat;
-		background-position: center center;
-		visibility: hidden;
-	}
-		.closeMap {			
-			left: 88%;
-			width: 12%;
-			height: 11%;
-			position: absolute;
-			display: flex;
-			font-size: 7vh;
-			color: white;
-			justify-content: center;
-			align-content: center;
-			cursor: pointer;
-			background-image: url('images/green_button.png');
-			background-repeat: no-repeat;
-			background-position: center center;
-		}
-		 .stationButton {
-			position: absolute;
-			left: 40%;
-			top: 30%;
-			width: 40px;
-			height: 40px;
-			background-image: url('images/artefacts.png');
-			background-repeat: no-repeat;
-			background-position: center center;
-			cursor: pointer;
-		}
-		 .field_342 {
-			position: absolute;
-			left: 80%;
-			top: 50%;
-			width: 40px;
-			height: 40px;	
-			background-image: url('images/asteroid2.png');
-			background-repeat: no-repeat;
-			background-position: center center;
-			cursor: pointer;	
-		}
+
 
 	.station > .marketContainer {
 		width: 20%;
@@ -69,8 +24,6 @@ html, body {
 		height: 100%;
 		justify-content: space-between;
 		background-image: url('images/artefacts.jpg');
-		background-repeat: no-repeat;
-		background-position: center center;
 	}
 
 		.station > .hungarContainer {
@@ -80,9 +33,6 @@ html, body {
 		height: 100%;
 		justify-content: center;
 		align-items: center;
-		background-image: url('images/ground.jpg');
-		background-repeat: no-repeat;
-		background-position: center center;
 	}	
 		.station > .hungarContainer > .stationName {
 			display: flex;
@@ -103,8 +53,6 @@ html, body {
 			justify-content: center;
 			font-size: 2vmax;
 			background-image: url('images/green_button.png'); 
-			background-repeat: no-repeat;
-			background-position: center center;
 			cursor: pointer;
 			color: #fff;
 		}
@@ -128,22 +76,22 @@ html, body {
 			width: 524px;
 			height: 330px;
 			background-image: url('images/wasp.png');
-			background-repeat: no-repeat;
 			position: relative;
 			margin: auto;
 		}
-			.station > .hungarContainer > .playersShip > .weaponPlace1 {
+
+			.station > .hungarContainer > .playersShip > .weaponPlace1, .weaponPlace2 {
 				width: 50px;
 				height: 50px;
+				position: absolute;
+
+			}
+			.station > .hungarContainer > .playersShip > .weaponPlace1 {
 				left: 255px;
 				top: 50px;
-				position: absolute;
 			}
 
 			.station > .hungarContainer > .playersShip > .weaponPlace2 {
-				width: 50px;
-				height: 50px;
-				position: absolute;
 				left: 120px;
 				top: 185px;
 			}
@@ -151,8 +99,6 @@ html, body {
 			width: 100%;
 			height: 33%;
 			background-image: url('images/artefacts.jpg');
-			background-repeat: no-repeat;
-			background-position: center center;
 			display: none;
 			flex-direction: column;
 			flex-wrap: wrap;
@@ -165,7 +111,5 @@ html, body {
 				width: 6%;
 				min-width: 75px;
 				background-image: url('images/artefacts.png');
-				background-repeat: no-repeat;
-				background-position: center center;
 			}
 			

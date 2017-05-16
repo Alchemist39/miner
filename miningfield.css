@@ -1,5 +1,7 @@
 * {
 	border: 1px solid red;
+	background-repeat: no-repeat;
+	background-position: center center;
 }
 html, body {
 	margin: 0;
@@ -13,55 +15,6 @@ html, body {
 	background-image: url('images/fleet.jpg');
 	z-index: 1;
 }
-	.map {
-		width: 80%;
-		height: 80%;
-		top: 10%;
-		left: 10%;
-		z-index: 5;
-		position: absolute;
-		background-image: url('images/space.jpg');
-		background-repeat: no-repeat;
-		background-position: center center;
-		visibility: hidden;
-	}
-		.closeMap {			
-			left: 88%;
-			width: 12%;
-			height: 11%;
-			position: absolute;
-			display: flex;
-			font-size: 7vh;
-			color: white;
-			justify-content: center;
-			align-content: center;
-			cursor: pointer;
-			background-image: url('images/green_button.png');
-			background-repeat: no-repeat;
-			background-position: center center;
-		}
-		 .stationButton {
-			position: absolute;
-			left: 40%;
-			top: 30%;
-			width: 40px;
-			height: 40px;
-			background-image: url('images/artefacts.png');
-			background-repeat: no-repeat;
-			background-position: center center;
-			cursor: pointer;
-		}
-		 .field_342 {
-			position: absolute;
-			left: 80%;
-			top: 50%;
-			width: 40px;
-			height: 40px;	
-			background-image: url('images/asteroid2.png');
-			background-repeat: no-repeat;
-			background-position: center center;
-			cursor: pointer;	
-		}
 	.miningField > .controlPanel {
 			width: 20%;
 			display: flex;
@@ -71,8 +24,6 @@ html, body {
 			height: 100%;
 			justify-content: space-between;
 			background-image: url('images/artefacts.jpg');
-			background-repeat: no-repeat;
-			background-position: center center;
 		}
 
 			.miningField > .controlPanel > div {
@@ -83,8 +34,6 @@ html, body {
 				justify-content: center;
 				font-size: 2vmax;
 				background-image: url('images/green_button.png'); 
-				background-repeat: no-repeat;
-				background-position: center center;
 				cursor: pointer;
 				color: #fff;
 			}
@@ -125,47 +74,41 @@ html, body {
 				position: absolute;
 				cursor: pointer;
 				background-image: url('images/asteroid.png'); 
-				background-repeat: no-repeat;
-				background-position: center center;
 			}
 
 			.miningField > .battleField > .mainField > .playersShip {
 				background-image: url('images/i/wasp.png'); 
-				background-repeat: no-repeat;
-				background-position: center center;
 				width: 115px;
 				height: 115px;
 				left: 46%;
 				top: 46%;
 			}
-
-			.miningField > .battleField > .mainField > .smallAsteroid1 {
+			.miningField > .battleField > .mainField > .smallAsteroid1, .smallAsteroid2, 
+			.smallAsteroid3 {
 				width: 50px;
-				height: 50px;
+				height: 50px;				
+			}
+			.miningField > .battleField > .mainField > .smallAsteroid1 {
 				left: 26%;
 				top: 5%;
 			}
 			.miningField > .battleField > .mainField > .smallAsteroid2 {
-				width: 50px;
-				height: 50px;
 				left: 35%;
 				top: 10%;
 			}
 			.miningField > .battleField > .mainField > .smallAsteroid3 {
-				width: 50px;
-				height: 50px;
 				left: 50%;
 				top: 15%;
 			}
-			.miningField > .battleField > .mainField > .mediumAsteroid1 {
+			.miningField > .battleField > .mainField > .mediumAsteroid1, .mediumAsteroid2 {
 				width: 75px;
-				height: 75px;
+				height: 75px;				
+			} 
+			.miningField > .battleField > .mainField > .mediumAsteroid1 {
 				left: 65%;
 				top: 3%;
 			}
 			.miningField > .battleField > .mainField > .mediumAsteroid2 {
-				width: 75px;
-				height: 75px;
 				left: 85%;
 				top: 70%;
 			}
@@ -175,8 +118,6 @@ html, body {
 				left: 14%;
 				top: 42%;
 			}
-
-
 				.hpBorder, .shieldBorder, .armorBorder {
 					position: absolute;
 					top: 104%;
@@ -196,6 +137,15 @@ html, body {
 						height: 100%;
 						background-color: red;
 					}
+						.playersShip .hpBar {
+							width: 20%;
+						} 
+						.playersShip .shieldBar {
+							width: 15%;
+						}
+						.playersShip .armorBar {
+							width: 30%;
+						}
 					.hpBorder .HP, .shieldBorder .shield, .armorBorder .armor {
 						position: absolute;
 						left: 0;
@@ -206,6 +156,24 @@ html, body {
 						font-size: 13px;
 						text-align: center;
 					}
+						.smallAsteroid1 .hpBar {
+							width: 80%;
+						}
+						.smallAsteroid2 .hpBar {
+							width: 40%;
+						}
+						.smallAsteroid3 .hpBar {
+							width: 30%;
+						}
+						.mediumAsteroid1 .hpBar {
+							width: 35%;
+						} 
+						.mediumAsteroid2 .hpBar {
+							width: 20%;
+						}
+						.bigAsteroid1 .hpBar {
+							width: 55%;
+						}
 					.shieldBorder {
 						top: 121%;
 					}
