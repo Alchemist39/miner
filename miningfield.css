@@ -1,7 +1,7 @@
 .miningField {
 	width: 100%;
 	height: 100%;
-	display: flex;
+	display: none;
 	background-image: url('images/fleet.jpg');
 	z-index: 1;
 }
@@ -145,18 +145,12 @@
 						.shieldBorder > .shieldBar {
 							background-color: blue;
 						}
-							.shieldBorder > .shield {
-								color: white;
-							}
 					.armorBorder {
 						top: 137%;
 					}
 						.armorBorder > .armorBar {
 							background-color: grey;
 						}
-							.armorBorder > .armor {
-								color: white;
-							}
 		.miningField > .battleField > .hold {
 			display: flex;
 			flex-direction: column;
