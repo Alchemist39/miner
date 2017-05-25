@@ -1,9 +1,10 @@
 'use strict';
 class Map{
-	constructor(station, parentElement) {
+	constructor(station, miningfield) {
 		this.station = station;
+		this.miningfield = miningfield;
 		this.mapElement = createAndAppend(
-			parentElement,
+			document.body,
 			'div', 
 			'map', 
 			`
@@ -16,19 +17,41 @@ class Map{
 		this.field_342Element = this.mapElement.querySelector('.field_342');
 		this.mapCloseElement = this.mapElement.querySelector('.closeMap');
 
-
 		this.stationButtonElement.onclick = function() {
-			this.station.stationElement.style.display = 'flex';
-			parentElement.style.display = 'none';
-			this.mapElement.style.visibility = 'hidden';
+			if(this.station.stationElement.style.display == 'flex') {
+				this.hideMap();
+			} else {
+				this.stationShow();
+			}
 		}.bind(this);
 		this.field_342Element.onclick = function() {
-			this.mapElement.style.visibility = 'hidden';
+			if(this.station.stationElement.style.display == 'flex') {
+				this.fieldShow();
+			} else {
+				this.hideMap();
+			}
 		}.bind(this);
 		this.mapCloseElement.onclick = function() {
-			this.mapElement.style.visibility = 'hidden';
+			this.hideMap();
 		}.bind(this);
 	}
+
+	stationShow() {
+		this.hideMap();
+		this.station.stationElement.style.display = 'flex';
+		this.miningfield.miningFieldElement.style.display = 'none';
+	};
+	fieldShow() {
+		this.hideMap();
+		this.station.stationElement.style.display = 'none';
+		this.miningfield.miningFieldElement.style.display = 'flex';
+	};
+	showMap() {
+		this.mapElement.style.visibility = 'visible';
+	};
+	hideMap() {
+		this.mapElement.style.visibility = 'hidden';
+	};
 }
 
 

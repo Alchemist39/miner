@@ -24,8 +24,7 @@ class ShipMarket {
 		);
 
 		this.backElement.onclick = function() {
-			this.station.stationElement.style.display = 'flex';
-			this.shipmarketElement.style.display = 'none';
+			this.hideMarket();
 		}.bind(this);
 
 		this.waspElement = createAndAppend(this.marketContainerElement, 'div', 'wasp', '');
@@ -104,6 +103,14 @@ class ShipMarket {
 			<p>Базовая мощность двигателей: 20000</p>`
 		);
 
+	}
+	showMarket() {
+		this.station.stationElement.style.display = 'none';
+		this.shipmarketElement.style.display = 'flex';		
+	}
+	hideMarket() {
+		this.station.stationElement.style.display = 'flex';
+		this.shipmarketElement.style.display = 'none';
 	}
 }
 

@@ -2,24 +2,8 @@
 
 class Station {
 	constructor() {
-		this.shipmarket = new ShipMarket(this);
-		this.miningfield = new Miningfield(this);
-		// див карты
-		this.mapElement = createAndAppend(document.body, 'div', 'map', '');
-		this.stationButtonElement = createAndAppend(this.mapElement, 'div', 'stationButton', '');
-		this.field_342Element = createAndAppend(this.mapElement, 'div', 'field_342', '');
-		this.mapCloseElement = createAndAppend(this.mapElement, 'div', 'closeMap', 'Закрыть');
-		//действия с кнопками карты: скрываем один див, показываем другой
-		this.field_342Element.onclick = function() {
-			this.stationElement.style.display = 'none';
-			this.miningfield.miningFieldElement.style.display = 'flex';
-			this.mapElement.style.visibility = 'hidden';
-		}.bind(this);
-		//действие при нажатии на текущее местоположение
-		this.stationButtonElement.onclick = function() {
-			this.mapElement.style.visibility = 'hidden';
-		}.bind(this);
-		
+		this.map = null;
+		this.shipmarket = null;
 		// див станции
 		this.stationElement = createAndAppend(document.body, 'div', 'station', '');
 		//див левой контрольной панели
@@ -28,8 +12,7 @@ class Station {
 		this.shipMarketElement = createAndAppend(this.controllPanelElement, 'div', 'shipsMarket', 'Корабли');
 		//переход на страницу покупки кораблей
 		this.shipMarketElement.onclick = function() {
-			this.stationElement.style.display = 'none';
-			this.shipmarket.shipmarketElement.style.display = 'flex';
+			this.shipmarket.showMarket();
 		}.bind(this);
 
 		this.weaponMarketElement = createAndAppend(this.controllPanelElement, 'div', 'weaponsMarket','Модули');
@@ -41,11 +24,7 @@ class Station {
 		//ошибка: выдавало style of undefiend
 		//решение: .bind(this)
 		this.starMapElement.onclick = function() {
-			this.mapElement.style.visibility = 'visible';
-		}.bind(this);
-
-		this.mapCloseElement.onclick = function() {
-			this.mapElement.style.visibility = 'hidden';
+			this.map.showMap();
 		}.bind(this);
 		//див ангара
 		this.hungarContainerElement = createAndAppend(this.stationElement, 'div', 'hungarContainer','');
@@ -72,15 +51,6 @@ class Station {
 			this.inventoryAppear();
 		}.bind(this);
 	}
-
-	// изменение стиля инвентаря видимый-невидимый
-	/*inventoryAppear() {
-		if (this.inventoryContainerElement.style.opacity == 0) {
-			this.inventoryContainerElement.style.opacity = 1;
-		} else {
-			this.inventoryContainerElement.style.opacity = 0;
-		}
-	}*/
 	inventoryAppear() {
 		if (this.inventoryContainerElement.style.left == '-100%') {
 			this.inventoryContainerElement.style.left = '0%';
@@ -88,9 +58,4 @@ class Station {
 			this.inventoryContainerElement.style.left = '-100%';
 		}
 	}
-}
-
-
-window.onload = function() {
-	var station = new Station();
 }

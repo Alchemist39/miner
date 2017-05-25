@@ -1,7 +1,7 @@
 .miningField {
 	width: 100%;
 	height: 100%;
-	display: none;
+	display: flex;
 	background-image: url('images/fleet.jpg');
 	z-index: 1;
 }
@@ -34,54 +34,30 @@
 			width: 100%;
 			position: relative;
 		}
-			.smallAsteroid1, .smallAsteroid2, .smallAsteroid3, .mediumAsteroid1,
-			.mediumAsteroid2, .bigAsteroid1, .playersShip {
+			.smallAsteroid1, .playersShip {
 				position: absolute;
 				cursor: pointer;
 				background-image: url('images/asteroid.png'); 
 			}
 
-			.miningField > .battleField > .mainField > .playersShip {
+			.miningField > .battleField > .mainField > .shipBorder {
+				width: 150px;
+				height: 200px;
+				position: absolute;
+				left: 45%;
+				top: 45%;
+				display: flex;
+				justify-content: center;
+				padding-top: 13px;
+			}
+			.miningField > .battleField > .mainField > .shipBorder > .playersShip {
 				background-image: url('images/i/wasp.png'); 
 				width: 115px;
 				height: 115px;
-				left: 46%;
-				top: 46%;
-			}
-			.miningField > .battleField > .mainField > .smallAsteroid1, .smallAsteroid2, 
-			.smallAsteroid3 {
-				width: 50px;
-				height: 50px;				
 			}
 			.miningField > .battleField > .mainField > .smallAsteroid1 {
-				left: 26%;
-				top: 5%;
-			}
-			.miningField > .battleField > .mainField > .smallAsteroid2 {
-				left: 35%;
-				top: 10%;
-			}
-			.miningField > .battleField > .mainField > .smallAsteroid3 {
-				left: 50%;
-				top: 15%;
-			}
-			.miningField > .battleField > .mainField > .mediumAsteroid1, .mediumAsteroid2 {
-				width: 75px;
-				height: 75px;				
-			} 
-			.miningField > .battleField > .mainField > .mediumAsteroid1 {
-				left: 65%;
-				top: 3%;
-			}
-			.miningField > .battleField > .mainField > .mediumAsteroid2 {
-				left: 85%;
-				top: 70%;
-			}
-			.miningField > .battleField > .mainField > .bigAsteroid1 {
-				width: 100px;
-				height: 100px;
-				left: 14%;
-				top: 42%;
+				width: 50px;
+				height: 50px;
 			}
 				.hpBorder, .shieldBorder, .armorBorder {
 					position: absolute;
@@ -122,22 +98,7 @@
 						text-align: center;
 					}
 						.smallAsteroid1 .hpBar {
-							width: 80%;
-						}
-						.smallAsteroid2 .hpBar {
-							width: 40%;
-						}
-						.smallAsteroid3 .hpBar {
-							width: 30%;
-						}
-						.mediumAsteroid1 .hpBar {
-							width: 35%;
-						} 
-						.mediumAsteroid2 .hpBar {
-							width: 20%;
-						}
-						.bigAsteroid1 .hpBar {
-							width: 55%;
+							width: 100%;
 						}
 					.shieldBorder {
 						top: 121%;
