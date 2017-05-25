@@ -3,11 +3,16 @@
 class Miningfield {
 	constructor() {
 		this.map = null;
+		this.cargo = null;
+		this.asteroid = null;
 		this.miningFieldElement = createAndAppend(document.body, 'div', 'miningField', '');
 		
 		//левая контрольная панель с меню
 		this.controllPanelElement = createAndAppend(this.miningFieldElement, 'div', 'controllPanel', '');
 		this.courierElement = createAndAppend(this.controllPanelElement, 'div', 'courier', 'Разгрузка');
+		this.courierElement.onclick = function() {
+			this.cargo.removeOre();
+		}.bind(this);
 		this.overheatElement = createAndAppend(this.controllPanelElement, 'div', 'overheat', 'Перегрев');
 		this.weaponElement = createAndAppend(this.controllPanelElement, 'div', 'weapon', 'Оружие');
 		this.miningLaserElement = createAndAppend(this.controllPanelElement, 'div', 'miningLaser','Буры');
@@ -37,20 +42,17 @@ class Miningfield {
 		this.hpBarElement = createAndAppend(this.hpBorderElement, 'div', 'hpBar', '');
 		this.HPElement = createAndAppend(this.hpBorderElement, 'div', 'HP', '30');
 		//маленькие астероиды
-		var asteroid = new Asteroid(5, this.mainFieldElement, this);
-		var asteroid2 = new Asteroid(15, this.mainFieldElement, this);
-		var asteroid3 = new Asteroid(25, this.mainFieldElement, this);
-		var asteroid4 = new Asteroid(35, this.mainFieldElement, this);
-		var asteroid5 = new Asteroid(45, this.mainFieldElement, this);
 
-		
+		for (var i = 1; i < 15; i++) {
+			this.asteroid = new Asteroid(5, this.mainFieldElement, this);
+		}
+
 		//див трюма корабля
-		this.holdElement = createAndAppend(this.battleFieldElement, 'div', 'hold', '');
-		this.holdTextElement = createAndAppend(this.holdElement, 'div', 'holdText', 'Загруженность трюма');
-		this.holdBorderElement = createAndAppend(this.holdElement, 'div', 'holdBorder', '');
-		this.holdBarElement = createAndAppend(this.holdBorderElement, 'div', 'holdBar', '');
-		this.holdStatusElement = createAndAppend(this.holdBorderElement, 'div', 'holdStatus', '18000 / 40000');
+		this.cargo = new Cargoholder(2000, 0, this.battleFieldElement, this);
 	}
 	//TODO создать метод создания астероида при удалении одного из астероидов
+	onKill() {
+		this.cargo.addOre(this.asteroid.getReward());
+	}
 }
 

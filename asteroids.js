@@ -34,8 +34,12 @@ class Asteroid {
 			this.currentVolume -= power;
 			this.changeVolumeBar();
 		} else {
-			this.parentElement.removeChild(this.asteroidElement);
+			this.kill();
 		}
+	}
+
+	getReward() {
+		return this.initialVolume * 50;
 	}
 
 	changeVolumeBar() {
@@ -50,21 +54,21 @@ class Asteroid {
 		this.asteroidElement.style.left = this.coordinates.x + '%';
 		this.asteroidElement.style.top = this.coordinates.y + '%';
 	}
-
+	kill() {
+		this.parentElement.removeChild(this.asteroidElement);
+		this.field.onKill(this);
+	}
 	getRandomCoordinatesX() {
-		var x;
-		var randomX = getRandomInt(2, 81);
-		this.coordinates.x = randomX;
+		this.coordinates.x = getRandomInt(2, 81);
 	}
 	getRandomCoordinatesY() {
-		var y;
-		var randomY = getRandomInt(0, 86);
+		var y = getRandomInt(0, 86);
 
-		if( (randomY > 32 && randomY < 80) && (this.coordinates.x > 41 && this.coordinates.x < 55) ) {
+		if(y > 32 && y < 80 && this.coordinates.x > 41 && this.coordinates.x < 55) {
 			y = getRandomInt(80, 86);
 			this.coordinates.y = y;
 		} else {
-			this.coordinates.y = randomY;
+			this.coordinates.y = y;
 		}
 	}
 

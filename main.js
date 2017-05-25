@@ -16,7 +16,7 @@ window.onload = function() {
 	station.map = map;
 	station.shipmarket = shipmarket;
 	miningfield.map = map;
-
+	
 
 	shipmarket.station = station;
 }
