@@ -20,6 +20,7 @@ class Asteroid {
 		this.volumeBarElement = this.asteroidElement.querySelector('.hpBar');
 		this.volumeElement = this.asteroidElement.querySelector('.HP');
 
+
 		this.asteroidElement.onclick = function() {
 			this.mineAsteroid(1);
 		}.bind(this);
@@ -57,6 +58,14 @@ class Asteroid {
 	kill() {
 		this.parentElement.removeChild(this.asteroidElement);
 		this.field.onKill(this);
+	}
+
+	isExist() {
+		if(this.field.asteroids.length >= 1) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	getRandomCoordinatesX() {
 		this.coordinates.x = getRandomInt(2, 81);

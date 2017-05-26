@@ -50,4 +50,7 @@ class Cargoholder {
 		this.changeCargoBar();
 		this.currentCargoElement.innerHTML = this.currentCargo + " / " + this.shipCargoHolder;
 	}
+	deconstructCargo() {
+		this.parentElement.removeChild(this.holdElement);
+	}
 }

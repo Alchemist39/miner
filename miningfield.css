@@ -25,6 +25,11 @@
 			align-items: center;
 			color: white;
 		}
+		.miningField > .battleField > .arrowblock {
+			display: flex;
+			color: white;
+			cursor: pointer;
+		}
 		.miningField > .battleField > .localStatus {
 			color: green;
 		}
@@ -139,6 +144,6 @@
 				}
 				.miningField > .battleField > .hold > .holdBorder > .holdBar {
 					height: 100%;
-					width: 45%;
+					width: 0%;
 					background-color: wheat;
 				}

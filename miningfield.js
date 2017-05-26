@@ -3,9 +3,8 @@
 class Miningfield {
 	constructor() {
 		this.map = null;
-		this.cargo = null;
-		this.asteroid = null;
 		this.miningFieldElement = createAndAppend(document.body, 'div', 'miningField', '');
+		this.fieldNumber = 1;
 		
 		//левая контрольная панель с меню
 		this.controllPanelElement = createAndAppend(this.miningFieldElement, 'div', 'controllPanel', '');
@@ -22,8 +21,53 @@ class Miningfield {
 		}.bind(this);
 		//див поля боя
 		this.battleFieldElement = createAndAppend(this.miningFieldElement, 'div', 'battleField', '');
-		this.locationNameElement = createAndAppend(this.battleFieldElement,	'div',	'locationName',	'Пояс астероидов №342');
+		this.locationNameElement = createAndAppend(this.battleFieldElement, 'div', 'locationName', '');
+
+
+		this.arrowBlockElement = createAndAppend(this.battleFieldElement, 'div', 'arrowblock', '');
+		this.arrowBackElement = createAndAppend(this.arrowBlockElement, 'div', 'arrow', '<==');
+		this.arrowNextElement = createAndAppend(this.arrowBlockElement, 'div', 'arrow', '==>');
+
+		this.arrowNextElement.onclick = function() {
+			this.nextField();
+		}.bind(this);
+
+		this.arrowBackElement.onclick = function() {
+			this.backField();
+		}.bind(this);
+
 		this.localStatusElement = createAndAppend(this.battleFieldElement,	'div',	'localStatus',	'Безопасный сектор');
+		this.createMainFieldElement();
+	}
+	//TODO создать метод создания астероида при удалении одного из астероидов
+	onKill() {
+		this.cargo.addOre(this.asteroid.getReward());
+	}
+	displayFieldNumber() {
+		this.locationNameElement.innerHTML = 'Пояс астероидов №' + this.fieldNumber;
+	}
+	nextField() {
+		this.fieldNumber += 1;
+		this.reconstructMainFieldElement();
+	}
+	backField() {
+		var previousFieldNumber = this.fieldNumber - 1;
+		if(previousFieldNumber >= 1) {
+			this.fieldNumber -= 1;
+			this.reconstructMainFieldElement();
+		} else {
+			return;
+		}
+	}
+	reconstructMainFieldElement() {
+		this.deconstructMainFieldElement();
+		this.cargo.deconstructCargo();
+		this.createMainFieldElement();
+	}
+	deconstructMainFieldElement() {
+		this.battleFieldElement.removeChild(this.mainFieldElement);
+	}
+	createMainFieldElement() {
 		this.mainFieldElement = createAndAppend(this.battleFieldElement, 'div', 'mainField', '');
 		//корабль игрока на поле
 		this.shipBorderElement = createAndAppend(this.mainFieldElement, 'div', 'shipBorder', '');
@@ -41,18 +85,14 @@ class Miningfield {
 		this.hpBorderElement = createAndAppend(this.playersShipElement, 'div', 'hpBorder', '');
 		this.hpBarElement = createAndAppend(this.hpBorderElement, 'div', 'hpBar', '');
 		this.HPElement = createAndAppend(this.hpBorderElement, 'div', 'HP', '30');
-		//маленькие астероиды
 
 		for (var i = 1; i < 15; i++) {
-			this.asteroid = new Asteroid(5, this.mainFieldElement, this);
+			this.asteroid = new Asteroid(5 * this.fieldNumber, this.mainFieldElement, this);
 		}
 
-		//див трюма корабля
 		this.cargo = new Cargoholder(2000, 0, this.battleFieldElement, this);
-	}
-	//TODO создать метод создания астероида при удалении одного из астероидов
-	onKill() {
-		this.cargo.addOre(this.asteroid.getReward());
+
+		this.displayFieldNumber();
 	}
 }
 
