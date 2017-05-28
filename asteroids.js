@@ -24,6 +24,7 @@ class Asteroid {
 		this.asteroidElement.onclick = function() {
 			this.mineAsteroid(1);
 		}.bind(this);
+		
 		this.coordinates = {
 			x: "",
 			y: ""

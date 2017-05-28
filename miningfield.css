@@ -1,7 +1,7 @@
 .miningField {
 	width: 100%;
 	height: 100%;
-	display: flex;
+	display: none;
 	background-image: url('images/fleet.jpg');
 	z-index: 1;
 }
@@ -145,5 +145,6 @@
 				.miningField > .battleField > .hold > .holdBorder > .holdBar {
 					height: 100%;
 					width: 0%;
+					transition: width 1s;
 					background-color: wheat;
 				}

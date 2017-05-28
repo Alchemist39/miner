@@ -18,6 +18,7 @@ class Station {
 		this.weaponMarketElement = createAndAppend(this.controllPanelElement, 'div', 'weaponsMarket','Модули');
 		this.repairMarketElement = createAndAppend(this.controllPanelElement, 'div', 'repairMarket','Ремонт');
 		this.sellMarketElement = createAndAppend(this.controllPanelElement, 'div', 'sellMarket','Продажа');
+		this.walletElement = createAndAppend(this.controllPanelElement, 'div', 'wallet','Кошелек');
 		this.inventoryElement = createAndAppend(this.controllPanelElement, 'div', 'inventory','Инвентарь');
 		this.starMapElement = createAndAppend(this.controllPanelElement, 'div', 'starMap','Карта');
 
@@ -35,27 +36,10 @@ class Station {
 		this.weaponPlace2Element = createAndAppend(this.playersShipElement, 'div', 'weaponPlace2','');
 
 		//инвентарь
-		this.inventoryContainerElement = createAndAppend(this.hungarContainerElement, 'div', 'inventoryContainer','');
-
-		for(var i = 0; i < 48; i++){
-			this.inventorySlotElement = createAndAppend(
-				this.inventoryContainerElement, 
-				'div', 
-				'inventorySlot',
-				''
-			);
-		}
-		// ошибка: выдавало inventoryAppear is not a function
-		// решение: .bind(this)
+		this.inventory = new Inventory(this.hungarContainerElement, this);
+		
 		this.inventoryElement.onclick = function() {
-			this.inventoryAppear();
+			this.inventory.inventoryAppear();
 		}.bind(this);
-	}
-	inventoryAppear() {
-		if (this.inventoryContainerElement.style.left == '-100%') {
-			this.inventoryContainerElement.style.left = '0%';
-		} else {
-			this.inventoryContainerElement.style.left = '-100%';
-		}
 	}
 }

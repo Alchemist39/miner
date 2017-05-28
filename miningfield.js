@@ -5,13 +5,17 @@ class Miningfield {
 		this.map = null;
 		this.miningFieldElement = createAndAppend(document.body, 'div', 'miningField', '');
 		this.fieldNumber = 1;
+		this.oreStorage = this.getOreStorage() || 0;
 		
 		//левая контрольная панель с меню
 		this.controllPanelElement = createAndAppend(this.miningFieldElement, 'div', 'controllPanel', '');
 		this.courierElement = createAndAppend(this.controllPanelElement, 'div', 'courier', 'Разгрузка');
+		
 		this.courierElement.onclick = function() {
+			this.addOreToStorage(this.cargo.currentCargo);
 			this.cargo.removeOre();
 		}.bind(this);
+
 		this.overheatElement = createAndAppend(this.controllPanelElement, 'div', 'overheat', 'Перегрев');
 		this.weaponElement = createAndAppend(this.controllPanelElement, 'div', 'weapon', 'Оружие');
 		this.miningLaserElement = createAndAppend(this.controllPanelElement, 'div', 'miningLaser','Буры');
@@ -40,6 +44,14 @@ class Miningfield {
 		this.createMainFieldElement();
 	}
 	//TODO создать метод создания астероида при удалении одного из астероидов
+
+	setOreStorage(amount) {
+		localStorage.setItem('oreAtStorage', amount);
+	}
+	getOreStorage() {
+		return parseInt(localStorage.getItem('oreAtStorage'));
+	}
+	
 	onKill() {
 		this.cargo.addOre(this.asteroid.getReward());
 	}
@@ -58,6 +70,11 @@ class Miningfield {
 		} else {
 			return;
 		}
+	}
+	addOreToStorage(value) {
+		this.oreStorage += value;
+		this.setOreStorage(this.oreStorage);
+		console.log(this.oreStorage);
 	}
 	reconstructMainFieldElement() {
 		this.deconstructMainFieldElement();
