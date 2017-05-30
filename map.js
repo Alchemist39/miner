@@ -28,7 +28,7 @@ class Map{
 			if(this.station.stationElement.style.display == 'flex') {
 				this.fieldShow();
 			} else {
-				this.hideMap();
+				this.hideMap()
 			}
 		}.bind(this);
 		this.mapCloseElement.onclick = function() {
@@ -37,14 +37,10 @@ class Map{
 	}
 
 	stationShow() {
-		this.hideMap();
-		this.station.stationElement.style.display = 'flex';
-		this.miningfield.miningFieldElement.style.display = 'none';
+		pushUrl('/station', 'Станция');
 	};
 	fieldShow() {
-		this.hideMap();
-		this.station.stationElement.style.display = 'none';
-		this.miningfield.miningFieldElement.style.display = 'flex';
+		pushUrl('/field/1', 'Поле');
 	};
 	showMap() {
 		this.mapElement.style.visibility = 'visible';

@@ -1,7 +1,10 @@
 'use strict';
 
+let asteroidID = 0;
+
 class Asteroid {
 	constructor(size, parentElement, field) {
+		this.id = asteroidID++;
 		this.initialVolume = size;
 		this.currentVolume = this.initialVolume;
 		this.parentElement = parentElement;
@@ -61,16 +64,10 @@ class Asteroid {
 		this.field.onKill(this);
 	}
 
-	isExist() {
-		if(this.field.asteroids.length >= 1) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 	getRandomCoordinatesX() {
 		this.coordinates.x = getRandomInt(2, 81);
 	}
+	
 	getRandomCoordinatesY() {
 		var y = getRandomInt(0, 86);
 

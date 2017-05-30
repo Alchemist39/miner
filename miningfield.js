@@ -6,6 +6,7 @@ class Miningfield {
 		this.miningFieldElement = createAndAppend(document.body, 'div', 'miningField', '');
 		this.fieldNumber = 1;
 		this.oreStorage = this.getOreStorage() || 0;
+		this.asteroids = {};
 		
 		//левая контрольная панель с меню
 		this.controllPanelElement = createAndAppend(this.miningFieldElement, 'div', 'controllPanel', '');
@@ -51,9 +52,11 @@ class Miningfield {
 	getOreStorage() {
 		return parseInt(localStorage.getItem('oreAtStorage'));
 	}
-	
-	onKill() {
-		this.cargo.addOre(this.asteroid.getReward());
+
+	onKill(asteroid) {
+		// удаляем весь астероид по id
+		this.cargo.addOre(asteroid.getReward());
+		delete this.asteroids[asteroid.id];
 	}
 	displayFieldNumber() {
 		this.locationNameElement.innerHTML = 'Пояс астероидов №' + this.fieldNumber;
@@ -61,11 +64,16 @@ class Miningfield {
 	nextField() {
 		this.fieldNumber += 1;
 		this.reconstructMainFieldElement();
+		var address = '/field' + '/' + this.fieldNumber;
+		history.pushState(null, "поле", address);
 	}
 	backField() {
 		var previousFieldNumber = this.fieldNumber - 1;
 		if(previousFieldNumber >= 1) {
 			this.fieldNumber -= 1;
+
+			var address = '/field' + '/' + this.fieldNumber;
+			history.pushState(null, "поле", address);
 			this.reconstructMainFieldElement();
 		} else {
 			return;
@@ -75,6 +83,9 @@ class Miningfield {
 		this.oreStorage += value;
 		this.setOreStorage(this.oreStorage);
 		console.log(this.oreStorage);
+	}
+	removeOreFromStorage() {
+		this.setOreStorage(0);
 	}
 	reconstructMainFieldElement() {
 		this.deconstructMainFieldElement();
@@ -104,7 +115,20 @@ class Miningfield {
 		this.HPElement = createAndAppend(this.hpBorderElement, 'div', 'HP', '30');
 
 		for (var i = 1; i < 15; i++) {
-			this.asteroid = new Asteroid(5 * this.fieldNumber, this.mainFieldElement, this);
+			let asteroid = new Asteroid(5 * this.fieldNumber, this.mainFieldElement, this);
+
+			//обект с определенным ID = экземпляру класса
+			this.asteroids[asteroid.id] = asteroid;
+/*
+			this.asteroids.superAsteroid
+			this.asteroids['superAsteroid']
+
+			this.asteroids = {
+				0: new Asteroid(5 * this.fieldNumber, this.mainFieldElement, this),
+				1: new Asteroid(5 * this.fieldNumber, this.mainFieldElement, this),
+				2: new Asteroid(5 * this.fieldNumber, this.mainFieldElement, this),
+				... 
+			}*/
 		}
 
 		this.cargo = new Cargoholder(2000, 0, this.battleFieldElement, this);

@@ -18,6 +18,9 @@ class Station {
 		this.weaponMarketElement = createAndAppend(this.controllPanelElement, 'div', 'weaponsMarket','Модули');
 		this.repairMarketElement = createAndAppend(this.controllPanelElement, 'div', 'repairMarket','Ремонт');
 		this.sellMarketElement = createAndAppend(this.controllPanelElement, 'div', 'sellMarket','Продажа');
+		this.sellMarketElement.onclick = function() {
+			this.inventory.clearInventorySlot();
+		}.bind(this);
 		this.walletElement = createAndAppend(this.controllPanelElement, 'div', 'wallet','Кошелек');
 		this.inventoryElement = createAndAppend(this.controllPanelElement, 'div', 'inventory','Инвентарь');
 		this.starMapElement = createAndAppend(this.controllPanelElement, 'div', 'starMap','Карта');

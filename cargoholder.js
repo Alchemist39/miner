@@ -53,7 +53,7 @@ class Cargoholder {
 	}
 
 	moveToInventory() {
-		this.inventory.inventorySlotElement.className += 'ore';
+		game.station.inventory.addToInventory(' ore');
 	}
 
 	changeCargoBar() {

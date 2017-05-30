@@ -20,29 +20,21 @@ class Inventory {
 			);
 			//this.inventorySlotElement.className += " id" + i;
 		}
-
-		this.inventorySlot = function() {
-			
-		}
-
+		this.slot = document.getElementsByClassName('inventorySlot')[0];
 	}
 
 	inventoryAppear() {
 		if (this.inventoryContainerElement.style.left == '-100%') {
 			this.inventoryContainerElement.style.left = '0%';
-			console.log(this.isEmptySlot());
 		} else {
 			this.inventoryContainerElement.style.left = '-100%';
 		}
 	}
-	addToInventory() {
-		this.inventorySlotElement.className += 'ore';
+	addToInventory(name) {
+		this.clearInventorySlot();
+		this.slot.className += name;
 	}
-	isEmptySlot() {
-		if(this.inventorySlotElement.className == 'inventorySlot') {
-			return true;
-		} else {
-			return false;
-		}
+	clearInventorySlot() {
+		this.slot.className = 'inventorySlot';
 	}
 }
