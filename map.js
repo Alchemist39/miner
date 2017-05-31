@@ -1,8 +1,7 @@
 'use strict';
 class Map{
-	constructor(station, miningfield) {
+	constructor(station) {
 		this.station = station;
-		this.miningfield = miningfield;
 		this.mapElement = createAndAppend(
 			document.body,
 			'div', 

@@ -1,33 +1,15 @@
 'use strict';
 
+var fieldID = 1;
+
 class Miningfield {
-	constructor() {
-		this.map = null;
-		this.miningFieldElement = createAndAppend(document.body, 'div', 'miningField', '');
-		this.fieldNumber = 1;
-		this.oreStorage = this.getOreStorage() || 0;
+	constructor(parentElement) {
+		this.id = fieldID++;
 		this.asteroids = {};
-		
-		//левая контрольная панель с меню
-		this.controllPanelElement = createAndAppend(this.miningFieldElement, 'div', 'controllPanel', '');
-		this.courierElement = createAndAppend(this.controllPanelElement, 'div', 'courier', 'Разгрузка');
-		
-		this.courierElement.onclick = function() {
-			this.addOreToStorage(this.cargo.currentCargo);
-			this.cargo.removeOre();
-		}.bind(this);
-
-		this.overheatElement = createAndAppend(this.controllPanelElement, 'div', 'overheat', 'Перегрев');
-		this.weaponElement = createAndAppend(this.controllPanelElement, 'div', 'weapon', 'Оружие');
-		this.miningLaserElement = createAndAppend(this.controllPanelElement, 'div', 'miningLaser','Буры');
-		this.starMapElement = createAndAppend(this.controllPanelElement, 'div', 'starMap', 'Карта');
-		this.starMapElement.onclick = function() {
-			this.map.showMap();
-		}.bind(this);
+		this.parentElement = parentElement;
 		//див поля боя
-		this.battleFieldElement = createAndAppend(this.miningFieldElement, 'div', 'battleField', '');
+		this.battleFieldElement = createAndAppend(this.parentElement, 'div', 'battleField', '');
 		this.locationNameElement = createAndAppend(this.battleFieldElement, 'div', 'locationName', '');
-
 
 		this.arrowBlockElement = createAndAppend(this.battleFieldElement, 'div', 'arrowblock', '');
 		this.arrowBackElement = createAndAppend(this.arrowBlockElement, 'div', 'arrow', '<==');
@@ -46,46 +28,28 @@ class Miningfield {
 	}
 	//TODO создать метод создания астероида при удалении одного из астероидов
 
-	setOreStorage(amount) {
-		localStorage.setItem('oreAtStorage', amount);
-	}
-	getOreStorage() {
-		return parseInt(localStorage.getItem('oreAtStorage'));
-	}
-
 	onKill(asteroid) {
 		// удаляем весь астероид по id
 		this.cargo.addOre(asteroid.getReward());
 		delete this.asteroids[asteroid.id];
 	}
-	displayFieldNumber() {
-		this.locationNameElement.innerHTML = 'Пояс астероидов №' + this.fieldNumber;
+	displayid() {
+		this.locationNameElement.innerHTML = 'Пояс астероидов №' + this.id;
 	}
 	nextField() {
-		this.fieldNumber += 1;
 		this.reconstructMainFieldElement();
-		var address = '/field' + '/' + this.fieldNumber;
-		history.pushState(null, "поле", address);
+		var address = '/field' + '/' + (this.id + 1);
+		pushUrl(address);
 	}
 	backField() {
-		var previousFieldNumber = this.fieldNumber - 1;
-		if(previousFieldNumber >= 1) {
-			this.fieldNumber -= 1;
-
-			var address = '/field' + '/' + this.fieldNumber;
+		var previousid = this.id - 1;
+		if(previousid >= 1) {
+			var address = '/field' + '/' + this.id;
 			history.pushState(null, "поле", address);
 			this.reconstructMainFieldElement();
 		} else {
 			return;
 		}
-	}
-	addOreToStorage(value) {
-		this.oreStorage += value;
-		this.setOreStorage(this.oreStorage);
-		console.log(this.oreStorage);
-	}
-	removeOreFromStorage() {
-		this.setOreStorage(0);
 	}
 	reconstructMainFieldElement() {
 		this.deconstructMainFieldElement();
@@ -93,7 +57,7 @@ class Miningfield {
 		this.createMainFieldElement();
 	}
 	deconstructMainFieldElement() {
-		this.battleFieldElement.removeChild(this.mainFieldElement);
+		this.parentElement.removeChild(this.battleFieldElement);
 	}
 	createMainFieldElement() {
 		this.mainFieldElement = createAndAppend(this.battleFieldElement, 'div', 'mainField', '');
@@ -115,7 +79,7 @@ class Miningfield {
 		this.HPElement = createAndAppend(this.hpBorderElement, 'div', 'HP', '30');
 
 		for (var i = 1; i < 15; i++) {
-			let asteroid = new Asteroid(5 * this.fieldNumber, this.mainFieldElement, this);
+			let asteroid = new Asteroid(5 * this.id, this.mainFieldElement, this);
 
 			//обект с определенным ID = экземпляру класса
 			this.asteroids[asteroid.id] = asteroid;
@@ -124,16 +88,16 @@ class Miningfield {
 			this.asteroids['superAsteroid']
 
 			this.asteroids = {
-				0: new Asteroid(5 * this.fieldNumber, this.mainFieldElement, this),
-				1: new Asteroid(5 * this.fieldNumber, this.mainFieldElement, this),
-				2: new Asteroid(5 * this.fieldNumber, this.mainFieldElement, this),
+				0: new Asteroid(5 * this.id, this.mainFieldElement, this),
+				1: new Asteroid(5 * this.id, this.mainFieldElement, this),
+				2: new Asteroid(5 * this.id, this.mainFieldElement, this),
 				... 
 			}*/
 		}
 
 		this.cargo = new Cargoholder(2000, 0, this.battleFieldElement, this);
 
-		this.displayFieldNumber();
+		this.displayid();
 	}
 }
 

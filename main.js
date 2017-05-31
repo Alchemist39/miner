@@ -7,13 +7,13 @@ window.onload = function() {
 
 	game.station = new Station();
 	var shipmarket = new ShipMarket();
-	var miningfield = new Miningfield();
+	var miningPage = new MiningfieldPage();
 	// див карты
-	var map = new Map(game.station, miningfield);
+	var map = new Map(game.station);
 
 	game.station.map = map;
 	game.station.shipmarket = shipmarket;
-	miningfield.map = map;
+	miningPage.map = map;
 
 	shipmarket.station = game.station;
 
@@ -23,15 +23,17 @@ window.onload = function() {
 			console.log('станция');
 			map.hideMap();
 			game.station.stationElement.style.display = 'flex';
-			miningfield.miningFieldElement.style.display = 'none';
-		} else if(window.location.pathname == '/field/1') {
+			miningPage.miningFieldElement.style.display = 'none';
+		} else if(window.location.pathname.substr(0, 7) == '/field/') {
 			console.log('поле');
 			map.hideMap();
-			game.station.stationElement.style.display = 'none';
-			miningfield.miningFieldElement.style.display = 'flex';
-		} else if(window.location.pathname == '/field/' + miningfield.feildNumber) {
 
-		}
+			let miningField = new Miningfield(miningPage.miningFieldElement);
+			miningPage.miningFields[miningField.id] = miningField;
+
+			game.station.stationElement.style.display = 'none';
+			miningPage.miningFieldElement.style.display = 'flex';
+		} 
 	});
 
 	window.dispatchEvent(new Event('popstate'));
