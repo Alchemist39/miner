@@ -3,7 +3,7 @@
 class MiningfieldPage {
 	constructor() {
 		this.map = null;
-		this.miningFieldElement = createAndAppend(document.body, 'div', 'miningField', '');
+		this.miningFieldElement = createAndAppend(document.querySelector('.container'), 'div', 'miningField', '');
 		this.oreStorage = this.getOreStorage() || 0;
 		
 		//левая контрольная панель с меню

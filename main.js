@@ -3,46 +3,54 @@ var game = {
 
 };
 
-window.onload = function() {
 
-	game.station = new Station();
-	var shipmarket = new ShipMarket();
-	var miningPage = new MiningfieldPage();
-	// див карты
-	var map = new Map(game.station);
-	var playerShip = new PlayerShip();
+game.station = new Station();
+var shipmarket = new ShipMarket();
+var miningPage = new MiningfieldPage();
+// див карты
+var map = new Map(game.station);
+var playerShip = new PlayerShip();
 
-	game.station.map = map;
-	game.station.shipmarket = shipmarket;
-	miningPage.map = map;
+game.station.map = map;
+game.station.shipmarket = shipmarket;
+miningPage.map = map;
 
-	shipmarket.station = game.station;
+shipmarket.station = game.station;
 
-	let miningField = new Miningfield(miningPage.miningFieldElement);
-	miningPage.miningFields[miningField.id] = miningField;
+let miningField = new Miningfield(miningPage.miningFieldElement);
+miningPage.miningFields[miningField.id] = miningField;
 
-	window.addEventListener('popstate', function() {
-		//console.log(window.location);
-		// переход со страницы поля
-		var clear = function() {
-			document.body.innerHTML = '';
-		};
-		if(window.location.pathname == '/station') {
-			clear();
-			game.station.showStation();
-			//переход со страницы маркета
-		} else if(window.location.pathname.substr(0, 7) == '/field/') {
-			//не более 15 строк
+var clear = function() {
+	document.querySelector('.container').innerHTML = '';
+};
 
-			clear();
-			miningPage.showMiningFieldPage();
-			//переход со станции в маркет
-		} else if(window.location.pathname == '/market') {
-			clear();
-			shipmarket.showMarket();
-		}
+crossroads.addRoute('/station', function(){
+	clear();
+	game.station.showStation();
+});
 
-	});
+crossroads.addRoute('/market', function(){
+	clear();
+	shipmarket.showMarket();
+});
 
-	window.dispatchEvent(new Event('popstate'));
-}
+crossroads.addRoute('/field/{page}', function(page){
+	clear();
+	miningPage.showMiningFieldPage(page);
+});
+
+window.addEventListener('popstate', function() {
+	crossroads.parse(window.location.pathname);
+});
+
+document.body.addEventListener('click', function(e){
+	if(e.target.nodeName == 'A'){
+		e.preventDefault();
+
+		pushUrl(e.target.pathname);
+	}
+})
+//предотвращать действие по ссылке
+//
+
+window.dispatchEvent(new Event('popstate'));

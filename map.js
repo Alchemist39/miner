@@ -2,14 +2,15 @@
 class Map{
 	constructor(station) {
 		this.station = station;
-		this.mapElement = createDiv( 
-			'map', 
-			`
-				<div class="stationButton"></div>
-				<div class="field_342"></div>
-				<div class="closeMap">Закрыть</div>
-			`
-		);
+
+		this.template = Handlebars.compile(`
+			<div class="stationButton"></div>
+			<div class="field_342"></div>
+			<div class="closeMap">Закрыть</div>
+		`);
+
+		this.mapElement = createDiv('map', this.template());
+		
 		this.stationButtonElement = this.mapElement.querySelector('.stationButton');
 		this.field_342Element = this.mapElement.querySelector('.field_342');
 		this.mapCloseElement = this.mapElement.querySelector('.closeMap');
@@ -34,10 +35,10 @@ class Map{
 		pushUrl('/field/1', 'Поле');
 	};
 	showMap() {
-		document.body.appendChild(this.mapElement);
+		document.querySelector('.container').appendChild(this.mapElement);
 	};
 	hideMap() {
-		document.body.removeChild(this.mapElement);
+		document.querySelector('.container').removeChild(this.mapElement);
 	};
 }
 

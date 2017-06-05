@@ -1,29 +1,57 @@
 'use strict';
 
-var fieldID = 1;
-
 class Miningfield {
-	constructor(parentElement) {
-		this.id = fieldID++;
-		this.asteroids = {};
-		this.parentElement = parentElement;
+	constructor(page) {
+		this.page = page;
+		this.asteroids = [];
 		//див поля боя
-		this.battleFieldElement = createAndAppend(this.parentElement, 'div', 'battleField', '');
-		this.locationNameElement = createAndAppend(this.battleFieldElement, 'div', 'locationName', '');
+		this.template = Handlebars.compile(`
+			<div class="locationName"></div>
+			<div class="arrowblock">
+				{{#if canGoBack}}
+					<div class="arrowBack">
+						<a href="{{math page '-' 1}}">назад</a>
+					</div>
+				{{/if}}
+				{{#if canGoForward}}
+					<div class="arrowNext">
+						<a href="{{math page '+' 1}}">вперед</a>
+					</div>
+				{{/if}}
+			</div> 
+			<div class="localStatus">Безопасный сектор</div>
+			<div class="mainField"></div>
+		`);
 
-		this.arrowBlockElement = createAndAppend(this.battleFieldElement, 'div', 'arrowblock', '');
-		this.arrowBackElement = createAndAppend(this.arrowBlockElement, 'div', 'arrow', '<==');
-		this.arrowNextElement = createAndAppend(this.arrowBlockElement, 'div', 'arrow', '==>');
+		this.battleFieldElement = createDiv('battleField', this.template({
+			page: this.page,
+			canGoBack: this.page >= 2,
+			canGoForward: this.page < 10
+		}));
 
-		this.arrowNextElement.onclick = function() {
-			this.nextField();
-		}.bind(this);
+		this.mainFieldElement = this.battleFieldElement.querySelector('.mainField');
 
-		this.arrowBackElement.onclick = function() {
-			this.backField();
-		}.bind(this);
+		for (var i = 1; i < 15; i++) {
+			//обект с определенным ID = экземпляру класса
+			this.asteroids.push(new Asteroid(5 * this.page, this.mainFieldElement, this));
+/*
+			this.asteroids.superAsteroid
+			this.asteroids['superAsteroid']
 
-		this.localStatusElement = createAndAppend(this.battleFieldElement,	'div',	'localStatus',	'Безопасный сектор');
+			this.asteroids = {
+				0: new Asteroid(5 * this.id, this.mainFieldElement, this),
+				1: new Asteroid(5 * this.id, this.mainFieldElement, this),
+				2: new Asteroid(5 * this.id, this.mainFieldElement, this),
+				... 
+			}*/
+		}
+
+		setInterval(function(){
+			if(this.asteroids.length < 15){
+				this.asteroids.push(new Asteroid(5 * this.page, this.mainFieldElement, this));
+			}
+		}.bind(this), 10000)
+
 		this.createMainFieldElement();
 	}
 	//TODO создать метод создания астероида при удалении одного из астероидов
@@ -31,36 +59,17 @@ class Miningfield {
 	onKill(asteroid) {
 		// удаляем весь астероид по id
 		this.cargo.addOre(asteroid.getReward());
-		delete this.asteroids[asteroid.id];
-	}
-	displayid() {
-		this.locationNameElement.innerHTML = 'Пояс астероидов №' + this.id;
-	}
-	nextField() {
-		this.reconstructMainFieldElement();
-		var address = '/field' + '/' + (this.id + 1);
-		pushUrl(address);
-	}
-	backField() {
-		var previousid = this.id - 1;
-		if(previousid >= 1) {
-			var address = '/field' + '/' + this.id;
-			history.pushState(null, "поле", address);
-			this.reconstructMainFieldElement();
-		} else {
-			return;
+		for(let i = 0; i < this.asteroids.length; i++){
+			if(this.asteroids[i].id == asteroid.id) {
+				this.asteroids.splice(i, 1);
+				break;
+			}
 		}
 	}
-	reconstructMainFieldElement() {
-		this.deconstructMainFieldElement();
-		this.cargo.remove();
-		this.createMainFieldElement();
-	}
-	deconstructMainFieldElement() {
-		this.parentElement.removeChild(this.battleFieldElement);
+	displayid() {
+		this.battleFieldElement.querySelector('.locationName').innerHTML = 'Пояс астероидов №' + this.page;
 	}
 	createMainFieldElement() {
-		this.mainFieldElement = createAndAppend(this.battleFieldElement, 'div', 'mainField', '');
 		//корабль игрока на поле
 		this.shipBorderElement = createAndAppend(this.mainFieldElement, 'div', 'shipBorder', '');
 
@@ -78,22 +87,6 @@ class Miningfield {
 		this.hpBarElement = createAndAppend(this.hpBorderElement, 'div', 'hpBar', '');
 		this.HPElement = createAndAppend(this.hpBorderElement, 'div', 'HP', '30');
 
-		for (var i = 1; i < 15; i++) {
-			let asteroid = new Asteroid(5 * this.id, this.mainFieldElement, this);
-
-			//обект с определенным ID = экземпляру класса
-			this.asteroids[asteroid.id] = asteroid;
-/*
-			this.asteroids.superAsteroid
-			this.asteroids['superAsteroid']
-
-			this.asteroids = {
-				0: new Asteroid(5 * this.id, this.mainFieldElement, this),
-				1: new Asteroid(5 * this.id, this.mainFieldElement, this),
-				2: new Asteroid(5 * this.id, this.mainFieldElement, this),
-				... 
-			}*/
-		}
 
 		this.cargo = new Cargoholder(2000, 0, this.battleFieldElement, this);
 

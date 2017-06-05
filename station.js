@@ -4,54 +4,61 @@ class Station {
 	constructor() {
 		this.map = null;
 		this.shipmarket = null;
+
+		this.template = Handlebars.compile(`
+			<div class="controllPanel">
+				<div class="shipsMarket">Корабли</div>	
+				<div class="weaponsMarket">Модули</div> 
+				<div class="repairMarket">Ремонт</div>
+				<div class="sellMarket">Продажа</div>
+				<div class="wallet">Кошелек</div>
+				<div class="inventory">Инвентарь</div>
+				<div class="starMap">Карта</div>			
+			</div>
+			<div class="hungarContainer">
+				<div class="stationName">Станция: Земляне люминатые</div>
+				<div class="playersShip">
+					<div class="weaponPlace1"></div>				
+					<div class="weaponPlace2"></div>
+				</div>
+			</div>
+		`);
+
+
+
+
 		// див станции
-		this.stationElement = createDiv('station');
-		//див левой контрольной панели
-		this.controllPanelElement = createAndAppend(this.stationElement, 'div', 'controllPanel', '');
-		// элементы меню
-		this.shipMarketElement = createAndAppend(this.controllPanelElement, 'div', 'shipsMarket', 'Корабли');
+		this.stationElement = createDiv('station', this.template());
+
+
 		//переход на страницу покупки кораблей
-		this.shipMarketElement.onclick = function() {
-			this.shipmarket.showMarket();
+		this.stationElement.querySelector('.shipsMarket').onclick = function() {
 			pushUrl('/market', 'Магазин');
 		}.bind(this);
 
-		this.weaponMarketElement = createAndAppend(this.controllPanelElement, 'div', 'weaponsMarket','Модули');
-		this.repairMarketElement = createAndAppend(this.controllPanelElement, 'div', 'repairMarket','Ремонт');
-		this.sellMarketElement = createAndAppend(this.controllPanelElement, 'div', 'sellMarket','Продажа');
-		this.sellMarketElement.onclick = function() {
+		this.stationElement.querySelector('.sellMarket').onclick = function() {
 			this.inventory.clearInventorySlot();
 		}.bind(this);
-		this.walletElement = createAndAppend(this.controllPanelElement, 'div', 'wallet','Кошелек');
-		this.inventoryElement = createAndAppend(this.controllPanelElement, 'div', 'inventory','Инвентарь');
-		this.starMapElement = createAndAppend(this.controllPanelElement, 'div', 'starMap','Карта');
 
 		//ошибка: выдавало style of undefiend
 		//решение: .bind(this)
-		this.starMapElement.onclick = function() {
+		this.stationElement.querySelector('.starMap').onclick = function() {
 			this.map.showMap();
 		}.bind(this);
-		//див ангара
-		this.hungarContainerElement = createAndAppend(this.stationElement, 'div', 'hungarContainer','');
-		this.stationNameElement = createAndAppend(this.hungarContainerElement, 'div', 'stationName','Станция: Земляне люминатые');
-		//корабль игрока
-		this.playersShipElement = createAndAppend(this.hungarContainerElement, 'div', 'playersShip','');
-		this.weaponPlace1Element = createAndAppend(this.playersShipElement, 'div', 'weaponPlace1','');
-		this.weaponPlace2Element = createAndAppend(this.playersShipElement, 'div', 'weaponPlace2','');
 
 		//инвентарь
-		this.inventory = new Inventory(this.hungarContainerElement, this);
+		this.inventory = new Inventory(this.stationElement.querySelector('.hungarContainer'), this);
 		
-		this.inventoryElement.onclick = function() {
+		this.stationElement.querySelector('.inventory').onclick = function() {
 			this.inventory.inventoryAppear();
 		}.bind(this);
 
 		this.showStation();
 	}
 	showStation() {
-		document.body.appendChild(this.stationElement);
+		document.querySelector('.container').appendChild(this.stationElement);
 	}
 	hideStation() {
-		document.body.removeChild(this.stationElement);
+		document.querySelector('.container').removeChild(this.stationElement);
 	}
 }

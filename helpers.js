@@ -25,6 +25,20 @@ let pushUrl = function(href, title = '', state = null) {
 	window.dispatchEvent(new Event('popstate'));
 };
 
+Handlebars.registerHelper("math", function(lvalue, operator, rvalue, options) {
+	lvalue = parseFloat(lvalue);
+	rvalue = parseFloat(rvalue);
+		
+	return {
+		"+": lvalue + rvalue,
+		"-": lvalue - rvalue,
+		"*": lvalue * rvalue,
+		"/": lvalue / rvalue,
+		"%": lvalue % rvalue
+	}[operator];
+});
+
+
 var stationExist = document.getElementsByClassName('station')[0];
 var marketExist = document.getElementsByClassName('shipmarket')[0];
 var miningFieldPageExist = document.getElementsByClassName('miningField')[0];

@@ -68,7 +68,7 @@ class ShipMarket {
 			`<p>Оружейных точек: 6</p>
 			<p>	3 малые точки</p>
 			<p>	2 средние точки</p>
-			<p>	1 больная точка</p>`
+			<p>	1 большая точка</p>`
 		);
 		this.armorDescriptionElement = createAndAppend(
 			this.shipDescriptionElement, 
@@ -100,10 +100,10 @@ class ShipMarket {
 
 	}
 	showMarket() {
-		document.body.appendChild(this.shipmarketElement);	
+		document.querySelector('.container').appendChild(this.shipmarketElement);	
 	}
 	hideMarket() {
-		document.body.removeChild(this.shipmarketElement);
+		document.querySelector('.container').removeChild(this.shipmarketElement);
 	}
 }
 
