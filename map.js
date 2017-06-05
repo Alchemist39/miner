@@ -2,9 +2,7 @@
 class Map{
 	constructor(station) {
 		this.station = station;
-		this.mapElement = createAndAppend(
-			document.body,
-			'div', 
+		this.mapElement = createDiv( 
 			'map', 
 			`
 				<div class="stationButton"></div>
@@ -17,19 +15,13 @@ class Map{
 		this.mapCloseElement = this.mapElement.querySelector('.closeMap');
 
 		this.stationButtonElement.onclick = function() {
-			if(this.station.stationElement.style.display == 'flex') {
-				this.hideMap();
-			} else {
-				this.stationShow();
-			}
+			this.stationShow();
 		}.bind(this);
+
 		this.field_342Element.onclick = function() {
-			if(this.station.stationElement.style.display == 'flex') {
-				this.fieldShow();
-			} else {
-				this.hideMap()
-			}
+			this.fieldShow();
 		}.bind(this);
+
 		this.mapCloseElement.onclick = function() {
 			this.hideMap();
 		}.bind(this);
@@ -42,10 +34,10 @@ class Map{
 		pushUrl('/field/1', 'Поле');
 	};
 	showMap() {
-		this.mapElement.style.visibility = 'visible';
+		document.body.appendChild(this.mapElement);
 	};
 	hideMap() {
-		this.mapElement.style.visibility = 'hidden';
+		document.body.removeChild(this.mapElement);
 	};
 }
 

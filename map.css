@@ -6,7 +6,6 @@
 	z-index: 5;
 	position: absolute;
 	background-image: url('images/space.jpg');
-	visibility: hidden;
 }
 	.closeMap, .stationButton, .field_342 {
 		cursor: pointer;

@@ -7,7 +7,13 @@ var createAndAppend = function (parentElement, tag, className, text) {
 	parentElement.appendChild(element);
 	return element;
 };
-
+//TODO сделать хелпер чисто создания дива
+var createDiv = function(className, text = "") {
+	var element = document.createElement('div');
+	element.className = className;
+	element.innerHTML = text;
+	return element;
+};
 
 var getRandomInt = function(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -19,4 +25,7 @@ let pushUrl = function(href, title = '', state = null) {
 	window.dispatchEvent(new Event('popstate'));
 };
 
-
+var stationExist = document.getElementsByClassName('station')[0];
+var marketExist = document.getElementsByClassName('shipmarket')[0];
+var miningFieldPageExist = document.getElementsByClassName('miningField')[0];
+var mapExist = document.getElementsByClassName('map')[0];

@@ -3,7 +3,7 @@
 class MiningfieldPage {
 	constructor() {
 		this.map = null;
-		this.miningFieldElement = createAndAppend(document.body, 'div', 'miningField', '');
+		this.miningFieldElement = createDiv('miningField');
 		this.oreStorage = this.getOreStorage() || 0;
 		this.miningFields = {};
 		
@@ -39,7 +39,21 @@ class MiningfieldPage {
 	removeOreFromStorage() {
 		this.setOreStorage(0);
 	}
-	showMiningField() {
-
+	showMiningFieldPage() {
+		document.body.appendChild(this.miningFieldElement);
+		/*
+		
+		if(!this.miningFields[pageNumber]) {
+			let miningField = new Miningfield(this.miningFieldElement);
+			this.miningFields[miningField.id] = miningField;
+		}
+		// удаляем все элементы с классом miningfield из баттлфилда 
+		// и аппендим this.miningFields[pageNumber]
+		
+		document.body.appendChild(this.miningFieldElement);
+		*/
+	}
+	hideMiningFieldPage() {
+		document.body.removeChild(this.miningFieldElement);	
 	}
 }

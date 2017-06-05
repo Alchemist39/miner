@@ -3,12 +3,7 @@
 class ShipMarket {
 	constructor(station) {
 		this.station = station;
-		this.shipmarketElement = createAndAppend(
-			document.body, 
-			'div', 
-			'shipmarket',
-			''
-		);
+		this.shipmarketElement = createDiv('shipmarket');
 
 		this.marketContainerElement = createAndAppend(
 			this.shipmarketElement, 
@@ -24,7 +19,7 @@ class ShipMarket {
 		);
 
 		this.backElement.onclick = function() {
-			this.hideMarket();
+			pushUrl('/station', 'Станция');
 		}.bind(this);
 
 		this.waspElement = createAndAppend(this.marketContainerElement, 'div', 'wasp', '');
@@ -105,12 +100,10 @@ class ShipMarket {
 
 	}
 	showMarket() {
-		this.station.stationElement.style.display = 'none';
-		this.shipmarketElement.style.display = 'flex';		
+		document.body.appendChild(this.shipmarketElement);	
 	}
 	hideMarket() {
-		this.station.stationElement.style.display = 'flex';
-		this.shipmarketElement.style.display = 'none';
+		document.body.removeChild(this.shipmarketElement);
 	}
 }
 

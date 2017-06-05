@@ -27,7 +27,7 @@ class Miningfield {
 		this.createMainFieldElement();
 	}
 	//TODO создать метод создания астероида при удалении одного из астероидов
-
+	// астероид == this в классе астероидов
 	onKill(asteroid) {
 		// удаляем весь астероид по id
 		this.cargo.addOre(asteroid.getReward());
@@ -53,7 +53,7 @@ class Miningfield {
 	}
 	reconstructMainFieldElement() {
 		this.deconstructMainFieldElement();
-		this.cargo.deconstructCargo();
+		this.cargo.remove();
 		this.createMainFieldElement();
 	}
 	deconstructMainFieldElement() {

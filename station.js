@@ -5,7 +5,7 @@ class Station {
 		this.map = null;
 		this.shipmarket = null;
 		// див станции
-		this.stationElement = createAndAppend(document.body, 'div', 'station', '');
+		this.stationElement = createDiv('station');
 		//див левой контрольной панели
 		this.controllPanelElement = createAndAppend(this.stationElement, 'div', 'controllPanel', '');
 		// элементы меню
@@ -13,6 +13,7 @@ class Station {
 		//переход на страницу покупки кораблей
 		this.shipMarketElement.onclick = function() {
 			this.shipmarket.showMarket();
+			pushUrl('/market', 'Магазин');
 		}.bind(this);
 
 		this.weaponMarketElement = createAndAppend(this.controllPanelElement, 'div', 'weaponsMarket','Модули');
@@ -44,5 +45,13 @@ class Station {
 		this.inventoryElement.onclick = function() {
 			this.inventory.inventoryAppear();
 		}.bind(this);
+
+		this.showStation();
+	}
+	showStation() {
+		document.body.appendChild(this.stationElement);
+	}
+	hideStation() {
+		document.body.removeChild(this.stationElement);
 	}
 }
