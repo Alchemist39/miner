@@ -8,10 +8,15 @@ class MiningfieldPage {
 		this.oreStorage = this.getOreStorage() || 0;
 		//все созданные поля хранятся в массиве
 		this.miningFields = {};
+		this.courier = 'Разгрузка';
+
+		this.playerShip = new PlayerShip ();
+		this.cargo = new Cargoholder(2000, 0);
+		this.courierStatus = true;
 
 		this.template = Handlebars.compile(`
 			<div class="controllPanel">
-				<div class="courier">Разгрузка</div>
+				<div class="courier">${this.courier}</div>
 				<div class="overheat">Перегрев</div> 
 				<div class="weapon">Оружие</div>
 				<div class="miningLaser">Буры</div>
@@ -19,22 +24,49 @@ class MiningfieldPage {
 			</div>
 		`);
 		this.miningFieldElement = createDiv('miningField', this.template());
-		
+
 		this.miningFieldElement.querySelector('.courier').onclick = function() {
-			this.addOreToStorage(this.cargo.currentCargo);
+			if (this.courierStatus){
+				this.courierStatus = false;
+				new Timer({
+					onTick: function(timer){
+						let time = timer.getFormatedLeftTime(); 
+
+						this.miningFieldElement.querySelector('.courier').innerHTML = `
+							Курьер летит <br>
+							${time.minutes}:${time.seconds}
+						`;
+					}.bind(this),
+					onEnd: function(){
+						this.addOreToStorage(this.cargo.currentCargo);
+						this.miningFieldElement.querySelector('.courier').innerHTML = 'Разгрузка';
+						new Timer({
+							duration: 8000,
+							onTick: function(timer){
+								let time = timer.getFormatedLeftTime(); 
+
+								this.miningFieldElement.querySelector('.courier').innerHTML = `
+									Курьер недоступен <br>
+									${time.minutes}:${time.seconds}
+								`;
+							}.bind(this),
+							onEnd: function() {
+								this.miningFieldElement.querySelector('.courier').innerHTML = `
+									Разгрузка
+								`;
+								this.courierStatus = true;
+							}.bind(this)
+
+						});
+					}.bind(this)
+				});
+			}
 		}.bind(this);
+
 
 		this.miningFieldElement.querySelector('.starMap').onclick = function() {
-			this.map.showMap();
+			this.map.show();
 		}.bind(this);
-
-		this.playerShip = new PlayerShip ();
-		this.cargo = new Cargoholder(2000, 0);
-
-
-		//this.miningFields[this.page].cargo.show(this.miningFields[this.page].battleFieldElement);
-
-		//this.playerShip.show(this.miningFields[this.page].mainFieldElement);
 	}
 
 	setOreStorage(amount) {
@@ -43,6 +75,7 @@ class MiningfieldPage {
 	getOreStorage() {
 		return parseInt(localStorage.getItem('oreAtStorage'));
 	}
+
 	addOreToStorage(value) {
 		this.oreStorage += value;
 		this.setOreStorage(this.oreStorage);
@@ -52,7 +85,8 @@ class MiningfieldPage {
 	removeOreFromStorage() {
 		this.setOreStorage(0);
 	}
-	showMiningFieldPage(pageNumber) {
+	
+	show(pageNumber) {
 		this.page = pageNumber;
 		//если поле не создано, создаем поле
 		if(!this.miningFields[pageNumber]) {
@@ -71,8 +105,5 @@ class MiningfieldPage {
 		this.cargo.show(this.miningFields[this.page].battleFieldElement);
 
 		document.querySelector('.container').appendChild(this.miningFieldElement);
-	}
-	hideMiningFieldPage() {
-		document.querySelector('.container').removeChild(this.miningFieldElement);	
 	}
 }

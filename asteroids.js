@@ -44,7 +44,7 @@ class Asteroid {
 	}
 
 	getReward() {
-		return this.initialVolume * 50;
+		return this.initialVolume;
 	}
 
 	changeVolumeBar() {

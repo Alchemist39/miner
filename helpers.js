@@ -37,3 +37,43 @@ Handlebars.registerHelper("math", function(lvalue, operator, rvalue, options) {
 		"%": lvalue % rvalue
 	}[operator];
 });
+
+class Timer {
+	constructor({duration = 4000, frequency = 1000, onTick, onEnd, instantStart = true}) {
+		this.onTick = onTick;
+		this.onEnd = onEnd;
+		this.duration = duration;
+		this.startTime = Date.now();
+		this.interval = setInterval(this.action.bind(this), frequency);
+
+		if(instantStart) {
+			this.duration -= frequency;
+			this.action();
+		}
+	}
+	action() {
+		this.currentTime = Date.now();
+		if( this.currentTime < (this.startTime + this.duration) ) {
+			if(this.onTick) {
+				this.onTick(this);
+			}
+			//this.onTick && this.onTick(this);
+		} else {
+			clearInterval(this.interval);
+			if(this.onEnd) {
+				this.onEnd();
+			}
+		}
+	}
+	getFormatedLeftTime() {
+		let milisecondsLeft = (this.startTime + this.duration) - this.currentTime;
+		let secondsLeft = Math.round(milisecondsLeft / 1000);
+
+		let minutes = Math.round(secondsLeft / 60);
+		let seconds = Math.round(secondsLeft % 60);
+		return {
+			minutes: minutes < 10 ? '0' + minutes : minutes,
+			seconds: seconds < 10 ? '0' + seconds : seconds
+		};
+	}
+}

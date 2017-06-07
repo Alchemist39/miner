@@ -24,19 +24,19 @@ var clear = function() {
 //переход на станцию при смене УРЛа
 crossroads.addRoute('/station', function(){
 	clear();
-	game.station.showStation();
+	game.station.show();
 });
 
 crossroads.addRoute('/market', function(){
 	clear();
-	shipmarket.showMarket();
+	shipmarket.show();
 });
 
 //передаем в фнкцию номер страницы из УРЛ
 crossroads.addRoute('/field/{page}', function(page){
 	clear();
 	//в функцию отрисовки поля передаем номер страницы из функции
-	miningPage.showMiningFieldPage(page);
+	miningPage.show(page);
 });
 //улушаем изменение УРЛа
 window.addEventListener('popstate', function() {

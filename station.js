@@ -37,7 +37,7 @@ class Station {
 		}.bind(this);
 		
 		this.stationElement.querySelector('.starMap').onclick = function() {
-			this.map.showMap();
+			this.map.show();
 		}.bind(this);
 
 		//инвентарь
@@ -47,9 +47,9 @@ class Station {
 			this.inventory.inventoryAppear();
 		}.bind(this);
 
-		this.showStation();
+		this.show();
 	}
-	showStation() {
+	show() {
 		document.querySelector('.container').appendChild(this.stationElement);
 	}
 	hideStation() {

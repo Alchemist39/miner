@@ -99,7 +99,7 @@ class ShipMarket {
 		);
 
 	}
-	showMarket() {
+	show() {
 		document.querySelector('.container').appendChild(this.shipmarketElement);	
 	}
 	hideMarket() {

@@ -24,7 +24,7 @@ class Map{
 		}.bind(this);
 
 		this.mapCloseElement.onclick = function() {
-			this.hideMap();
+			this.hide();
 		}.bind(this);
 	}
 	//меняем УРЛ страницы
@@ -35,11 +35,11 @@ class Map{
 		pushUrl('/field/1', 'Поле');
 	};
 	//присоединяем карту к страницу
-	showMap() {
+	show() {
 		document.querySelector('.container').appendChild(this.mapElement);
 	};
 	//отсоединяем карту от страницы
-	hideMap() {
+	hide() {
 		document.querySelector('.container').removeChild(this.mapElement);
 	};
 }

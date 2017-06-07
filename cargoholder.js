@@ -51,7 +51,7 @@ class Cargoholder {
 	}
 
 	changeCargoBar() {
-		var barSize = Math.round((this.currentCargo / this.shipCargoHolder) * 100);
+		var barSize = (this.currentCargo / this.shipCargoHolder) * 100;
 		this.currentCargoBarElement.style.width = barSize + '%';
 	}
 

@@ -28,7 +28,7 @@ class Miningfield {
 
 		this.battleFieldElement = createDiv('battleField', this.template({
 			page: this.page,
-			//создаем свойства-ограничители для отображения/сокрытия ссылок в темплейте
+			//создаем свойства-ограничители для отображения/скрытия ссылок в темплейте
 			canGoBack: this.page >= 2,
 			canGoForward: this.page < 10
 		}));
@@ -49,7 +49,6 @@ class Miningfield {
 			}
 		}.bind(this), 10000)
 
-		this.createMainFieldElement();
 		this.displayPage();
 	}
 	//TODO создать метод создания астероида при удалении одного из астероидов
@@ -69,10 +68,6 @@ class Miningfield {
 	}
 	displayPage() {
 		this.battleFieldElement.querySelector('.locationName').innerHTML = 'Пояс астероидов №' + this.page;
-	}
-	createMainFieldElement() {
-		//корабль игрока на поле
-
 	}
 }
 
