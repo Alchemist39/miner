@@ -18,6 +18,7 @@
 		background-image: url('images/green_button.png'); 
 		cursor: pointer;
 		color: #fff;
+    	text-align: center;
 	}
 
 		.controllPanel div:hover {

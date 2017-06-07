@@ -38,11 +38,17 @@ Handlebars.registerHelper("math", function(lvalue, operator, rvalue, options) {
 	}[operator];
 });
 
+//хелпер создания таймера обратного отсчета
+//аргументы: длительность отсчета, частота отсчета, действие на тик, действие по окончании,
+// быстрый старт
+// в аргументах длительность задаем в секундах, поэтому домножаем ее на тысячу милисекунд
+// устанавливаем интервал с аргументом - функция и заданной частотой (frequency)
+// при быстром старте от длительности отнимаем величину задержки от частоты 
 class Timer {
-	constructor({duration = 4000, frequency = 1000, onTick, onEnd, instantStart = true}) {
+	constructor({duration = 10, frequency = 1000, onTick, onEnd, instantStart = true}) {
 		this.onTick = onTick;
 		this.onEnd = onEnd;
-		this.duration = duration;
+		this.duration = duration * 1000;
 		this.startTime = Date.now();
 		this.interval = setInterval(this.action.bind(this), frequency);
 
@@ -51,6 +57,10 @@ class Timer {
 			this.action();
 		}
 	}
+	//в переменную сохраняем текущее время
+	//проверяем что текущее время меньше, чем врея начала + длительность
+	//выполняем функцию onTick если она существует
+	//иначе (по истечение интервала) очищаем интервал и вызываем функцию onEnd, если она есть
 	action() {
 		this.currentTime = Date.now();
 		if( this.currentTime < (this.startTime + this.duration) ) {
@@ -65,6 +75,8 @@ class Timer {
 			}
 		}
 	}
+
+	//сохраняем хелпер отображения минут и секунд в формате 00:00
 	getFormatedLeftTime() {
 		let milisecondsLeft = (this.startTime + this.duration) - this.currentTime;
 		let secondsLeft = Math.round(milisecondsLeft / 1000);
@@ -77,3 +89,6 @@ class Timer {
 		};
 	}
 }
+
+
+//почитать про promises
