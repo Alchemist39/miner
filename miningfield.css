@@ -30,6 +30,10 @@
 			color: white;
 			cursor: pointer;
 		}
+			.arrowblock a {
+				color: white;
+				text-decoration: none;
+			}
 		.miningField > .battleField > .localStatus {
 			color: green;
 		}

@@ -24,12 +24,8 @@ class Station {
 			</div>
 		`);
 
-
-
-
 		// див станции
 		this.stationElement = createDiv('station', this.template());
-
 
 		//переход на страницу покупки кораблей
 		this.stationElement.querySelector('.shipsMarket').onclick = function() {
@@ -39,9 +35,7 @@ class Station {
 		this.stationElement.querySelector('.sellMarket').onclick = function() {
 			this.inventory.clearInventorySlot();
 		}.bind(this);
-
-		//ошибка: выдавало style of undefiend
-		//решение: .bind(this)
+		
 		this.stationElement.querySelector('.starMap').onclick = function() {
 			this.map.showMap();
 		}.bind(this);

@@ -27,16 +27,18 @@ class Map{
 			this.hideMap();
 		}.bind(this);
 	}
-
+	//меняем УРЛ страницы
 	stationShow() {
 		pushUrl('/station', 'Станция');
 	};
 	fieldShow() {
 		pushUrl('/field/1', 'Поле');
 	};
+	//присоединяем карту к страницу
 	showMap() {
 		document.querySelector('.container').appendChild(this.mapElement);
 	};
+	//отсоединяем карту от страницы
 	hideMap() {
 		document.querySelector('.container').removeChild(this.mapElement);
 	};

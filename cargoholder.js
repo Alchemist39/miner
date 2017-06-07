@@ -1,13 +1,12 @@
 'use strict';
+let cargoID = 0;
 class Cargoholder {
-	constructor(shipCargoHolder, currentCargo = 0, parentElement, field) {
+	constructor(shipCargoHolder, currentCargo = 0) {
 		this.shipCargoHolder = shipCargoHolder;
 		this.currentCargo = this.getOre() || currentCargo;
-		this.parentElement = parentElement;
-		this.field = field;
-		this.holdElement = createAndAppend(
-			parentElement, 
-			'div', 
+
+		this.id = cargoID++;
+		this.holdElement = createDiv(
 			'hold', 
 			`
 			<div class="holdText">Загруженность трюма</div>
@@ -43,17 +42,12 @@ class Cargoholder {
 		localStorage.setItem('ore', amount);
 	}
 	getOre() {
-		return parseInt(localStorage.getItem('ore'));
+		return parseInt(localStorage.getItem('ore')) || 0;
 	}
 	removeOre() {
 		this.currentCargo = 0;
 		this.displayCargoVolume();
 		this.setOre(this.currentCargo);
-		this.moveToInventory();
-	}
-
-	moveToInventory() {
-		game.station.inventory.addToInventory(' ore');
 	}
 
 	changeCargoBar() {

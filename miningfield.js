@@ -2,9 +2,11 @@
 
 class Miningfield {
 	constructor(page) {
+		//конструктор принимает аргумент страницы из функции, из УРЛ
 		this.page = page;
+		//массив для храненя астероидов
 		this.asteroids = [];
-		//див поля боя
+
 		this.template = Handlebars.compile(`
 			<div class="locationName"></div>
 			<div class="arrowblock">
@@ -21,76 +23,56 @@ class Miningfield {
 			</div> 
 			<div class="localStatus">Безопасный сектор</div>
 			<div class="mainField"></div>
+			
 		`);
 
 		this.battleFieldElement = createDiv('battleField', this.template({
 			page: this.page,
+			//создаем свойства-ограничители для отображения/сокрытия ссылок в темплейте
 			canGoBack: this.page >= 2,
 			canGoForward: this.page < 10
 		}));
 
 		this.mainFieldElement = this.battleFieldElement.querySelector('.mainField');
-
+		//обходим массив астероидов
 		for (var i = 1; i < 15; i++) {
-			//обект с определенным ID = экземпляру класса
+			//записываем каждый новый астероид в массив
+			//у каждого нового астероида новый ID
 			this.asteroids.push(new Asteroid(5 * this.page, this.mainFieldElement, this));
-/*
-			this.asteroids.superAsteroid
-			this.asteroids['superAsteroid']
-
-			this.asteroids = {
-				0: new Asteroid(5 * this.id, this.mainFieldElement, this),
-				1: new Asteroid(5 * this.id, this.mainFieldElement, this),
-				2: new Asteroid(5 * this.id, this.mainFieldElement, this),
-				... 
-			}*/
 		}
 
 		setInterval(function(){
+			//если астероидов меньше 15, спауним новый астероид раз в 10 сек.
+			//и записываем его в массив
 			if(this.asteroids.length < 15){
 				this.asteroids.push(new Asteroid(5 * this.page, this.mainFieldElement, this));
 			}
 		}.bind(this), 10000)
 
 		this.createMainFieldElement();
+		this.displayPage();
 	}
 	//TODO создать метод создания астероида при удалении одного из астероидов
 	// астероид == this в классе астероидов
 	onKill(asteroid) {
-		// удаляем весь астероид по id
-		this.cargo.addOre(asteroid.getReward());
+		// добавляем руду в карго по объему астероида
+		miningPage.cargo.addOre(asteroid.getReward());
+		// обходим массив астероидов циклом
 		for(let i = 0; i < this.asteroids.length; i++){
+			//если ID астероида номер i в массиве совпадает с ID астерода, который мы добываем
+			// то из массива выпиливается кусок астероидов номер i длиной в 1, т.е. текущий астероид
 			if(this.asteroids[i].id == asteroid.id) {
 				this.asteroids.splice(i, 1);
 				break;
 			}
 		}
 	}
-	displayid() {
+	displayPage() {
 		this.battleFieldElement.querySelector('.locationName').innerHTML = 'Пояс астероидов №' + this.page;
 	}
 	createMainFieldElement() {
 		//корабль игрока на поле
-		this.shipBorderElement = createAndAppend(this.mainFieldElement, 'div', 'shipBorder', '');
 
-		this.playersShipElement = createAndAppend(this.shipBorderElement, 'div', 'playersShip', '');
-		//щит корабля
-		this.shieldBorderElement = createAndAppend(this.playersShipElement, 'div', 'shieldBorder', '');
-		this.shieldBarElement = createAndAppend(this.shieldBorderElement, 'div', 'shieldBar', '');
-		this.shieldElement = createAndAppend(this.shieldBorderElement, 'div', 'shield', '30');
-		//броня корабля
-		this.armorBorderElement = createAndAppend(this.playersShipElement, 'div', 'armorBorder', '');
-		this.armorBarElement = createAndAppend(this.armorBorderElement, 'div', 'armorBar', '');
-		this.armorElement = createAndAppend(this.armorBorderElement, 'div', 'armor', '30');
-		//хп корабля
-		this.hpBorderElement = createAndAppend(this.playersShipElement, 'div', 'hpBorder', '');
-		this.hpBarElement = createAndAppend(this.hpBorderElement, 'div', 'hpBar', '');
-		this.HPElement = createAndAppend(this.hpBorderElement, 'div', 'HP', '30');
-
-
-		this.cargo = new Cargoholder(2000, 0, this.battleFieldElement, this);
-
-		this.displayid();
 	}
 }
 
