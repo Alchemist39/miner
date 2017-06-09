@@ -16,7 +16,7 @@ class Asteroid {
 			`
 			<div class="hpBorder">
 				<div class="hpBar"></div>
-				<div class="HP">${this.currentVolume}</div>
+				<div class="HP">${this.currentVolume} / ${this.initialVolume}</div>
 			</div>
 			`
 		);
@@ -25,7 +25,7 @@ class Asteroid {
 
 
 		this.asteroidElement.onclick = function() {
-			this.mineAsteroid(1);
+			this.mineAsteroid(miningPage.playerShip.laserPower);
 		}.bind(this);
 		
 		this.coordinates = {
@@ -35,11 +35,14 @@ class Asteroid {
 		this.setCoordinates();
 	}
 	mineAsteroid(power) {
-		if(this.currentVolume > 1) {
+		var newVolume = this.currentVolume - power
+		if(this.currentVolume > 1 && newVolume > 0) {
 			this.currentVolume -= power;
 			this.changeVolumeBar();
 		} else {
 			this.kill();
+			this.currentVolume = 0;
+			this.changeVolumeBar();
 		}
 	}
 
@@ -50,7 +53,7 @@ class Asteroid {
 	changeVolumeBar() {
 		var barSize = Math.round((this.currentVolume / this.initialVolume) * 100);
 		this.volumeBarElement.style.width = barSize + '%';
-		this.volumeElement.innerHTML = this.currentVolume;
+		this.volumeElement.innerHTML = this.currentVolume + "/" + this.initialVolume;
 	}
 
 	setCoordinates() {

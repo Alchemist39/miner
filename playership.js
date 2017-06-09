@@ -3,7 +3,7 @@
 class PlayerShip{
 	constructor() {
 		//корабль игрока на поле
-
+		this.laserPower = 1;
 		this.template = Handlebars.compile(`
 			<div class="playersShip">
 				<div class="shieldBorder">

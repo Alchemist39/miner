@@ -6,6 +6,7 @@ var game = {
 game.station = new Station();
 var shipmarket = new ShipMarket();
 var miningPage = new MiningfieldPage();
+var wallet = new Wallet(game.station);
 // див карты
 var map = new Map(game.station);
 //var playerShip = new PlayerShip();

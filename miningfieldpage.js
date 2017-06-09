@@ -1,10 +1,18 @@
 'use strict';
-
+var config = {
+	// время ожидания курьера
+	courierDelay: 3,
+	// кулдаун курьера
+	courierCooldown: 4,
+	// длительность перегрева
+	overheatDuration: 60
+};
 class MiningfieldPage {
 	constructor() {
 		this.map = null;
 		this.page = null;
 		this.playerShip = null;
+		this.courierCargo = 0;
 		this.oreStorage = this.getOreStorage() || 0;
 		//все созданные поля хранятся в массиве
 		this.miningFields = {};
@@ -12,6 +20,8 @@ class MiningfieldPage {
 		this.playerShip = new PlayerShip ();
 		this.cargo = new Cargoholder(2000, 0);
 		this.courierStatus = true;
+		this.flyAvailable = true;
+		this.overheatAvailable = true;
 
 		this.template = Handlebars.compile(`
 			<div class="controllPanel">
@@ -24,6 +34,7 @@ class MiningfieldPage {
 		`);
 		this.miningFieldElement = createDiv('miningField', this.template());
 		this.courierElement = this.miningFieldElement.querySelector('.courier');
+		this.overheatElement = this.miningFieldElement.querySelector('.overheat');
 
 		// кнопка разгрузки
 		// если курьер доступен
@@ -44,8 +55,8 @@ class MiningfieldPage {
 			if (this.courierStatus){
 				this.courierStatus = false;
 				new Timer({
-					duration: 10,
-					onTick: function(timer){
+					duration: config.courierDelay,
+					onTick: function(timer) {
 						let time = timer.getFormatedLeftTime(); 
 						this.courierElement.innerHTML = `
 							Курьер летит <br>
@@ -54,10 +65,11 @@ class MiningfieldPage {
 						this.courierElement.style.fontSize = '1vmax';
 					}.bind(this),
 					onEnd: function(){
-						this.addOreToStorage(this.cargo.currentCargo);
+						// перенесли руду из карго в курьера
+						this.cargo.removeOre();
 						new Timer({
-							duration: 20,
-							onTick: function(timer){
+							duration: config.courierCooldown,
+							onTick: function(timer) {
 								let time = timer.getFormatedLeftTime(); 
 								this.courierElement.innerHTML = `
 									Курьер недоступен <br>
@@ -68,8 +80,36 @@ class MiningfieldPage {
 								this.courierElement.innerHTML = 'Разгрузка';
 								this.courierElement.style.fontSize = '2vmax';
 								this.courierStatus = true;
+								this.addOreToStorage(this.courierCargo);
+								game.station.inventory.addOreToinventory();
 							}.bind(this)
 						});
+					}.bind(this)
+				});
+			}
+		}.bind(this);
+
+		this.overheatElement.onclick = function() {
+			if(this.overheatAvailable) {
+				this.overheatAvailable = false;
+				this.overheatElement.style.color = 'red';
+				this.overheatElement.style.fontSize = '1vmax';
+				this.playerShip.laserPower *= 10;
+				new Timer({
+					duration: config.overheatDuration,
+					onTick: function(timer) {
+						let time = timer.getFormatedLeftTime();
+						this.overheatElement.innerHTML = `
+							Перегрев<br>
+							${time.minutes}:${time.seconds}
+						`;
+					}.bind(this),
+					onEnd: function() {
+						this.overheatAvailable = true;
+						this.overheatElement.innerHTML = `Перегрев`;
+						this.overheatElement.style.color = 'white';
+						this.playerShip.laserPower /= 10;
+						this.overheatElement.style.fontSize = '2vmax';
 					}.bind(this)
 				});
 			}
@@ -87,14 +127,21 @@ class MiningfieldPage {
 		return parseInt(localStorage.getItem('oreAtStorage'));
 	}
 
+	addOreToCourierCargo(amount) {
+		this.courierCargo += amount;
+	}
+	removeOreFromCourierCargo() {
+		this.courierCargo = 0;
+	}
+
 	addOreToStorage(value) {
 		this.oreStorage += value;
 		this.setOreStorage(this.oreStorage);
-		this.cargo.removeOre();
 		console.log(this.oreStorage);
+		this.removeOreFromCourierCargo();
 	}
 	removeOreFromStorage() {
-		this.setOreStorage(0);
+		localStorage.setItem('oreAtStorage', 0);
 	}
 	
 	show(pageNumber) {

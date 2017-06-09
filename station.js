@@ -33,7 +33,9 @@ class Station {
 		}.bind(this);
 
 		this.stationElement.querySelector('.sellMarket').onclick = function() {
-			this.inventory.clearInventorySlot();
+			wallet.addMoney(miningPage.getOreStorage());
+			miningPage.removeOreFromStorage();
+			this.inventory.removeOreFromInventory();
 		}.bind(this);
 		
 		this.stationElement.querySelector('.starMap').onclick = function() {
@@ -41,7 +43,7 @@ class Station {
 		}.bind(this);
 
 		//инвентарь
-		this.inventory = new Inventory(this.stationElement.querySelector('.hungarContainer'), this);
+		this.inventory = new Inventory(this.stationElement.querySelector('.hungarContainer'));
 		
 		this.stationElement.querySelector('.inventory').onclick = function() {
 			this.inventory.inventoryAppear();

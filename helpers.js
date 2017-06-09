@@ -81,7 +81,7 @@ class Timer {
 		let milisecondsLeft = (this.startTime + this.duration) - this.currentTime;
 		let secondsLeft = Math.round(milisecondsLeft / 1000);
 
-		let minutes = Math.round(secondsLeft / 60);
+		let minutes = Math.floor(secondsLeft / 60);
 		let seconds = Math.round(secondsLeft % 60);
 		return {
 			minutes: minutes < 10 ? '0' + minutes : minutes,

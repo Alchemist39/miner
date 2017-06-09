@@ -38,18 +38,22 @@ class Miningfield {
 		for (var i = 1; i < 15; i++) {
 			//записываем каждый новый астероид в массив
 			//у каждого нового астероида новый ID
-			this.asteroids.push(new Asteroid(5 * this.page, this.mainFieldElement, this));
+			this.asteroids.push(new Asteroid(this.randomValue(), this.mainFieldElement, this));
 		}
 
 		setInterval(function(){
 			//если астероидов меньше 15, спауним новый астероид раз в 10 сек.
 			//и записываем его в массив
 			if(this.asteroids.length < 15){
-				this.asteroids.push(new Asteroid(5 * this.page, this.mainFieldElement, this));
+				this.asteroids.push(new Asteroid(this.randomValue(), this.mainFieldElement, this));
 			}
 		}.bind(this), 10000)
 
 		this.displayPage();
+	}
+
+	randomValue() {
+		return 5 * getRandomInt(1, 20) * this.page;
 	}
 	//TODO создать метод создания астероида при удалении одного из астероидов
 	// астероид == this в классе астероидов

@@ -45,6 +45,7 @@ class Cargoholder {
 		return parseInt(localStorage.getItem('ore')) || 0;
 	}
 	removeOre() {
+		miningPage.addOreToCourierCargo(this.currentCargo);
 		this.currentCargo = 0;
 		this.displayCargoVolume();
 		this.setOre(this.currentCargo);
