@@ -10,7 +10,24 @@ class Map{
 		`);
 
 		this.mapElement = createDiv('map', this.template());
+		/*
 		
+		this.template = Handlebars.compile(`
+			{{#if isStation}}
+				<div class="stationButton" title="Вы находитесь здесь"></div>
+				<div class="field_342" title="До места назначения 100 единиц"></div>
+			{{else}}
+				<div class="stationButton" title="До места назначения 100 единиц"></div>
+				<div class="field_342" title="Вы находитесь здесь"></div>
+			{{/if}}
+			<div class="closeMap">Закрыть</div>
+		`);
+
+		this.mapElement = createDiv('map', this.template({
+			isStation: stationRoute.match(window.location.pathname)
+		}));
+
+		*/
 		this.stationButtonElement = this.mapElement.querySelector('.stationButton');
 		this.field_342Element = this.mapElement.querySelector('.field_342');
 		this.mapCloseElement = this.mapElement.querySelector('.closeMap');
@@ -27,6 +44,7 @@ class Map{
 			this.hide();
 		}.bind(this);
 	}
+
 	//меняем УРЛ страницы
 	stationShow() {
 		pushUrl('/station', 'Станция');

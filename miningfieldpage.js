@@ -39,16 +39,17 @@ class MiningfieldPage {
 		// кнопка разгрузки
 		// если курьер доступен
 		// устанавливаем его недоступным, создаем экземпляр таймера
-		// длительность 10 сек
+		// длительностью courierDelay
 
 		// в функции onTick обращаемся к методу форматирования выходных данных
 		// устанавливаем отображение надписи полета и таймер отсчета
 		// меняем размер шрифта на меньший
 
-		// функция onEnd: добавляем руду в хранилище
+		// функция onEnd: добавляем руду в карго курьера
 		// запусаем новый таймер с большей длительностью, то же форматирование данных
 		// меняем надпись
 		// onEnd меняем надпись, увеличиваем шрифт, меняем статус курьера на true
+		// перегружаем руду из курьера в хранилище, отображаем руду в инвентаре
 
 		// везде указываем текущий контекст для функций через .bind(this)
 		this.courierElement.onclick = function() {
@@ -119,14 +120,14 @@ class MiningfieldPage {
 			this.map.show();
 		}.bind(this);
 	}
-
+	// руда в хранилище
 	setOreStorage(amount) {
 		localStorage.setItem('oreAtStorage', amount);
 	}
 	getOreStorage() {
 		return parseInt(localStorage.getItem('oreAtStorage'));
 	}
-
+	// руда в карго курьера
 	addOreToCourierCargo(amount) {
 		this.courierCargo += amount;
 	}
@@ -143,7 +144,7 @@ class MiningfieldPage {
 	removeOreFromStorage() {
 		localStorage.setItem('oreAtStorage', 0);
 	}
-	
+	// создание/отображение поля
 	show(pageNumber) {
 		this.page = pageNumber;
 		//если поле не создано, создаем поле

@@ -4,6 +4,13 @@ class PlayerShip{
 	constructor() {
 		//корабль игрока на поле
 		this.laserPower = 1;
+		// мощь движка единиц в секунду
+		this.enginePower = 20;
+		// скорость сканирования 10 астероидов в минуту
+		this.scanRate = 20;
+		// количество одновременно удерживаемых астероидов
+		this.targetQuantity = 15;
+		
 		this.template = Handlebars.compile(`
 			<div class="playersShip">
 				<div class="shieldBorder">

@@ -1,10 +1,11 @@
 'use strict';
 
 class Inventory {
-	constructor(parentElement) {
+	constructor(parentElement, slots = 48) {
 		this.parentElement = parentElement;
 		//все контейнеры храним в массиве
 		this.containers = [];
+		this.slots = slots;
 		//темплейт создания слотов
 		
 			//разобраться с синтаксисом
@@ -17,9 +18,16 @@ class Inventory {
 		`);
 
 		//создаем циклом слоты
-		for(var i = 0; i < 48; i++){
+		for(var i = 0; i < this.slots; i++){
 			this.containers.push({});
 		}
+		this.createInventory();
+	}
+	setUpgrades() {
+		this.containers[0] = {class: 'cruiser', title: 'Усиление лазеров'};
+		this.containers[1] = {class: 'carrier', title: 'Расширение сканера'};
+		this.containers[2] = {class: 'truck', title: 'Ускорение сканера'};
+		this.removeInventory();
 		this.createInventory();
 	}
 	createInventory() {
@@ -32,7 +40,7 @@ class Inventory {
 			this.template({containers: this.containers})
 		);
 	}
-	remomveInventory() {
+	removeInventory() {
 		this.parentElement.removeChild(this.inventoryContainerElement);
 	}
 
@@ -53,7 +61,16 @@ class Inventory {
 				class: 'ore',
 				title: "Руда" + " " + miningPage.getOreStorage()
 			};
-			this.remomveInventory();
+
+			this.removeInventory();
+			this.createInventory();
+		} else if(this.containers[0].class = 'ore') {
+			this.containers[0] = {
+				class: 'ore',
+				title: "Руда" + " " + miningPage.getOreStorage()
+			};
+
+			this.removeInventory();
 			this.createInventory();
 		}
 	}
@@ -63,7 +80,7 @@ class Inventory {
 				class: '',
 				title: ''
 			}
-			this.remomveInventory();
+			this.removeInventory();
 			this.createInventory();
 		}
 	}

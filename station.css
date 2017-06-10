@@ -47,6 +47,42 @@
 				left: 120px;
 				top: 185px;
 			}
+		.station > .hungarContainer > .upgrades {
+				width: 20%;
+				height: 67%;
+				position: absolute;
+				right: 0;
+				top: 0;
+				background-image: url('images/artefacts.jpg');
+				visibility: hidden;
+		}
+			.station > .hungarContainer > .upgrades > .inventoryContainer {
+				width: 100%;
+				height: 100%;
+				display: flex;
+				flex-direction: row;
+				flex-wrap: wrap;
+				justify-content: space-between;
+				align-items: flex-start;
+				position: relative;
+				z-index: 1;
+			}
+				.station > .hungarContainer > .upgrades > .inventoryContainer > .inventorySlot {
+					height: 17%;
+					width: 10%;
+					min-width: 75px;
+					background-image: url('images/artefacts.png');
+					cursor: pointer;
+				}
+				.station > .hungarContainer > .upgrades > .inventoryContainer > .cruiser {
+					background-image: url('/images/i/cruiser.png');
+				}
+				.station > .hungarContainer > .upgrades > .inventoryContainer > .carrier {
+					background-image: url('/images/i/carrier.png');
+				}
+				.station > .hungarContainer > .upgrades > .inventoryContainer > .truck {
+					background-image: url('/images/i/truck.png');
+				}
 		.station > .hungarContainer > .inventoryContainer {
 			width: 100%;
 			height: 33%;

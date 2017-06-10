@@ -80,7 +80,9 @@ class Timer {
 	getFormatedLeftTime() {
 		let milisecondsLeft = (this.startTime + this.duration) - this.currentTime;
 		let secondsLeft = Math.round(milisecondsLeft / 1000);
-
+	// к минутам применяется округление до Floor т.к. при round минуты не перещелкиваются как надо 
+	// к секундам округление идет до ближайшего целого, иначе секунды могут пропускаться
+	// т.к. не всегда тик происходит на круглом значении милисекунд (998, 1000, 1002)
 		let minutes = Math.floor(secondsLeft / 60);
 		let seconds = Math.round(secondsLeft % 60);
 		return {

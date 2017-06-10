@@ -23,7 +23,6 @@ class Miningfield {
 			</div> 
 			<div class="localStatus">Безопасный сектор</div>
 			<div class="mainField"></div>
-			
 		`);
 
 		this.battleFieldElement = createDiv('battleField', this.template({
@@ -32,22 +31,22 @@ class Miningfield {
 			canGoBack: this.page >= 2,
 			canGoForward: this.page < 10
 		}));
-
 		this.mainFieldElement = this.battleFieldElement.querySelector('.mainField');
 		//обходим массив астероидов
-		for (var i = 1; i < 15; i++) {
+		for (var i = 1; i < 10; i++) {
 			//записываем каждый новый астероид в массив
 			//у каждого нового астероида новый ID
 			this.asteroids.push(new Asteroid(this.randomValue(), this.mainFieldElement, this));
 		}
-
+		// 10 / 60 сек. раз в 6 сек
+		this.scaningSpeed = (60 / miningPage.playerShip.scanRate) * 1000;
 		setInterval(function(){
-			//если астероидов меньше 15, спауним новый астероид раз в 10 сек.
-			//и записываем его в массив
-			if(this.asteroids.length < 15){
+		//если астероидов меньше targetQuantity, спауним новый астероид раз в this.scaningSpeed сек.
+		//и записываем его в массив
+			if(this.asteroids.length < miningPage.playerShip.targetQuantity){
 				this.asteroids.push(new Asteroid(this.randomValue(), this.mainFieldElement, this));
 			}
-		}.bind(this), 10000)
+		}.bind(this), this.scaningSpeed)
 
 		this.displayPage();
 	}
@@ -59,7 +58,6 @@ class Miningfield {
 	// астероид == this в классе астероидов
 	onKill(asteroid) {
 		// добавляем руду в карго по объему астероида
-		miningPage.cargo.addOre(asteroid.getReward());
 		// обходим массив астероидов циклом
 		for(let i = 0; i < this.asteroids.length; i++){
 			//если ID астероида номер i в массиве совпадает с ID астерода, который мы добываем

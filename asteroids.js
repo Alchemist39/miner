@@ -38,14 +38,26 @@ class Asteroid {
 		var newVolume = this.currentVolume - power
 		if(this.currentVolume > 1 && newVolume > 0) {
 			this.currentVolume -= power;
+			miningPage.cargo.addOre(power);
 			this.changeVolumeBar();
 		} else {
+			miningPage.cargo.addOre(this.currentVolume);
 			this.kill();
 			this.currentVolume = 0;
 			this.changeVolumeBar();
 		}
 	}
-
+/*
+	autoMining() {
+		for(var i = 0; i < miningPage.asteroids.length; i++) {
+			setInterval(function() {
+				if (miningPage.asteroids[i]) {
+					miningPage.asteroids[i].mineAsteroid(miningPage.playerShip.laserPower);				
+				}
+			}.bind(this), 1000);
+		}
+	}
+*/
 	getReward() {
 		return this.initialVolume;
 	}

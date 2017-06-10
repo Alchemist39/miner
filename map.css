@@ -26,12 +26,14 @@
 		top: 30%;
 		width: 40px;
 		height: 40px;
+		border-radius: 23px;
 		background-image: url('images/artefacts.png');
 	}
 	 .field_342 {
 		left: 80%;
 		top: 50%;
-		width: 40px;
-		height: 40px;	
+		width: 68px;
+		height: 68px;	
+		border-radius: 34px;
 		background-image: url('images/asteroid2.png');
 	}

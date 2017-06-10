@@ -23,18 +23,18 @@ var clear = function() {
 	document.querySelector('.container').innerHTML = '';
 };
 //переход на станцию при смене УРЛа
-crossroads.addRoute('/station', function(){
+var stationRoute = crossroads.addRoute('/station', function(){
 	clear();
 	game.station.show();
 });
 
-crossroads.addRoute('/market', function(){
+var marketRoute = crossroads.addRoute('/market', function(){
 	clear();
 	shipmarket.show();
 });
 
 //передаем в фнкцию номер страницы из УРЛ
-crossroads.addRoute('/field/{page}', function(page){
+ var fieldRoute = crossroads.addRoute('/field/{page}', function(page){
 	clear();
 	//в функцию отрисовки поля передаем номер страницы из функции
 	miningPage.show(page);
