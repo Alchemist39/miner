@@ -1,15 +1,18 @@
 'use strict';
 
+var player = new Player('Alchemist');
 class PlayerShip{
 	constructor() {
 		//корабль игрока на поле
-		this.laserPower = 1;
+		this.laserPower = player.upgrades.lasers;
 		// мощь движка единиц в секунду
 		this.enginePower = 20;
 		// скорость сканирования 10 астероидов в минуту
-		this.scanRate = 20;
+		this.scanRate = player.upgrades.scanRate;
 		// количество одновременно удерживаемых астероидов
-		this.targetQuantity = 15;
+		this.targetQuantity = player.upgrades.targetQuantity;
+
+		this.cargoCapacity = 2000;
 		
 		this.template = Handlebars.compile(`
 			<div class="playersShip">

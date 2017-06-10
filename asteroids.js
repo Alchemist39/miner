@@ -9,6 +9,10 @@ class Asteroid {
 		this.currentVolume = this.initialVolume;
 		this.parentElement = parentElement;
 		this.field = field;
+
+		this.mineInterval = null;
+		this.multiplier = null;
+
 		this.asteroidElement = createAndAppend(
 			parentElement,
 			'div',
@@ -23,10 +27,31 @@ class Asteroid {
 		this.volumeBarElement = this.asteroidElement.querySelector('.hpBar');
 		this.volumeElement = this.asteroidElement.querySelector('.HP');
 
-
-		this.asteroidElement.onclick = function() {
+		this.asteroidElement.addEventListener('click', function() {
 			this.mineAsteroid(miningPage.playerShip.laserPower);
-		}.bind(this);
+		}.bind(this));
+
+		// добыча астероида призажатии кнопки мыши на нем
+		// если занести всю формулу в переменную, то увеличение мультипликатора не происходит
+		this.asteroidElement.addEventListener('mousedown', function() {
+			this.mineInterval = setInterval(function(){
+				if(this.currentVolume > 1 && this.currentVolume > ((miningPage.playerShip.laserPower + this.multiplier) / 2)) {
+					this.mineAsteroid((miningPage.playerShip.laserPower + this.multiplier) / 4);
+					this.multiplier += (miningPage.playerShip.laserPower / 16);
+				} else {
+					this.mineAsteroid(this.currentVolume);
+					clearInterval(this.mineInterval);
+					this.multiplier = null;
+				}
+			}.bind(this), 250);
+		}.bind(this));
+
+		this.asteroidElement.addEventListener('mouseup', function() {
+			clearInterval(this.mineInterval);
+			this.multiplier = null;
+		}.bind(this));
+
+		
 		
 		this.coordinates = {
 			x: "",
@@ -65,7 +90,7 @@ class Asteroid {
 	changeVolumeBar() {
 		var barSize = Math.round((this.currentVolume / this.initialVolume) * 100);
 		this.volumeBarElement.style.width = barSize + '%';
-		this.volumeElement.innerHTML = this.currentVolume + "/" + this.initialVolume;
+		this.volumeElement.innerHTML = Math.round(this.currentVolume) + "/" + this.initialVolume;
 	}
 
 	setCoordinates() {

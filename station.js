@@ -28,58 +28,63 @@ class Station {
 		// див станции
 		this.stationElement = createDiv('station', this.template());
 
-		this.stationElement.querySelector('.controllPanel').onclick = function(event) {
-			let target = event.target;
-			// клик по кораблям
-			if(target.className == 'shipsMarket') {
-				pushUrl('/market', 'Магазин');
-			// клик по модулям
-			} else if(target.className == 'weaponsMarket') {this.hideStation();
-				this.show();
-				this.inventory.inventoryContainerElement.style.left = '0%';
-				this.stationElement.querySelector('.upgrades').style.visibility = 'visible';
-			// клик по продаже
-			} else if(target.className == 'sellMarket') {
-				wallet.addMoney(miningPage.getOreStorage());
-				miningPage.removeOreFromStorage();
-				this.inventory.removeOreFromInventory();
-				this.inventory.inventoryContainerElement.style.left = '0%';
-			//клик по карте
-			} else if(target.className == 'starMap') {
-				this.map.show();
-			// клик по инвенатрю
-			} else if(target.className == 'inventory') {
-				this.inventory.inventoryAppear();
-			}
-		}.bind(this);
 
 		//инвентарь
 		this.inventory = new Inventory(this.stationElement.querySelector('.hungarContainer'));
-		// апгрейды
+
 		this.upgradesSlots = new Inventory(this.stationElement.querySelector('.upgrades'), 20);
 		this.upgradesSlots.setUpgrades();
-		
 
-		this.stationElement.querySelector('.upgrades').onclick = function(event) {
-			let target = event.target;
+		//переход на страницу покупки кораблей
+		this.stationElement.querySelector('.shipsMarket').addEventListener('click', function() {
+			pushUrl('/market', 'Магазин');
+		}.bind(this));
 
-			if(target.className == 'inventorySlot cruiser') {
-				if(miningPage.playerShip.laserPower != 20 && miningPage.overheatAvailable == true) {
-					miningPage.playerShip.laserPower = 20;
-					console.log('Лазеры усилены до 20');
-				}
-			} else if(target.className == 'inventorySlot carrier') {
-				if(miningPage.playerShip.targetQuantity != 30) {
-					miningPage.playerShip.targetQuantity = 30;
-					console.log('Количество увеличено до 30');
-				}
-			} else if(target.className == 'inventorySlot truck') {
-				if(miningPage.playerShip.scanRate != 100) {
-					miningPage.playerShip.scanRate = 100;
-					console.log('Скорость сканеров увеличена до 100');
-				}
+		this.stationElement.querySelector('.weaponsMarket').addEventListener('click', function() {
+			this.hideStation();
+			this.show();
+			this.inventory.inventoryContainerElement.style.left = '0%';
+			this.stationElement.querySelector('.upgrades').style.visibility = 'visible';
+		}.bind(this));
+
+		this.stationElement.querySelector('.sellMarket').addEventListener('click', function() {
+			wallet.addMoney(miningPage.getOreStorage());
+			miningPage.removeOreFromStorage();
+			this.inventory.removeOreFromInventory();
+			this.inventory.inventoryContainerElement.style.left = '0%';
+		}.bind(this));
+
+		this.stationElement.querySelector('.starMap').addEventListener('click', function() {
+			this.map.show();
+		}.bind(this));
+
+		this.stationElement.querySelector('.inventory').addEventListener('click', function() {
+			this.inventory.inventoryAppear();
+		}.bind(this));
+
+		this.stationElement.querySelector('.cruiser').addEventListener('click', function() {
+			if(miningPage.playerShip.laserPower != 2 && miningPage.overheatAvailable == true) {
+				miningPage.playerShip.laserPower = 2;
+				console.log('Лазеры усилены до 2');
+				localStorage.setItem('lasers', 2);
 			}
-		}.bind(this);
+		}.bind(this));
+
+		this.stationElement.querySelector('.carrier').addEventListener('click', function() {
+			if(miningPage.playerShip.targetQuantity != 15) {
+				miningPage.playerShip.targetQuantity = 15;
+				console.log('Количество увеличено до 15');
+				localStorage.setItem('targetQuantity', 15);
+			}
+		}.bind(this));
+
+		this.stationElement.querySelector('.truck').addEventListener('click', function() {
+			if(miningPage.playerShip.scanRate != 15) {
+				miningPage.playerShip.scanRate = 15;
+				console.log('Скорость сканеров увеличена до 15');
+				localStorage.setItem('scanRate', 15);
+			}
+		}.bind(this));
 
 		this.show();
 	}

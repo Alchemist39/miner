@@ -18,7 +18,7 @@ class MiningfieldPage {
 		this.miningFields = {};
 
 		this.playerShip = new PlayerShip ();
-		this.cargo = new Cargoholder(2000, 0);
+		this.cargo = new Cargoholder(this.playerShip.cargoCapacity);
 		this.courierStatus = true;
 		this.flyAvailable = true;
 		this.overheatAvailable = true;

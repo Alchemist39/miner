@@ -1,9 +1,9 @@
 'use strict';
 let cargoID = 0;
 class Cargoholder {
-	constructor(shipCargoHolder, currentCargo = 0) {
+	constructor(shipCargoHolder) {
 		this.shipCargoHolder = shipCargoHolder;
-		this.currentCargo = this.getOre() || currentCargo;
+		this.currentCargo = this.getOre();
 
 		this.id = cargoID++;
 		this.holdElement = createDiv(
@@ -58,7 +58,7 @@ class Cargoholder {
 
 	displayCargoVolume() {
 		this.changeCargoBar();
-		this.currentCargoElement.innerHTML = this.currentCargo + " / " + this.shipCargoHolder;
+		this.currentCargoElement.innerHTML = Math.round(this.currentCargo) + " / " + this.shipCargoHolder;
 	}
 	show(parentElement) {
 		parentElement.appendChild(this.holdElement);
