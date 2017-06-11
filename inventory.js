@@ -45,28 +45,47 @@ class Inventory {
 			this.template({containers: this.containers})
 		);
 
-
+		// создаем переменную, в которую в дальнейшем передаем отправную точку (див) для драга
 		var dragged;
-
-		var slots = this.inventoryContainerElement.querySelectorAll('.inventorySlot div');
-		for(let i = 0; i < slots.length; i++) {
-			slots[i].addEventListener('dragstart', function(e) {
-				e.dataTransfer.setData('item', e.target);
+		// slots = массив дивов в инвентаре
+		// обходим массив, при драгстарте создаем объект с трансферной информацией
+		var innerSlots = this.inventoryContainerElement.querySelectorAll('.inventorySlot div');
+		for(let i = 0; i < innerSlots.length; i++) {
+			innerSlots[i].addEventListener('dragstart', function(e) {
+				// сохраняем исходную точку (див) в ранее созданную вне функций переменную
+				// если не сохранить ее тут, то при вызове дропа e.target будет равен цели дропа
 				dragged = e.target;
 			}.bind(this));
 		}
-		
+		// создаем массив, который хранит все родительские дивы слотов
+		// обходим массив, предотвращаем действия по умолчанию
+
+		// при дропе отлавливаем событие
+
+		// если конечная ячейка содержит какой-то предмет
 		var slots = this.inventoryContainerElement.querySelectorAll('.inventorySlot');
 		for(let i = 0; i < slots.length; i++) {
 			slots[i].addEventListener('dragover', function(e) {
 				e.preventDefault();
 			});
 			slots[i].addEventListener('drop', function(e) {
+				e.preventDefault();
+				// родитель элемента в исходной точке
+				var draggedParent = dragged.parentNode;
+				// див, уже находящийся в точке назначения
+				var destinationContent = e.currentTarget.firstElementChild;
+				// если конечная ячейка пустая, 
+				// то отцепляем див от исходной ячейки 
+				// и цепляем к конечной ячейке
 				if(e.currentTarget.childElementCount == 0) {
-					e.preventDefault();
-					e.dataTransfer.getData('item');
-					dragged.parentNode.removeChild(dragged );
+					draggedParent.removeChild(dragged);
 					e.target.appendChild(dragged);
+				} else if(e.currentTarget.childElementCount == 1) {
+					// в точке назначения заменяем новым (dragged) дивом старый (dest.Cont) див.
+					e.currentTarget.replaceChild(dragged, destinationContent);
+					// в исходной точке, а точнее к родителю элемента в исходной точке 
+					// аппендим старый див (который был в точке назначения до замены)
+					draggedParent.appendChild(destinationContent);
 				}
 			});
 		}
