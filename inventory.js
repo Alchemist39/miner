@@ -62,10 +62,12 @@ class Inventory {
 				e.preventDefault();
 			});
 			slots[i].addEventListener('drop', function(e) {
-				e.preventDefault();
-				e.dataTransfer.getData('item');
-				dragged.parentNode.removeChild(dragged );
-				e.target.appendChild(dragged);
+				if(e.currentTarget.childElementCount == 0) {
+					e.preventDefault();
+					e.dataTransfer.getData('item');
+					dragged.parentNode.removeChild(dragged );
+					e.target.appendChild(dragged);
+				}
 			});
 		}
 	}
