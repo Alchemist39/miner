@@ -71,16 +71,19 @@
 					height: 17%;
 					width: 10%;
 					min-width: 75px;
-					background-image: url('images/artefacts.png');
 					cursor: pointer;
 				}
-				.station > .hungarContainer > .upgrades > .inventoryContainer > .cruiser {
+				.station > .hungarContainer > .upgrades > .inventoryContainer > .inventorySlot > div {
+					height: 100%;
+					width: 100%;
+				}
+				.station > .hungarContainer > .upgrades > .inventoryContainer > .inventorySlot > .cruiser {
 					background-image: url('/images/i/cruiser.png');
 				}
-				.station > .hungarContainer > .upgrades > .inventoryContainer > .carrier {
+				.station > .hungarContainer > .upgrades > .inventoryContainer > .inventorySlot > .carrier {
 					background-image: url('/images/i/carrier.png');
 				}
-				.station > .hungarContainer > .upgrades > .inventoryContainer > .truck {
+				.station > .hungarContainer > .upgrades > .inventoryContainer > .inventorySlot > .truck {
 					background-image: url('/images/i/truck.png');
 				}
 		.station > .hungarContainer > .inventoryContainer {
@@ -102,9 +105,12 @@
 				height: 32%;
 				width: 6%;
 				min-width: 75px;
-				background-image: url('images/artefacts.png');
 			}
-			.inventoryContainer > .inventorySlot.ore {
+				.inventoryContainer > .inventorySlot > div {
+					height: 100%;
+					width: 100%;
+				}
+			.inventoryContainer > .inventorySlot > .ore {
 				background-image: url('images/asteroid2.png');
 			}
 			

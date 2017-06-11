@@ -1,9 +1,9 @@
 'use strict';
 var config = {
 	// время ожидания курьера
-	courierDelay: 3,
+	courierDelay: 1,
 	// кулдаун курьера
-	courierCooldown: 4,
+	courierCooldown: 1,
 	// длительность перегрева
 	overheatDuration: 60
 };
