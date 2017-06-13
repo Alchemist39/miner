@@ -125,7 +125,7 @@ class MiningfieldPage {
 		localStorage.setItem('oreAtStorage', amount);
 	}
 	getOreStorage() {
-		return parseInt(localStorage.getItem('oreAtStorage'));
+		return parseInt( localStorage.getItem('oreAtStorage') ) || 0;
 	}
 	// руда в карго курьера
 	addOreToCourierCargo(amount) {

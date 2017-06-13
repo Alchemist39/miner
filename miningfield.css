@@ -68,7 +68,7 @@
 				width: 50px;
 				height: 50px;
 			}
-				.hpBorder, .shieldBorder, .armorBorder {
+				.hpBorder, .shieldBorder, .armorBorder, .chargeBorder {
 					position: absolute;
 					top: 104%;
 					left: calc(50% - 42px);
@@ -79,7 +79,7 @@
 					border: 2px solid black;
 					background-color: white;
 				}
-					.hpBorder .hpBar, .shieldBorder .shieldBar, .armorBorder .armorBar {
+					.hpBorder .hpBar, .shieldBorder .shieldBar, .armorBorder .armorBar, .chargeBorder .chargeBar {
 						position: absolute;
 						left: 0;
 						top: 0;
@@ -96,7 +96,10 @@
 						.playersShip .armorBar {
 							width: 30%;
 						}
-					.hpBorder .HP, .shieldBorder .shield, .armorBorder .armor {
+						.playersShip .chargeBar {
+							width: 0%;
+						}
+					.hpBorder .HP, .shieldBorder .shield, .armorBorder .armor, .chargeBorder .charge {
 						position: absolute;
 						left: 0;
 						top: 0;
@@ -121,6 +124,12 @@
 						.armorBorder > .armorBar {
 							background-color: grey;
 						}
+					.chargeBorder {
+						top: 154%;
+					}
+
+
+
 		.miningField > .battleField > .hold {
 			display: flex;
 			flex-direction: column;

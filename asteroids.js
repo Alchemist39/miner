@@ -11,7 +11,8 @@ class Asteroid {
 		this.field = field;
 
 		this.mineInterval = null;
-		this.multiplier = null;
+		this.removeInterval = null;
+		this.mineAction = null;
 
 		this.asteroidElement = createAndAppend(
 			parentElement,
@@ -34,36 +35,47 @@ class Asteroid {
 		// добыча астероида призажатии кнопки мыши на нем
 		// если занести всю формулу в переменную, то увеличение мультипликатора не происходит
 		this.asteroidElement.addEventListener('mousedown', function() {
+			// установка цели для оружия корабля miningPage.playerShip.setTarget(this)
+			// mouseUp clearTarget
 			this.mineInterval = setInterval(function(){
-				if(this.currentVolume > 1 && this.currentVolume > ((miningPage.playerShip.laserPower + this.multiplier) / 2)) {
-					this.mineAsteroid((miningPage.playerShip.laserPower + this.multiplier) / 4);
-					this.multiplier += (miningPage.playerShip.laserPower / 16);
+				let playerShip = miningPage.playerShip;
+				if(this.currentVolume > 1 && this.currentVolume > ((playerShip.laserPower + playerShip.multiplier) / 4)) {
+					this.mineAsteroid((playerShip.laserPower + playerShip.getMultiplier()) / 4);
+					if( playerShip.getMultiplier() < playerShip.maxCharge) {
+						playerShip.setMultiplier(playerShip.laserPower / 16);
+					}
+					console.log(playerShip.getMultiplier());
 				} else {
 					this.mineAsteroid(this.currentVolume);
 					clearInterval(this.mineInterval);
-					this.multiplier = null;
+					playerShip.setMultiplier(0);
 				}
+				playerShip.changeChargeBar();
 			}.bind(this), 250);
 		}.bind(this));
+		// прослушиваем отпускание на документе, т.к. если зажатую мышь увести с астероида
+		// и отпустить, то добыча не остановится. Если не отлавливать dragend, то при перетягивании
+		// астероида, не отлавливается событие mouseup 
+		document.addEventListener('mouseup', function() {this.clearMultiplier()}.bind(this));
+		document.addEventListener('dragend', function() {this.clearMultiplier()}.bind(this));
 
-		this.asteroidElement.addEventListener('mouseup', function() {
-			clearInterval(this.mineInterval);
-			this.multiplier = null;
-		}.bind(this));
-
-		
-		
 		this.coordinates = {
 			x: "",
 			y: ""
 		};
 		this.setCoordinates();
 	}
+	clearMultiplier() {
+		clearInterval(this.mineInterval);
+		miningPage.playerShip.setMultiplier(0);
+		miningPage.playerShip.changeChargeBar()
+	}
 	mineAsteroid(power) {
 		var newVolume = this.currentVolume - power
 		if(this.currentVolume > 1 && newVolume > 0) {
 			this.currentVolume -= power;
 			miningPage.cargo.addOre(power);
+			// TODO ретурн power||currentVolume
 			this.changeVolumeBar();
 		} else {
 			miningPage.cargo.addOre(this.currentVolume);

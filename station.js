@@ -10,7 +10,7 @@ class Station {
 				<div class="shipsMarket">Корабли</div>	
 				<div class="weaponsMarket">Модули</div> 
 				<div class="repairMarket">Ремонт</div>
-				<div class="sellMarket">Продажа</div>
+				<div class="sellMarket" draggable="true">Продажа</div>
 				<div class="wallet">Кошелек</div>
 				<div class="inventory">Инвентарь</div>
 				<div class="starMap">Карта</div>			
@@ -27,6 +27,7 @@ class Station {
 
 		// див станции
 		this.stationElement = createDiv('station', this.template());
+		this.sellElement = this.stationElement.querySelector('.sellMarket');
 
 
 		//инвентарь
@@ -47,7 +48,7 @@ class Station {
 			this.stationElement.querySelector('.upgrades').style.visibility = 'visible';
 		}.bind(this));
 
-		this.stationElement.querySelector('.sellMarket').addEventListener('click', function() {
+		this.sellElement.addEventListener('click', function() {
 			wallet.addMoney(miningPage.getOreStorage());
 			miningPage.removeOreFromStorage();
 			this.inventory.removeOreFromInventory();

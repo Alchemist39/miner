@@ -8,7 +8,6 @@ class Inventory {
 		this.slots = slots;
 		//темплейт создания слотов
 		
-			//разобраться с синтаксисом
 		// массив контейнеров, каждый контейнер
 		// в класс передаем свойство объекта из массива
 		this.template = Handlebars.compile(`
@@ -25,9 +24,10 @@ class Inventory {
 		for(var i = 0; i < this.slots; i++){
 			this.containers.push({});
 		}
-		this.createInventory();
 
+		this.createInventory();
 	}
+
 	setUpgrades() {
 		this.containers[0] = {class: 'cruiser', title: 'Усиление лазеров'};
 		this.containers[1] = {class: 'carrier', title: 'Расширение сканера'};
@@ -35,6 +35,7 @@ class Inventory {
 		this.removeInventory();
 		this.createInventory();
 	}
+
 	createInventory() {
 		this.inventoryContainerElement = createAndAppend(
 			this.parentElement,
@@ -68,6 +69,7 @@ class Inventory {
 			slots[i].addEventListener('dragover', function(e) {
 				e.preventDefault();
 			});
+
 			slots[i].addEventListener('drop', function(e) {
 				e.preventDefault();
 				// родитель элемента в исходной точке
@@ -90,10 +92,10 @@ class Inventory {
 			});
 		}
 	}
+
 	removeInventory() {
 		this.parentElement.removeChild(this.inventoryContainerElement);
 	}
-
 	appendInventory() {
 		this.parentElement.appendChild(this.inventoryContainerElement);
 	}
@@ -105,13 +107,13 @@ class Inventory {
 			this.inventoryContainerElement.style.left = '-100%';
 		}
 	}
+
 	addOreToinventory() {
 		if(!this.containers[0].class || this.containers[0].class == 'ore') {
 			this.containers[0] = {
 				class: 'ore',
 				title: "Руда" + " " + miningPage.getOreStorage()
 			};
-
 
 			this.removeInventory();
 			this.createInventory();
@@ -123,6 +125,7 @@ class Inventory {
 				class: '',
 				title: ''
 			}
+			
 			this.removeInventory();
 			this.createInventory();
 		}
