@@ -32,32 +32,16 @@ class Asteroid {
 			this.mineAsteroid(miningPage.playerShip.laserPower);
 		}.bind(this));
 
-		// добыча астероида призажатии кнопки мыши на нем
-		// если занести всю формулу в переменную, то увеличение мультипликатора не происходит
 		this.asteroidElement.addEventListener('mousedown', function() {
 			// установка цели для оружия корабля miningPage.playerShip.setTarget(this)
 			// mouseUp clearTarget
-			this.mineInterval = setInterval(function(){
-				let playerShip = miningPage.playerShip;
-				if(this.currentVolume > 1 && this.currentVolume > ((playerShip.laserPower + playerShip.multiplier) / 4)) {
-					this.mineAsteroid((playerShip.laserPower + playerShip.getMultiplier()) / 4);
-					if( playerShip.getMultiplier() < playerShip.maxCharge) {
-						playerShip.setMultiplier(playerShip.laserPower / 16);
-					}
-					console.log(playerShip.getMultiplier());
-				} else {
-					this.mineAsteroid(this.currentVolume);
-					clearInterval(this.mineInterval);
-					playerShip.setMultiplier(0);
-				}
-				playerShip.changeChargeBar();
-			}.bind(this), 250);
+			this.setTarget(this);
 		}.bind(this));
 		// прослушиваем отпускание на документе, т.к. если зажатую мышь увести с астероида
 		// и отпустить, то добыча не остановится. Если не отлавливать dragend, то при перетягивании
 		// астероида, не отлавливается событие mouseup 
-		document.addEventListener('mouseup', function() {this.clearMultiplier()}.bind(this));
-		document.addEventListener('dragend', function() {this.clearMultiplier()}.bind(this));
+		document.addEventListener('mouseup', function() {this.clearTarget()}.bind(this));
+		document.addEventListener('dragend', function() {this.clearTarget()}.bind(this));
 
 		this.coordinates = {
 			x: "",
@@ -65,10 +49,12 @@ class Asteroid {
 		};
 		this.setCoordinates();
 	}
-	clearMultiplier() {
-		clearInterval(this.mineInterval);
-		miningPage.playerShip.setMultiplier(0);
-		miningPage.playerShip.changeChargeBar()
+	setTarget(target) {
+		miningPage.playerShip.target = target;
+		miningPage.playerShip.miningLaser();
+	}
+	clearTarget() {
+		miningPage.playerShip.miningStop();
 	}
 	mineAsteroid(power) {
 		var newVolume = this.currentVolume - power
@@ -84,17 +70,6 @@ class Asteroid {
 			this.changeVolumeBar();
 		}
 	}
-/*
-	autoMining() {
-		for(var i = 0; i < miningPage.asteroids.length; i++) {
-			setInterval(function() {
-				if (miningPage.asteroids[i]) {
-					miningPage.asteroids[i].mineAsteroid(miningPage.playerShip.laserPower);				
-				}
-			}.bind(this), 1000);
-		}
-	}
-*/
 	getReward() {
 		return this.initialVolume;
 	}
@@ -114,6 +89,7 @@ class Asteroid {
 	kill() {
 		this.parentElement.removeChild(this.asteroidElement);
 		this.field.onKill(this);
+		this.clearTarget();
 	}
 
 	getRandomCoordinatesX() {

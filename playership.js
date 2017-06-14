@@ -17,6 +17,9 @@ class PlayerShip{
 		this.maxCharge = 200;
 
 		this.multiplier = 0;
+		this.mineInterval = null;
+		this.timer = null;
+		this.target = null;
 		
 		this.template = Handlebars.compile(`
 			<div class="playersShip">
@@ -42,6 +45,12 @@ class PlayerShip{
 		this.shipBorderElement = createDiv('shipBorder', this.template());
 		this.chargeBarElement = this.shipBorderElement.querySelector('.chargeBar');
 		this.chargeElement = this.shipBorderElement.querySelector('.charge');
+
+		this.something = debounce(function() {
+			this.target = null;
+			this.setMultiplier(0);
+			this.changeChargeBar();
+		}, 10000);
 	}
 	show(parentElement) {
 		parentElement.appendChild(this.shipBorderElement);
@@ -67,21 +76,28 @@ class PlayerShip{
 			return this.maxCharge;
 		}
 	}
-	miningLaser() {
 
-		this.mineInterval = setInterval(function(){
-			if(this.currentVolume > 1 && this.currentVolume > ((this.laserPower + this.multiplier) / 4)) {
-				this.mineAsteroid((this.laserPower + this.getMultiplier()) / 4);
-				if( this.getMultiplier() < this.maxCharge) {
-					this.setMultiplier(this.laserPower / 16);
+	miningLaser() {
+		if(this.target) {
+			this.mineInterval = setInterval(function(){
+				this.something();
+				if(this.target.currentVolume > 1 && this.target.currentVolume > ((this.laserPower + this.multiplier) / 4)) {
+					this.target.mineAsteroid((this.laserPower + this.getMultiplier()) / 4);
+					if( this.getMultiplier() < this.maxCharge) {
+						this.setMultiplier(this.laserPower / 16);
+					}
+					console.log(this.getMultiplier());
+				} else {
+					this.target.mineAsteroid(this.target.currentVolume);
+					clearInterval(this.mineInterval);
 				}
-				console.log(this.getMultiplier());
-			} else {
-				this.mineAsteroid(this.currentVolume);
-				clearInterval(this.mineInterval);
-				this.setMultiplier(0);
-			}
-			this.changeChargeBar();
-		}.bind(this), 250);
+				this.changeChargeBar();
+			}.bind(this), 250);
+		}
 	}
+
+	miningStop() {
+		clearInterval(this.mineInterval);
+	}
+
 }
