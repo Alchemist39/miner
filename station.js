@@ -32,6 +32,7 @@ class Station {
 
 		//инвентарь
 		this.inventory = new Inventory(this.stationElement.querySelector('.hungarContainer'));
+		this.inventory.loadInventory();
 
 		this.upgradesSlots = new Inventory(this.stationElement.querySelector('.upgrades'), 20);
 		this.upgradesSlots.setUpgrades();

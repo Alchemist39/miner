@@ -35,6 +35,17 @@ class Inventory {
 		this.removeInventory();
 		this.createInventory();
 	}
+	loadInventory() {
+		if( parseInt(localStorage.getItem('oreAtStorage')) > 0) {
+			this.containers[0] = {
+				class: 'ore',
+				title: "Руда" + " " + parseInt(localStorage.getItem('oreAtStorage'))
+			};
+			
+			this.removeInventory();
+			this.createInventory();
+		}
+	}
 
 	createInventory() {
 		this.inventoryContainerElement = createAndAppend(

@@ -1,14 +1,15 @@
 'use strict';
-var config = {
-	// время ожидания курьера
-	courierDelay: 1,
-	// кулдаун курьера
-	courierCooldown: 1,
-	// длительность перегрева
-	overheatDuration: 60
-};
+
 class MiningfieldPage {
 	constructor() {
+		this.config = {
+			// время ожидания курьера
+			courierDelay: 1,
+			// кулдаун курьера
+			courierCooldown: 1,
+			// длительность перегрева
+			overheatDuration: 60
+		};
 		this.map = null;
 		this.page = null;
 		this.playerShip = null;
@@ -56,7 +57,7 @@ class MiningfieldPage {
 			if (this.courierStatus){
 				this.courierStatus = false;
 				new Timer({
-					duration: config.courierDelay,
+					duration: this.config.courierDelay,
 					onTick: function(timer) {
 						let time = timer.getFormatedLeftTime(); 
 						this.courierElement.innerHTML = `
@@ -69,7 +70,7 @@ class MiningfieldPage {
 						// перенесли руду из карго в курьера
 						this.cargo.removeOre();
 						new Timer({
-							duration: config.courierCooldown,
+							duration: this.config.courierCooldown,
 							onTick: function(timer) {
 								let time = timer.getFormatedLeftTime(); 
 								this.courierElement.innerHTML = `
@@ -97,7 +98,7 @@ class MiningfieldPage {
 				this.overheatElement.style.fontSize = '1vmax';
 				this.playerShip.laserPower *= 10;
 				new Timer({
-					duration: config.overheatDuration,
+					duration: this.config.overheatDuration,
 					onTick: function(timer) {
 						let time = timer.getFormatedLeftTime();
 						this.overheatElement.innerHTML = `

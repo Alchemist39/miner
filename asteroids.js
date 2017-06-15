@@ -10,10 +10,6 @@ class Asteroid {
 		this.parentElement = parentElement;
 		this.field = field;
 
-		this.mineInterval = null;
-		this.removeInterval = null;
-		this.mineAction = null;
-
 		this.asteroidElement = createAndAppend(
 			parentElement,
 			'div',
@@ -27,21 +23,22 @@ class Asteroid {
 		);
 		this.volumeBarElement = this.asteroidElement.querySelector('.hpBar');
 		this.volumeElement = this.asteroidElement.querySelector('.HP');
+		this.hpElement = this.asteroidElement.querySelector('.hpBorder');
+
+		this.hpElement.style.visibility = 'hidden';
 
 		this.asteroidElement.addEventListener('click', function() {
 			this.mineAsteroid(miningPage.playerShip.laserPower);
 		}.bind(this));
 
 		this.asteroidElement.addEventListener('mousedown', function() {
-			// установка цели для оружия корабля miningPage.playerShip.setTarget(this)
-			// mouseUp clearTarget
-			this.setTarget(this);
+			miningPage.playerShip.setTarget(this);
 		}.bind(this));
 		// прослушиваем отпускание на документе, т.к. если зажатую мышь увести с астероида
 		// и отпустить, то добыча не остановится. Если не отлавливать dragend, то при перетягивании
 		// астероида, не отлавливается событие mouseup 
-		document.addEventListener('mouseup', function() {this.clearTarget()}.bind(this));
-		document.addEventListener('dragend', function() {this.clearTarget()}.bind(this));
+		document.addEventListener('mouseup', miningPage.playerShip.clearTarget() );
+		document.addEventListener('blur', miningPage.playerShip.clearTarget() );
 
 		this.coordinates = {
 			x: "",
@@ -49,15 +46,10 @@ class Asteroid {
 		};
 		this.setCoordinates();
 	}
-	setTarget(target) {
-		miningPage.playerShip.target = target;
-		miningPage.playerShip.miningLaser();
-	}
-	clearTarget() {
-		miningPage.playerShip.miningStop();
-	}
+
 	mineAsteroid(power) {
 		var newVolume = this.currentVolume - power
+		this.setHpVisible();
 		if(this.currentVolume > 1 && newVolume > 0) {
 			this.currentVolume -= power;
 			miningPage.cargo.addOre(power);
@@ -72,6 +64,10 @@ class Asteroid {
 	}
 	getReward() {
 		return this.initialVolume;
+	}
+
+	setHpVisible() {
+		this.hpElement.style.visibility = 'visible';
 	}
 
 	changeVolumeBar() {
@@ -89,7 +85,6 @@ class Asteroid {
 	kill() {
 		this.parentElement.removeChild(this.asteroidElement);
 		this.field.onKill(this);
-		this.clearTarget();
 	}
 
 	getRandomCoordinatesX() {

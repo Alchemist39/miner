@@ -3,6 +3,9 @@
 var player = new Player('Alchemist');
 class PlayerShip{
 	constructor() {
+		this.config = {
+			reductionTimer: 3
+		};
 		//корабль игрока на поле
 		this.laserPower = player.upgrades.lasers;
 		// мощь движка единиц в секунду
@@ -18,7 +21,6 @@ class PlayerShip{
 
 		this.multiplier = 0;
 		this.mineInterval = null;
-		this.timer = null;
 		this.target = null;
 		
 		this.template = Handlebars.compile(`
@@ -46,28 +48,43 @@ class PlayerShip{
 		this.chargeBarElement = this.shipBorderElement.querySelector('.chargeBar');
 		this.chargeElement = this.shipBorderElement.querySelector('.charge');
 
-		this.something = debounce(function() {
+		// используем хелпер дебаунс, чтобы отложить выполнение действия 
+		// и обновить таймер, если функция повторно вызывается
+		this.multiplierReduction = debounce(function() {
 			this.target = null;
-			this.setMultiplier(0);
-			this.changeChargeBar();
-		}, 10000);
+			this.reductionTick = setInterval(function() {
+				if(this.getMultiplier() > 1) {
+					this.multiplier *= 0.8;
+					this.renderChargeBar();
+					console.log(this.getMultiplier());
+				} else {
+					this.setMultiplier(0);
+					clearInterval(this.reductionTick);
+					console.log(this.getMultiplier());
+				}
+			}.bind(this), 1000);
+		}, 1000 * this.config.reductionTimer);
 	}
+
 	show(parentElement) {
 		parentElement.appendChild(this.shipBorderElement);
 	}
 	remove(parentElement) {
 		parentElement.removeChild(this.shipBorderElement);
 	}
-	changeChargeBar() {
+
+	renderChargeBar() {
 		var barSize = Math.round((this.multiplier / this.maxCharge) * 100);
 		this.chargeBarElement.style.width = barSize + '%';
 		this.chargeElement.innerHTML = Math.round(this.multiplier) + "/" + this.maxCharge;
 	}
+
 	setMultiplier(value) {
 		this.multiplier += value;
 		if (value == 0) {
 			this.multiplier = 0;
 		}
+		this.renderChargeBar();
 	}
 	getMultiplier() {
 		if(this.multiplier < this.maxCharge) {
@@ -76,27 +93,44 @@ class PlayerShip{
 			return this.maxCharge;
 		}
 	}
-
-	miningLaser() {
+	// функция непрерывной добычи руды при зажатии кнопки мыши
+	// если есть цель запускается таймер
+	// внутри таймера запускается отсчет обнуления мультиплаера (выполнение которого откладывается
+	// при повторном вызове функции)
+	// если у астероиа остается ХП после получения урона, то наносим урон и получаем руду в размере
+	// нанесенного урона
+	// в ином случае наносим уров в размере оставшихся хп, получаем руду и запускаем таймер
+	// для обнуления мультиплаера
+	startMiningLaser() {
 		if(this.target) {
 			this.mineInterval = setInterval(function(){
-				this.something();
+				clearInterval(this.reductionTick);
+				this.multiplierReduction();
 				if(this.target.currentVolume > 1 && this.target.currentVolume > ((this.laserPower + this.multiplier) / 4)) {
 					this.target.mineAsteroid((this.laserPower + this.getMultiplier()) / 4);
 					if( this.getMultiplier() < this.maxCharge) {
 						this.setMultiplier(this.laserPower / 16);
+						console.log(this.getMultiplier());
 					}
-					console.log(this.getMultiplier());
 				} else {
 					this.target.mineAsteroid(this.target.currentVolume);
-					clearInterval(this.mineInterval);
+					this.stopMining();
 				}
-				this.changeChargeBar();
+				this.renderChargeBar();
 			}.bind(this), 250);
 		}
 	}
 
-	miningStop() {
+	setTarget(target) {
+		this.target = target;
+		this.startMiningLaser();
+	}
+	clearTarget() {
+		this.target = null;
+		this.stopMining();
+	}
+
+	stopMining() {
 		clearInterval(this.mineInterval);
 	}
 
