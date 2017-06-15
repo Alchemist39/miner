@@ -37,8 +37,12 @@ class Asteroid {
 		// прослушиваем отпускание на документе, т.к. если зажатую мышь увести с астероида
 		// и отпустить, то добыча не остановится. Если не отлавливать dragend, то при перетягивании
 		// астероида, не отлавливается событие mouseup 
-		document.addEventListener('mouseup', miningPage.playerShip.clearTarget() );
-		document.addEventListener('blur', miningPage.playerShip.clearTarget() );
+		document.addEventListener('mouseup', function() {
+			miningPage.playerShip.clearTarget();
+		});
+		document.addEventListener('dragend', function() {
+			miningPage.playerShip.clearTarget();
+		});
 
 		this.coordinates = {
 			x: "",
@@ -46,7 +50,6 @@ class Asteroid {
 		};
 		this.setCoordinates();
 	}
-
 	mineAsteroid(power) {
 		var newVolume = this.currentVolume - power
 		this.setHpVisible();
