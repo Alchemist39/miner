@@ -2,11 +2,12 @@
 
 class MiningfieldPage {
 	constructor() {
+		let self = this;
 		this.config = {
 			// время ожидания курьера
-			courierDelay: 1,
+			courierDelay: 3,
 			// кулдаун курьера
-			courierCooldown: 1,
+			courierCooldown: 3,
 			// длительность перегрева
 			overheatDuration: 60
 		};
@@ -54,68 +55,77 @@ class MiningfieldPage {
 
 		// везде указываем текущий контекст для функций через .bind(this)
 		this.courierElement.onclick = function() {
-			if (this.courierStatus){
-				this.courierStatus = false;
-				new Timer({
-					duration: this.config.courierDelay,
+			if (self.courierStatus){
+				self.courierStatus = false;
+
+				let waitForCourier = new Timer({
+					duration: self.config.courierDelay,
 					onTick: function(timer) {
 						let time = timer.getFormatedLeftTime(); 
-						this.courierElement.innerHTML = `
+						self.courierElement.innerHTML = `
 							Курьер летит <br>
 							${time.minutes}:${time.seconds}
 						`;
-						this.courierElement.style.fontSize = '1vmax';
-					}.bind(this),
-					onEnd: function(){
-						// перенесли руду из карго в курьера
-						this.cargo.removeOre();
-						new Timer({
-							duration: this.config.courierCooldown,
-							onTick: function(timer) {
-								let time = timer.getFormatedLeftTime(); 
-								this.courierElement.innerHTML = `
-									Курьер недоступен <br>
-									${time.minutes}:${time.seconds}
-								`;
-							}.bind(this),
-							onEnd: function() {
-								this.courierElement.innerHTML = 'Разгрузка';
-								this.courierElement.style.fontSize = '2vmax';
-								this.courierStatus = true;
-								this.addOreToStorage(this.courierCargo);
-								game.station.inventory.addOreToinventory();
-							}.bind(this)
-						});
-					}.bind(this)
+						self.courierElement.style.fontSize = '1vmax';
+					}
 				});
+
+				waitForCourier.promise.then(function() {
+					// перенесли руду из карго в курьера
+					self.cargo.removeOre();
+				}).then(function() {
+					let courierCooldown = new Timer({
+						duration: self.config.courierCooldown,
+						onTick: function(timer) {
+							let time = timer.getFormatedLeftTime(); 
+							self.courierElement.innerHTML = `
+								Курьер недоступен <br>
+								${time.minutes}:${time.seconds}
+							`;
+						}
+					});
+
+					return courierCooldown.promise;
+				}).then(function() {
+					self.courierElement.innerHTML = 'Разгрузка';
+					self.courierElement.style.fontSize = '2vmax';
+					self.courierStatus = true;
+					self.addOreToStorage(self.courierCargo);
+					game.station.inventory.addOreToinventory();
+				})
 			}
-		}.bind(this);
+		};
 
 		this.overheatElement.onclick = function() {
-			if(this.overheatAvailable) {
-				this.overheatAvailable = false;
-				this.overheatElement.style.color = 'red';
-				this.overheatElement.style.fontSize = '1vmax';
-				this.playerShip.laserPower *= 10;
-				new Timer({
-					duration: this.config.overheatDuration,
-					onTick: function(timer) {
-						let time = timer.getFormatedLeftTime();
-						this.overheatElement.innerHTML = `
-							Перегрев<br>
-							${time.minutes}:${time.seconds}
-						`;
-					}.bind(this),
-					onEnd: function() {
-						this.overheatAvailable = true;
-						this.overheatElement.innerHTML = `Перегрев`;
-						this.overheatElement.style.color = 'white';
-						this.playerShip.laserPower /= 10;
-						this.overheatElement.style.fontSize = '2vmax';
-					}.bind(this)
-				});
+			if(!self.overheatAvailable) {
+				return;
 			}
-		}.bind(this);
+
+			self.overheatAvailable = false;
+			self.overheatElement.style.color = 'red';
+			self.overheatElement.style.fontSize = '1vmax';
+			self.playerShip.laserPower *= 10;
+			
+			let overheatCountdown = new Timer({
+				duration: self.config.overheatDuration,
+				onTick: function(timer) {
+					let time = timer.getFormatedLeftTime();
+					self.overheatElement.innerHTML = `
+						Перегрев<br>
+						${time.minutes}:${time.seconds}
+					`;
+				}
+			});
+
+			overheatCountdown.promise.then(function() {
+				self.overheatAvailable = true;
+				self.overheatElement.innerHTML = `Перегрев`;
+				self.overheatElement.style.color = 'white';
+				self.playerShip.laserPower /= 10;
+				self.overheatElement.style.fontSize = '2vmax';
+			});
+		};
+			
 
 		this.miningFieldElement.querySelector('.starMap').onclick = function() {
 			this.map.show();

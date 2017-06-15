@@ -47,10 +47,17 @@ Handlebars.registerHelper("math", function(lvalue, operator, rvalue, options) {
 class Timer {
 	constructor({duration = 10, frequency = 1000, onTick, onEnd, instantStart = true}) {
 		this.onTick = onTick;
-		this.onEnd = onEnd;
+		//this.onEnd = onEnd;
 		this.duration = duration * 1000;
 		this.startTime = Date.now();
 		this.interval = setInterval(this.action.bind(this), frequency);
+
+		// стрелочная функция сразу передает контекст, избавляя от использования self = this
+		// и дальнейшего использования self вместо this внутри функции
+		this.promise = new Promise((resolve, reject) => {
+			this.resolve = resolve;
+			this.reject = reject;
+		});
 
 		if(instantStart) {
 			this.duration -= frequency;
@@ -67,12 +74,9 @@ class Timer {
 			if(this.onTick) {
 				this.onTick(this);
 			}
-			//this.onTick && this.onTick(this);
 		} else {
 			clearInterval(this.interval);
-			if(this.onEnd) {
-				this.onEnd();
-			}
+			this.resolve();
 		}
 	}
 
