@@ -2,28 +2,32 @@
 
 class MiningfieldPage {
 	constructor() {
+		// сохраняем в self текущий контекст (экземпляр класса MiningPage)
 		let self = this;
+		// конфиг для изменения констант
 		this.config = {
 			// время ожидания курьера
 			courierDelay: 3,
 			// кулдаун курьера
 			courierCooldown: 3,
 			// длительность перегрева
-			overheatDuration: 60
+			overheatDuration: 5,
+			// кулдаун перегрева
+			overheatCooldown: 5
 		};
 		this.map = null;
 		this.page = null;
 		this.playerShip = null;
 		this.courierCargo = 0;
+		this.courierStatus = true;
+		this.flyAvailable = true;
+		this.overheatAvailable = true;
 		this.oreStorage = this.getOreStorage() || 0;
 		//все созданные поля хранятся в массиве
 		this.miningFields = {};
 
 		this.playerShip = new PlayerShip ();
 		this.cargo = new Cargoholder(this.playerShip.cargoCapacity);
-		this.courierStatus = true;
-		this.flyAvailable = true;
-		this.overheatAvailable = true;
 
 		this.template = Handlebars.compile(`
 			<div class="controllPanel">
@@ -34,74 +38,67 @@ class MiningfieldPage {
 				<div class="starMap">Карта</div>
 			</div>
 		`);
+
 		this.miningFieldElement = createDiv('miningField', this.template());
 		this.courierElement = this.miningFieldElement.querySelector('.courier');
 		this.overheatElement = this.miningFieldElement.querySelector('.overheat');
+		this.starMapElement = this.miningFieldElement.querySelector('.starMap');
+
+
+		// используем стрелочную функцию для исключения .bind(this)
+		this.starMapElement.addEventListener( 'click', () => this.map.show() );
 
 		// кнопка разгрузки
-		// если курьер доступен
-		// устанавливаем его недоступным, создаем экземпляр таймера
-		// длительностью courierDelay
+		this.courierElement.addEventListener('click', function() {
+			// если курьер недоступен функция дальше не выполняется
+			if (!self.courierStatus){
+				return;
+			}
 
-		// в функции onTick обращаемся к методу форматирования выходных данных
-		// устанавливаем отображение надписи полета и таймер отсчета
-		// меняем размер шрифта на меньший
+			self.courierStatus = false;
 
-		// функция onEnd: добавляем руду в карго курьера
-		// запусаем новый таймер с большей длительностью, то же форматирование данных
-		// меняем надпись
-		// onEnd меняем надпись, увеличиваем шрифт, меняем статус курьера на true
-		// перегружаем руду из курьера в хранилище, отображаем руду в инвентаре
+			let waitForCourier = new Timer({
+				duration: self.config.courierDelay
+			});
 
-		// везде указываем текущий контекст для функций через .bind(this)
+			self.courierElement.style.fontSize = '1vmax';
+			
+			waitForCourier.onTick(function(timer) {
+				let time = timer.getFormatedLeftTime(); 
+				self.courierElement.innerHTML = `
+					Курьер летит <br>
+					${time.minutes}:${time.seconds}
+				`;
+			});
 
-		// TODO переписать с онклик на ивент лисенеры
-		this.courierElement.onclick = function() {
-			if (self.courierStatus){
-				self.courierStatus = false;
-
-				let waitForCourier = new Timer({
-					duration: self.config.courierDelay
+			waitForCourier.promise.then(function() {
+				// перенесли руду из карго в курьера
+				self.cargo.removeOre();
+			}).then(function() {
+				let courierCooldown = new Timer({
+					duration: self.config.courierCooldown
 				});
-
-				waitForCourier.onTick(function(timer) {
+				// добавляем функцию в массив functionArray хелпера
+				courierCooldown.onTick(function(timer) {
 					let time = timer.getFormatedLeftTime(); 
 					self.courierElement.innerHTML = `
-						Курьер летит <br>
+						Курьер недоступен <br>
 						${time.minutes}:${time.seconds}
 					`;
-					self.courierElement.style.fontSize = '1vmax';
-				});
-
-
-				waitForCourier.promise.then(function() {
-					// перенесли руду из карго в курьера
-					self.cargo.removeOre();
-				}).then(function() {
-					let courierCooldown = new Timer({
-						duration: self.config.courierCooldown
-					});
-					// добавляем функцию в массив functionArray
-					courierCooldown.onTick(function(timer) {
-						let time = timer.getFormatedLeftTime(); 
-						self.courierElement.innerHTML = `
-							Курьер недоступен <br>
-							${time.minutes}:${time.seconds}
-						`;
-					})
-
-					return courierCooldown.promise;
-				}).then(function() {
-					self.courierElement.innerHTML = 'Разгрузка';
-					self.courierElement.style.fontSize = '2vmax';
-					self.courierStatus = true;
-					self.addOreToStorage(self.courierCargo);
-					game.station.inventory.addOreToinventory();
 				})
-			}
-		};
 
-		this.overheatElement.onclick = function() {
+				return courierCooldown.promise;
+			}).then(function() {
+				self.courierElement.innerHTML = 'Разгрузка';
+				self.courierElement.style.fontSize = '2vmax';
+				self.courierStatus = true;
+				self.addOreToStorage(self.courierCargo);
+				game.station.inventory.addOreToinventory();
+			})
+		});
+		// кнопка перегрева
+		this.overheatElement.addEventListener('click', function() {
+		// если перегрев недоступен (уже активен), то функция не выполняется
 			if(!self.overheatAvailable) {
 				return;
 			}
@@ -110,11 +107,12 @@ class MiningfieldPage {
 			self.overheatElement.style.color = 'red';
 			self.overheatElement.style.fontSize = '1vmax';
 			self.playerShip.laserPower *= 10;
-
+		// создаем экземпляр класса таймер, устанавливаем ему длительность через конфиг
 			let overheatCountdown = new Timer({
 				duration: self.config.overheatDuration
 			});
-
+		// вызываем функцию (свойство класса) onTick, передаем в нее функцию с аргументом timer
+		// через свойство класса форматируем время; меняем текст на странице
 			overheatCountdown.onTick(function(timer) {
 				let time = timer.getFormatedLeftTime();
 				self.overheatElement.innerHTML = `
@@ -122,20 +120,32 @@ class MiningfieldPage {
 					${time.minutes}:${time.seconds}
 				`;
 			});
-
+		// вызываем свойство promise экземпляра класса Timer, по завершении отсчета активности перегрева
+		// Начинаем новый отсчет отката перегрева с отображением отсчета на странице
+		// устанавливаем цвет текста на белый, уменьшаем мощьность лазерова в 10 раз (к изначальному)
 			overheatCountdown.promise.then(function() {
-				self.overheatAvailable = true;
-				self.overheatElement.innerHTML = `Перегрев`;
+				let overheatCooldown = new Timer({
+					duration: self.config.overheatCooldown
+				})
+				overheatCooldown.onTick(function(timer) {
+					let time = timer.getFormatedLeftTime();
+					self.overheatElement.innerHTML = `
+						Перегрев недоступен<br>
+						${time.minutes}:${time.seconds}
+					`;
+				})
 				self.overheatElement.style.color = 'white';
 				self.playerShip.laserPower /= 10;
+
+				return overheatCooldown.promise;
+		// Затем устанавливаем доступность перегрева, меняем текст, увеличиваем шрифт.
+			}).then(function() {
+				self.overheatAvailable = true;
+				self.overheatElement.innerHTML = `Перегрев`;
 				self.overheatElement.style.fontSize = '2vmax';
 			});
-		};
-			
+		});
 
-		this.miningFieldElement.querySelector('.starMap').onclick = function() {
-			this.map.show();
-		}.bind(this);
 	}
 	// руда в хранилище
 	setOreStorage(amount) {

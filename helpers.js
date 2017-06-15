@@ -45,9 +45,8 @@ Handlebars.registerHelper("math", function(lvalue, operator, rvalue, options) {
 // устанавливаем интервал с аргументом - функция и заданной частотой (frequency)
 // при быстром старте от длительности отнимаем величину задержки от частоты 
 class Timer {
-	constructor({duration = 10, frequency = 1000, onEnd, instantStart = true}) {
+	constructor({duration = 10, frequency = 1000, instantStart = true}) {
 		this.instantStart = instantStart;
-		//this.onEnd = onEnd;
 		this.duration = duration * 1000;
 		this.functionArray = [];
 		this.startTime = Date.now();
@@ -65,10 +64,10 @@ class Timer {
 			this.action();
 		}
 	}
-	//в переменную сохраняем текущее время
-	//проверяем что текущее время меньше, чем врея начала + длительность
-	//выполняем функцию onTick если она существует
-	//иначе (по истечение интервала) очищаем интервал и вызываем функцию onEnd, если она есть
+	// в переменную сохраняем текущее время
+	// проверяем что текущее время меньше, чем время начала + длительность
+	// обходим массив с функциями, выполняем каждую функцию в текущем контексте
+	// иначе (по истечение интервала) очищаем интервал и вызываем промис онрезолв
 	action() {
 		this.currentTime = Date.now();
 		if( this.currentTime < (this.startTime + this.duration) ) {
@@ -80,6 +79,7 @@ class Timer {
 			this.resolve();
 		}
 	}
+	// добавляем новую функцию в массив, при инстант старте еще и сразу вызываем это функцию
 	onTick(func) {
 		this.functionArray.push(func);
 		if(this.instantStart) {
