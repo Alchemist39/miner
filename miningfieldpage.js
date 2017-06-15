@@ -44,10 +44,9 @@ class MiningfieldPage {
 		this.overheatElement = this.miningFieldElement.querySelector('.overheat');
 		this.starMapElement = this.miningFieldElement.querySelector('.starMap');
 
-
 		// используем стрелочную функцию для исключения .bind(this)
 		this.starMapElement.addEventListener( 'click', () => this.map.show() );
-
+		
 		// кнопка разгрузки
 		this.courierElement.addEventListener('click', function() {
 			// если курьер недоступен функция дальше не выполняется

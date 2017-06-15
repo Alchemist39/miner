@@ -31,6 +31,7 @@ class Miningfield {
 			canGoBack: this.page >= 2,
 			canGoForward: this.page < 10
 		}));
+		
 		this.mainFieldElement = this.battleFieldElement.querySelector('.mainField');
 		//обходим массив астероидов
 		for (var i = 1; i < 10; i++) {
@@ -38,7 +39,7 @@ class Miningfield {
 			//у каждого нового астероида новый ID
 			this.asteroids.push(new Asteroid(this.randomValue(), this.mainFieldElement, this));
 		}
-		// 10 / 60 сек. раз в 6 сек
+		// 60 / 10 сек. раз в 6 сек
 		this.scaningSpeed = (60 / miningPage.playerShip.scanRate) * 1000;
 		setInterval(function(){
 		//если астероидов меньше targetQuantity, спауним новый астероид раз в this.scaningSpeed сек.
@@ -54,13 +55,11 @@ class Miningfield {
 	randomValue() {
 		return 5 * getRandomInt(1, 20) * this.page;
 	}
-	//TODO создать метод создания астероида при удалении одного из астероидов
 	// астероид == this в классе астероидов
 	onKill(asteroid) {
-		// добавляем руду в карго по объему астероида
 		// обходим массив астероидов циклом
 		for(let i = 0; i < this.asteroids.length; i++){
-			//если ID астероида номер i в массиве совпадает с ID астерода, который мы добываем
+			// если ID астероида номер i в массиве совпадает с ID астерода, который мы добываем
 			// то из массива выпиливается кусок астероидов номер i длиной в 1, т.е. текущий астероид
 			if(this.asteroids[i].id == asteroid.id) {
 				this.asteroids.splice(i, 1);

@@ -39,8 +39,7 @@ Handlebars.registerHelper("math", function(lvalue, operator, rvalue, options) {
 });
 
 //хелпер создания таймера обратного отсчета
-//аргументы: длительность отсчета, частота отсчета, действие на тик, действие по окончании,
-// быстрый старт
+//аргументы: длительность отсчета, частота отсчета, быстрый старт
 // в аргументах длительность задаем в секундах, поэтому домножаем ее на тысячу милисекунд
 // устанавливаем интервал с аргументом - функция и заданной частотой (frequency)
 // при быстром старте от длительности отнимаем величину задержки от частоты 
@@ -51,9 +50,9 @@ class Timer {
 		this.functionArray = [];
 		this.startTime = Date.now();
 		this.interval = setInterval(this.action.bind(this), frequency);
-
 		// стрелочная функция сразу передает контекст, избавляя от использования self = this
 		// и дальнейшего использования self вместо this внутри функции
+		// это единственное место, где допустима стрелочная функция у неоднострочного выражения
 		this.promise = new Promise((resolve, reject) => {
 			this.resolve = resolve;
 			this.reject = reject;
@@ -86,7 +85,6 @@ class Timer {
 			func(this);
 		}
 	}
-
 	//сохраняем хелпер отображения минут и секунд в формате 00:00
 	getFormatedLeftTime() {
 		let milisecondsLeft = (this.startTime + this.duration) - this.currentTime;
@@ -113,5 +111,3 @@ function debounce(func, delay) {
 		}.bind(this), delay);
 	}
 }
-
-//почитать про promises

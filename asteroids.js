@@ -40,9 +40,6 @@ class Asteroid {
 		document.addEventListener('mouseup', function() {
 			miningPage.playerShip.clearTarget();
 		});
-		document.addEventListener('dragend', function() {
-			miningPage.playerShip.clearTarget();
-		});
 
 		this.coordinates = {
 			x: "",

@@ -28,67 +28,77 @@ class Station {
 		// див станции
 		this.stationElement = createDiv('station', this.template());
 		this.sellElement = this.stationElement.querySelector('.sellMarket');
+		this.marketElement = this.stationElement.querySelector('.shipsMarket');
+		this.moduleMarket = this.stationElement.querySelector('.weaponsMarket');
+		this.starMapElement = this.stationElement.querySelector('.starMap');
+		this.inventoryElement = this.stationElement.querySelector('.inventory');
 
+		// переход на страницу покупки кораблей
+		this.marketElement.addEventListener( 'click', () => pushUrl('/market', 'Магазин') );
+		// показать модули
+		this.moduleMarket.addEventListener( 'click', () => this.showModules() );
+		// кнопка продажи
+		this.sellElement.addEventListener( 'click', () => this.sell() );
+		// кнопка карты
+		this.starMapElement.addEventListener( 'click', () => this.map.show() );
+		// открыть инвентарь
+		this.inventoryElement.addEventListener( 'click', () => this.inventory.inventoryAppear() );
 
-		//инвентарь
+		// инвентарь
 		this.inventory = new Inventory(this.stationElement.querySelector('.hungarContainer'));
 		this.inventory.loadInventory();
 
 		this.upgradesSlots = new Inventory(this.stationElement.querySelector('.upgrades'), 20);
 		this.upgradesSlots.setUpgrades();
 
-		//переход на страницу покупки кораблей
-		this.stationElement.querySelector('.shipsMarket').addEventListener('click', function() {
-			pushUrl('/market', 'Магазин');
-		}.bind(this));
+		this.upgradeLasersElement = this.stationElement.querySelector('.cruiser');
+		this.upgradeTargetQuantityElement = this.stationElement.querySelector('.carrier');
+		this.upgradeScaningSpeedElement = this.stationElement.querySelector('.truck');
 
-		this.stationElement.querySelector('.weaponsMarket').addEventListener('click', function() {
-			this.hideStation();
-			this.show();
-			this.inventory.inventoryContainerElement.style.left = '0%';
-			this.stationElement.querySelector('.upgrades').style.visibility = 'visible';
-		}.bind(this));
-
-		this.sellElement.addEventListener('click', function() {
-			wallet.addMoney(miningPage.getOreStorage());
-			miningPage.removeOreFromStorage();
-			this.inventory.removeOreFromInventory();
-			this.inventory.inventoryContainerElement.style.left = '0%';
-		}.bind(this));
-
-		this.stationElement.querySelector('.starMap').addEventListener('click', function() {
-			this.map.show();
-		}.bind(this));
-
-		this.stationElement.querySelector('.inventory').addEventListener('click', function() {
-			this.inventory.inventoryAppear();
-		}.bind(this));
-
-		this.stationElement.querySelector('.cruiser').addEventListener('click', function() {
-			if(miningPage.playerShip.laserPower != 2 && miningPage.overheatAvailable == true) {
-				miningPage.playerShip.laserPower = 2;
-				console.log('Лазеры усилены до 2');
-				localStorage.setItem('lasers', 2);
-			}
-		}.bind(this));
-
-		this.stationElement.querySelector('.carrier').addEventListener('click', function() {
-			if(miningPage.playerShip.targetQuantity != 15) {
-				miningPage.playerShip.targetQuantity = 15;
-				console.log('Количество увеличено до 15');
-				localStorage.setItem('targetQuantity', 15);
-			}
-		}.bind(this));
-
-		this.stationElement.querySelector('.truck').addEventListener('click', function() {
-			if(miningPage.playerShip.scanRate != 15) {
-				miningPage.playerShip.scanRate = 15;
-				console.log('Скорость сканеров увеличена до 15');
-				localStorage.setItem('scanRate', 15);
-			}
-		}.bind(this));
+		// кнопка апгрейда лазеров
+		this.upgradeLasersElement.addEventListener('click', () => this.upgradeLasers1() );
+		// кнопка апгрейда количества целей
+		this.upgradeTargetQuantityElement.addEventListener( 'click', () => this.upgradeTargetQuantity1() );
+		// кнопка апгрейда скорости сканирования
+		this.upgradeScaningSpeedElement.addEventListener('click', () => this.upgradeScaningSpeed1() );
 
 		this.show();
+	}
+	upgradeScaningSpeed1() {
+		if(miningPage.playerShip.scanRate == 15) {
+			return;
+		}
+		miningPage.playerShip.scanRate = 15;
+		console.log('Скорость сканеров увеличена до 15');
+		localStorage.setItem('scanRate', 15);
+	}
+	upgradeTargetQuantity1() {
+		if(miningPage.playerShip.targetQuantity == 15) {
+			return;
+		}
+		miningPage.playerShip.targetQuantity = 15;
+		console.log('Количество увеличено до 15');
+		localStorage.setItem('targetQuantity', 15);
+	}
+	upgradeLasers1() {
+		if(miningPage.playerShip.laserPower == 2 && miningPage.overheatAvailable == false) {
+			return;
+		}
+		miningPage.playerShip.laserPower = 2;
+		console.log('Лазеры усилены до 2');
+		localStorage.setItem('lasers', 2);
+	}
+	sell() {
+		wallet.addMoney(miningPage.getOreStorage());
+		miningPage.removeOreFromStorage();
+		this.inventory.removeOreFromInventory();
+		this.inventory.inventoryContainerElement.style.left = '0%';
+	}
+	showModules() {
+		this.hideStation();
+		this.show();
+		this.inventory.inventoryContainerElement.style.left = '0%';
+		this.stationElement.querySelector('.upgrades').style.visibility = 'visible';
 	}
 	show() {
 		document.querySelector('.container').appendChild(this.stationElement);
