@@ -54,36 +54,41 @@ class MiningfieldPage {
 		// перегружаем руду из курьера в хранилище, отображаем руду в инвентаре
 
 		// везде указываем текущий контекст для функций через .bind(this)
+
+		// TODO переписать с онклик на ивент лисенеры
 		this.courierElement.onclick = function() {
 			if (self.courierStatus){
 				self.courierStatus = false;
 
 				let waitForCourier = new Timer({
-					duration: self.config.courierDelay,
-					onTick: function(timer) {
-						let time = timer.getFormatedLeftTime(); 
-						self.courierElement.innerHTML = `
-							Курьер летит <br>
-							${time.minutes}:${time.seconds}
-						`;
-						self.courierElement.style.fontSize = '1vmax';
-					}
+					duration: self.config.courierDelay
 				});
+
+				waitForCourier.onTick(function(timer) {
+					let time = timer.getFormatedLeftTime(); 
+					self.courierElement.innerHTML = `
+						Курьер летит <br>
+						${time.minutes}:${time.seconds}
+					`;
+					self.courierElement.style.fontSize = '1vmax';
+				});
+
 
 				waitForCourier.promise.then(function() {
 					// перенесли руду из карго в курьера
 					self.cargo.removeOre();
 				}).then(function() {
 					let courierCooldown = new Timer({
-						duration: self.config.courierCooldown,
-						onTick: function(timer) {
-							let time = timer.getFormatedLeftTime(); 
-							self.courierElement.innerHTML = `
-								Курьер недоступен <br>
-								${time.minutes}:${time.seconds}
-							`;
-						}
+						duration: self.config.courierCooldown
 					});
+					// добавляем функцию в массив functionArray
+					courierCooldown.onTick(function(timer) {
+						let time = timer.getFormatedLeftTime(); 
+						self.courierElement.innerHTML = `
+							Курьер недоступен <br>
+							${time.minutes}:${time.seconds}
+						`;
+					})
 
 					return courierCooldown.promise;
 				}).then(function() {
@@ -105,16 +110,17 @@ class MiningfieldPage {
 			self.overheatElement.style.color = 'red';
 			self.overheatElement.style.fontSize = '1vmax';
 			self.playerShip.laserPower *= 10;
-			
+
 			let overheatCountdown = new Timer({
-				duration: self.config.overheatDuration,
-				onTick: function(timer) {
-					let time = timer.getFormatedLeftTime();
-					self.overheatElement.innerHTML = `
-						Перегрев<br>
-						${time.minutes}:${time.seconds}
-					`;
-				}
+				duration: self.config.overheatDuration
+			});
+
+			overheatCountdown.onTick(function(timer) {
+				let time = timer.getFormatedLeftTime();
+				self.overheatElement.innerHTML = `
+					Перегрев<br>
+					${time.minutes}:${time.seconds}
+				`;
 			});
 
 			overheatCountdown.promise.then(function() {

@@ -45,10 +45,11 @@ Handlebars.registerHelper("math", function(lvalue, operator, rvalue, options) {
 // устанавливаем интервал с аргументом - функция и заданной частотой (frequency)
 // при быстром старте от длительности отнимаем величину задержки от частоты 
 class Timer {
-	constructor({duration = 10, frequency = 1000, onTick, onEnd, instantStart = true}) {
-		this.onTick = onTick;
+	constructor({duration = 10, frequency = 1000, onEnd, instantStart = true}) {
+		this.instantStart = instantStart;
 		//this.onEnd = onEnd;
 		this.duration = duration * 1000;
+		this.functionArray = [];
 		this.startTime = Date.now();
 		this.interval = setInterval(this.action.bind(this), frequency);
 
@@ -71,12 +72,18 @@ class Timer {
 	action() {
 		this.currentTime = Date.now();
 		if( this.currentTime < (this.startTime + this.duration) ) {
-			if(this.onTick) {
-				this.onTick(this);
+			for(let i = 0; i < this.functionArray.length; i++) {
+				this.functionArray[i](this);
 			}
 		} else {
 			clearInterval(this.interval);
 			this.resolve();
+		}
+	}
+	onTick(func) {
+		this.functionArray.push(func);
+		if(this.instantStart) {
+			func(this);
 		}
 	}
 
