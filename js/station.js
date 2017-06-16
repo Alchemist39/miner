@@ -50,22 +50,22 @@ class Station {
 
 		// инвентарь
 		this.inventory = new Inventory(this.stationElement.querySelector('.hungarContainer'));
-		this.inventory.loadInventory();
+		this.inventory.initialize();
 
 		this.upgradesSlots = new Inventory(this.stationElement.querySelector('.upgrades'), 20);
-		this.upgradesSlots.setUpgrades();
+		//this.upgradesSlots.setUpgrades();
 
 		this.upgradeLasersElement = this.stationElement.querySelector('.cruiser');
 		this.upgradeTargetQuantityElement = this.stationElement.querySelector('.carrier');
 		this.upgradeScaningSpeedElement = this.stationElement.querySelector('.truck');
-
+/*
 		// кнопка апгрейда лазеров
 		this.upgradeLasersElement.addEventListener('click', () => this.upgradeLasers1() );
 		// кнопка апгрейда количества целей
 		this.upgradeTargetQuantityElement.addEventListener( 'click', () => this.upgradeTargetQuantity1() );
 		// кнопка апгрейда скорости сканирования
 		this.upgradeScaningSpeedElement.addEventListener('click', () => this.upgradeScaningSpeed1() );
-
+*/
 		this.show();
 	}
 
@@ -82,7 +82,7 @@ class Station {
 			return;
 		}
 		miningPage.playerShip.targetQuantity = 15;
-		console.log('Количество увеличено до 15');
+		console.log('Количество целей увеличено до 15');
 		localStorage.setItem('targetQuantity', 15);
 	}
 	upgradeLasers1() {
@@ -94,9 +94,9 @@ class Station {
 		localStorage.setItem('lasers', 2);
 	}
 	sell() {
-		wallet.addMoney(miningPage.getOreStorage());
-		miningPage.removeOreFromStorage();
-		this.inventory.removeOreFromInventory();
+		wallet.addMoney(this.inventory.getFromStorage('ore'));
+		this.inventory.clearStorage('ore');
+		this.inventory.removeFromInventory('ore');
 		this.inventory.inventoryContainerElement.style.left = '0%';
 	}
 	showModules() {

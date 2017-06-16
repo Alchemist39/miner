@@ -92,7 +92,8 @@ class MiningfieldPage {
 				self.courierElement.style.fontSize = '2vmax';
 				self.courierStatus = true;
 				game.station.inventory.moveToStorage('ore', self.courierCargo);
-				game.station.inventory.addOreToinventory();
+				game.station.inventory.addToInventory('ore');
+				self.removeOreFromCourierCargo();
 			})
 		});
 		// кнопка перегрева
@@ -145,31 +146,13 @@ class MiningfieldPage {
 			});
 		});
 
-	}/*
-	// руда в хранилище
-	setOreStorage(amount) {
-		localStorage.setItem('oreAtStorage', amount);
 	}
-	getOreStorage() {
-		return parseInt( localStorage.getItem('oreAtStorage') ) || 0;
-	}*/
 	// руда в карго курьера
 	addOreToCourierCargo(amount) {
 		this.courierCargo += amount;
 	}
 	removeOreFromCourierCargo() {
 		this.courierCargo = 0;
-	}
-
-	addOreToStorage(value) {
-		this.oreStorage += value;
-		game.station.inventory(this.oreStorage);
-		this.setOreStorage(this.oreStorage);
-		console.log(this.oreStorage);
-		this.removeOreFromCourierCargo();
-	}
-	removeOreFromStorage() {
-		localStorage.setItem('oreAtStorage', 0);
 	}
 	// создание/отображение поля
 	show(pageNumber) {

@@ -6,8 +6,10 @@ class Inventory {
 		this.parentElement = parentElement;
 		//все контейнеры храним в массиве
 		this.containers = [];
+		this.inventoryHidden = true;
 		this.itemToContainers = {};
 		this.nextEmptyContainer = 0;
+		this.itemsArray = ['ore', 'metall', 'diamonds', 'gas'];
 
 		//this.containers[this.itemToContainers['metall']]
 
@@ -34,16 +36,61 @@ class Inventory {
 
 		this.createInventory();
 	}
-
+/*
 	setUpgrades() {
 		this.containers[0] = {class: 'cruiser', title: 'Усиление лазеров'};
 		this.containers[1] = {class: 'carrier', title: 'Расширение сканера'};
 		this.containers[2] = {class: 'truck', title: 'Ускорение сканера'};
-		this.removeInventory();
-		this.createInventory();
-	}
-	
+		
+	}*/
 
+	// TODO добавить методы 
+	// 1) добавить в инвентарь
+	// 2) убрать из инвентаря
+	// 3) перемемстить из одной ячейки в другую 
+	//  3.1) свап ячеек
+	initialize() {
+		for(let i = 0; i < this.itemsArray.length; i++) {
+			if(this.getFromStorage(this.itemsArray[i]) > 0) {
+				this.addToInventory(this.itemsArray[i]);
+			}
+		}
+		this.reloadInventory();
+	}
+	addToInventory(item) {
+		let i = null;
+
+		if(this.itemToContainers[item] !== undefined) {
+			i = this.itemToContainers[item];
+		} else {
+			i = this.findEmptySlot();
+			this.itemToContainers[item] = i;
+		}
+		this.containers[i] = {
+			class: item,
+			title: item + " " + this.getFromStorage(item)
+		};
+		this.reloadInventory();	
+	}
+
+	removeFromInventory(item) {
+		if(this.itemToContainers[item] === undefined) {
+			return;
+		}
+		this.containers[this.itemToContainers[item]] = {};
+		delete this.itemToContainers[item];
+
+		this.reloadInventory();
+	}
+	// функция возвращает номер ячейки
+	findEmptySlot() {
+		for(var i = 0; i < this.containers.length; i++) {
+			if(!this.containers[i].class) {
+				console.log(i);
+				return i;
+			}
+		}
+	}
 	createInventory() {
 		let self = this;
 
@@ -56,6 +103,8 @@ class Inventory {
 			this.template({containers: this.containers})
 		);
 		this.inventoryContainerElement.setAttribute('id', this.id);
+		this.inventorySlots = this.inventoryContainerElement.querySelectorAll('.inventorySlot');
+		this.filledInventorySlots = this.inventoryContainerElement.querySelectorAll('.inventorySlot div');
 
 		// создаем переменную, в которую в дальнейшем передаем отправную точку (див) для драга
 		var dragged;
@@ -121,12 +170,16 @@ class Inventory {
 	}
 
 	moveToStorage(item, count) {
-		localStorage.setItem(item + 'AtStorage', count);
+		let fillerValue = this.getFromStorage(item + 'AtStorage');
+		fillerValue += count
+		localStorage.setItem(item + 'AtStorage', fillerValue);
 	}
 	getFromStorage(item) {
 		return parseInt( localStorage.getItem(item + 'AtStorage') ) || 0;
 	}
-
+	clearStorage(item) {
+		localStorage.removeItem(item + 'AtStorage');
+	}
 
 	runRefining() {
 		if( this.getFromStorage('ore') <= 0 ) {
@@ -135,39 +188,32 @@ class Inventory {
 		// [10, 25, 35, 30];
 		let totalVolumeOre = this.getFromStorage('ore');
 		this.diamonds = totalVolumeOre * 0.1;
-		this.moveToStorage('diamonds', this.diamonds);
 		this.metall = totalVolumeOre * 0.35;
-		this.moveToStorage('metall', this.metall);
 		this.gas = totalVolumeOre * 0.25;
+		this.moveToStorage('diamonds', this.diamonds);
+		this.moveToStorage('metall', this.metall);
 		this.moveToStorage('gas', this.gas);
-		this.moveToStorage('ore', 0);
-		this.addRefinedMaterialsToInventory();
-	}
-
-	loadInventory() {
-		if( parseInt(localStorage.getItem('oreAtStorage')) > 0) {
-			this.containers[0] = {
-				class: 'ore',
-				title: "Руда" + " " + this.getFromStorage('ore')
-			};
-			
-			this.removeInventory();
-			this.createInventory();
-		}
+		this.addToInventory('diamonds');
+		this.addToInventory('metall');
+		this.addToInventory('gas');
+		this.removeFromInventory('ore');
+		this.clearStorage('ore');
 	}
 
 	inventoryAppear() {
-		if (this.inventoryContainerElement.style.left == '-100%') {
+		if (this.inventoryHidden) {
 			this.inventoryContainerElement.style.left = '0%';
+			this.inventoryHidden = false;
 		} else {
 			this.inventoryContainerElement.style.left = '-100%';
+			this.inventoryHidden = true;
 		}
 	}
 	reloadInventory() {
 		this.removeInventory();
 		this.createInventory();
+		//this.inventoryContainerElement.style.left = '0%';
 	}
-
 	addOreToinventory() {
 		if(!this.containers[0].class || this.containers[0].class == 'ore') {
 			this.containers[0] = {
@@ -254,6 +300,5 @@ class Inventory {
 		this.addDiamondsToinventory();
 		this.addMetallToinventory();
 		this.reloadInventory();
-		this.inventoryContainerElement.style.left = '0%';
 	}
 }
