@@ -36,6 +36,18 @@ class Inventory {
 
 		this.createInventory();
 	}
+
+	moveToStorage(item, count) {
+		let fillerValue = this.getFromStorage(item);
+		fillerValue += count;
+		localStorage.setItem(item + 'AtStorage', fillerValue);
+	}
+	getFromStorage(item) {
+		return parseInt( localStorage.getItem(item + 'AtStorage') ) || 0;
+	}
+	clearStorage(item) {
+		localStorage.removeItem(item + 'AtStorage');
+	}
 /*
 	setUpgrades() {
 		this.containers[0] = {class: 'cruiser', title: 'Усиление лазеров'};
@@ -45,18 +57,11 @@ class Inventory {
 	}*/
 
 	// TODO добавить методы 
-	// 1) добавить в инвентарь
-	// 2) убрать из инвентаря
+	// 1) добавить в инвентарь v
+	// 2) убрать из инвентаря v
 	// 3) перемемстить из одной ячейки в другую 
 	//  3.1) свап ячеек
-	initialize() {
-		for(let i = 0; i < this.itemsArray.length; i++) {
-			if(this.getFromStorage(this.itemsArray[i]) > 0) {
-				this.addToInventory(this.itemsArray[i]);
-			}
-		}
-		this.reloadInventory();
-	}
+	
 	addToInventory(item) {
 		let i = null;
 
@@ -72,7 +77,7 @@ class Inventory {
 		};
 		this.reloadInventory();	
 	}
-
+	// удаляем из ячейки предмет с именем item
 	removeFromInventory(item) {
 		if(this.itemToContainers[item] === undefined) {
 			return;
@@ -91,6 +96,26 @@ class Inventory {
 			}
 		}
 	}
+
+	runRefining() {
+		if( this.getFromStorage('ore') <= 0 ) {
+			return;
+		}
+		// [10, 25, 35, 30];
+		let totalVolumeOre = this.getFromStorage('ore');
+		this.diamonds = totalVolumeOre * 0.1;
+		this.metall = totalVolumeOre * 0.35;
+		this.gas = totalVolumeOre * 0.25;
+		this.moveToStorage('diamonds', this.diamonds);
+		this.moveToStorage('metall', this.metall);
+		this.moveToStorage('gas', this.gas);
+		this.addToInventory('diamonds');
+		this.addToInventory('metall');
+		this.addToInventory('gas');
+		this.removeFromInventory('ore');
+		this.clearStorage('ore');
+	}
+
 	createInventory() {
 		let self = this;
 
@@ -162,44 +187,6 @@ class Inventory {
 		}
 	}
 
-	removeInventory() {
-		this.parentElement.removeChild(this.inventoryContainerElement);
-	}
-	appendInventory() {
-		this.parentElement.appendChild(this.inventoryContainerElement);
-	}
-
-	moveToStorage(item, count) {
-		let fillerValue = this.getFromStorage(item + 'AtStorage');
-		fillerValue += count
-		localStorage.setItem(item + 'AtStorage', fillerValue);
-	}
-	getFromStorage(item) {
-		return parseInt( localStorage.getItem(item + 'AtStorage') ) || 0;
-	}
-	clearStorage(item) {
-		localStorage.removeItem(item + 'AtStorage');
-	}
-
-	runRefining() {
-		if( this.getFromStorage('ore') <= 0 ) {
-			return;
-		}
-		// [10, 25, 35, 30];
-		let totalVolumeOre = this.getFromStorage('ore');
-		this.diamonds = totalVolumeOre * 0.1;
-		this.metall = totalVolumeOre * 0.35;
-		this.gas = totalVolumeOre * 0.25;
-		this.moveToStorage('diamonds', this.diamonds);
-		this.moveToStorage('metall', this.metall);
-		this.moveToStorage('gas', this.gas);
-		this.addToInventory('diamonds');
-		this.addToInventory('metall');
-		this.addToInventory('gas');
-		this.removeFromInventory('ore');
-		this.clearStorage('ore');
-	}
-
 	inventoryAppear() {
 		if (this.inventoryHidden) {
 			this.inventoryContainerElement.style.left = '0%';
@@ -212,93 +199,22 @@ class Inventory {
 	reloadInventory() {
 		this.removeInventory();
 		this.createInventory();
-		//this.inventoryContainerElement.style.left = '0%';
+		this.inventoryHidden = true;
 	}
-	addOreToinventory() {
-		if(!this.containers[0].class || this.containers[0].class == 'ore') {
-			this.containers[0] = {
-				class: 'ore',
-				title: "Руда" + " " + this.getFromStorage('ore')
-			};
 
-			this.reloadInventory();
-		}
+	removeInventory() {
+		this.parentElement.removeChild(this.inventoryContainerElement);
 	}
-	removeOreFromInventory() {
-		if(this.containers[0].class == 'ore') {
-			this.containers[0] = {
-				class: '',
-				title: ''
+	appendInventory() {
+		this.parentElement.appendChild(this.inventoryContainerElement);
+	}
+
+	initialize() {
+		for(let i = 0; i < this.itemsArray.length; i++) {
+			if(this.getFromStorage(this.itemsArray[i]) > 0) {
+				this.addToInventory(this.itemsArray[i]);
 			}
-			
-			this.reloadInventory();
 		}
-	}
-	addMetallToinventory() {
-		if(!this.containers[1].class || this.containers[1].class == 'metall') {
-			this.containers[1] = {
-				class: 'metall',
-				title: "Металл" + " " + this.getFromStorage('metall')
-			};
-
-			this.reloadInventory();
-		}
-	}
-	removeMetallFromInventory() {
-		if(this.containers[1].class == 'metall') {
-			this.containers[1] = {
-				class: '',
-				title: ''
-			}
-
-			this.reloadInventory();
-		}
-	}
-	addGasToinventory() {
-		if(!this.containers[2].class || this.containers[2].class == 'gas') {
-			this.containers[2] = {
-				class: 'gas',
-				title: "Газ" + " " + this.getFromStorage('gas')
-			};
-
-			this.reloadInventory();
-		}
-	}
-	removeGasFromInventory() {
-		if(this.containers[2].class == 'gas') {
-			this.containers[2] = {
-				class: '',
-				title: ''
-			}
-
-			this.reloadInventory();
-		}
-	}
-	addDiamondsToinventory() {
-		if(!this.containers[3].class || this.containers[3].class == 'diamonds') {
-			this.containers[3] = {
-				class: 'diamonds',
-				title: "Бриллианты" + " " + this.getFromStorage('diamonds')
-			};
-
-			this.reloadInventory();
-		}
-	}
-	removeDiamondsFromInventory() {
-		if(this.containers[3].class == 'diamonds') {
-			this.containers[3] = {
-				class: '',
-				title: ''
-			}
-
-			this.reloadInventory();
-		}
-	}
-	addRefinedMaterialsToInventory() {
-		this.removeOreFromInventory();
-		this.addGasToinventory();
-		this.addDiamondsToinventory();
-		this.addMetallToinventory();
 		this.reloadInventory();
 	}
 }
