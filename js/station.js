@@ -10,7 +10,8 @@ class Station {
 				<div class="shipsMarket">Корабли</div>	
 				<div class="weaponsMarket">Модули</div> 
 				<div class="repairMarket">Ремонт</div>
-				<div class="sellMarket" draggable="true">Продажа</div>
+				<div class="sellMarket">Продажа</div>
+				<div class="refineButton" title="Переработать всю руду в минералы">Очистка</div>
 				<div class="wallet">Кошелек</div>
 				<div class="inventory">Инвентарь</div>
 				<div class="starMap">Карта</div>			
@@ -32,6 +33,7 @@ class Station {
 		this.moduleMarket = this.stationElement.querySelector('.weaponsMarket');
 		this.starMapElement = this.stationElement.querySelector('.starMap');
 		this.inventoryElement = this.stationElement.querySelector('.inventory');
+		this.refineElement = this.stationElement.querySelector('.refineButton');
 
 		// переход на страницу покупки кораблей
 		this.marketElement.addEventListener( 'click', () => pushUrl('/market', 'Магазин') );
@@ -43,6 +45,8 @@ class Station {
 		this.starMapElement.addEventListener( 'click', () => this.map.show() );
 		// открыть инвентарь
 		this.inventoryElement.addEventListener( 'click', () => this.inventory.inventoryAppear() );
+		// очистка
+		this.refineElement.addEventListener( 'click', () => this.inventory.runRefining() );
 
 		// инвентарь
 		this.inventory = new Inventory(this.stationElement.querySelector('.hungarContainer'));
@@ -64,6 +68,7 @@ class Station {
 
 		this.show();
 	}
+
 	upgradeScaningSpeed1() {
 		if(miningPage.playerShip.scanRate == 15) {
 			return;

@@ -1,11 +1,18 @@
 'use strict';
+var inventoryId = 1;
 
 class Inventory {
 	constructor(parentElement, slots = 48) {
 		this.parentElement = parentElement;
 		//все контейнеры храним в массиве
 		this.containers = [];
+		this.itemToContainers = {};
+		this.nextEmptyContainer = 0;
+
+		//this.containers[this.itemToContainers['metall']]
+
 		this.slots = slots;
+		this.id = inventoryId++;
 		//темплейт создания слотов
 		
 		// массив контейнеров, каждый контейнер
@@ -35,19 +42,11 @@ class Inventory {
 		this.removeInventory();
 		this.createInventory();
 	}
-	loadInventory() {
-		if( parseInt(localStorage.getItem('oreAtStorage')) > 0) {
-			this.containers[0] = {
-				class: 'ore',
-				title: "Руда" + " " + parseInt(localStorage.getItem('oreAtStorage'))
-			};
-			
-			this.removeInventory();
-			this.createInventory();
-		}
-	}
+	
 
 	createInventory() {
+		let self = this;
+
 		this.inventoryContainerElement = createAndAppend(
 			this.parentElement,
 			'div', 
@@ -56,6 +55,7 @@ class Inventory {
 			// в темплейт передаем объект со свойством контейнерс, который равен нашему массиву
 			this.template({containers: this.containers})
 		);
+		this.inventoryContainerElement.setAttribute('id', this.id);
 
 		// создаем переменную, в которую в дальнейшем передаем отправную точку (див) для драга
 		var dragged;
@@ -66,7 +66,9 @@ class Inventory {
 			innerSlots[i].addEventListener('dragstart', function(e) {
 				// сохраняем исходную точку (див) в ранее созданную вне функций переменную
 				// если не сохранить ее тут, то при вызове дропа e.target будет равен цели дропа
-				dragged = e.target;
+				dragged = e.currentTarget;
+				// сохраняем Id текущего инвентаря в дататрансфер
+				e.dataTransfer.setData("inventoryId", this.inventoryContainerElement.id);
 			}.bind(this));
 		}
 		// создаем массив, который хранит все родительские дивы слотов
@@ -82,6 +84,13 @@ class Inventory {
 			});
 
 			slots[i].addEventListener('drop', function(e) {
+				// получаем Id инвентаря из которого перемещаем предмет
+				// сравниваем Id исходного инвентаря и Id конечного инвентаря
+				// если они не совпадают, то перенос не происходит
+				var inventoryID = e.dataTransfer.getData("inventoryId");
+				if(inventoryID != self.inventoryContainerElement.id) {
+					return;
+				}
 				e.preventDefault();
 				// родитель элемента в исходной точке
 				var draggedParent = dragged.parentNode;
@@ -111,6 +120,42 @@ class Inventory {
 		this.parentElement.appendChild(this.inventoryContainerElement);
 	}
 
+	moveToStorage(item, count) {
+		localStorage.setItem(item + 'AtStorage', count);
+	}
+	getFromStorage(item) {
+		return parseInt( localStorage.getItem(item + 'AtStorage') ) || 0;
+	}
+
+
+	runRefining() {
+		if( this.getFromStorage('ore') <= 0 ) {
+			return;
+		}
+		// [10, 25, 35, 30];
+		let totalVolumeOre = this.getFromStorage('ore');
+		this.diamonds = totalVolumeOre * 0.1;
+		this.moveToStorage('diamonds', this.diamonds);
+		this.metall = totalVolumeOre * 0.35;
+		this.moveToStorage('metall', this.metall);
+		this.gas = totalVolumeOre * 0.25;
+		this.moveToStorage('gas', this.gas);
+		this.moveToStorage('ore', 0);
+		this.addRefinedMaterialsToInventory();
+	}
+
+	loadInventory() {
+		if( parseInt(localStorage.getItem('oreAtStorage')) > 0) {
+			this.containers[0] = {
+				class: 'ore',
+				title: "Руда" + " " + this.getFromStorage('ore')
+			};
+			
+			this.removeInventory();
+			this.createInventory();
+		}
+	}
+
 	inventoryAppear() {
 		if (this.inventoryContainerElement.style.left == '-100%') {
 			this.inventoryContainerElement.style.left = '0%';
@@ -118,16 +163,19 @@ class Inventory {
 			this.inventoryContainerElement.style.left = '-100%';
 		}
 	}
+	reloadInventory() {
+		this.removeInventory();
+		this.createInventory();
+	}
 
 	addOreToinventory() {
 		if(!this.containers[0].class || this.containers[0].class == 'ore') {
 			this.containers[0] = {
 				class: 'ore',
-				title: "Руда" + " " + miningPage.getOreStorage()
+				title: "Руда" + " " + this.getFromStorage('ore')
 			};
 
-			this.removeInventory();
-			this.createInventory();
+			this.reloadInventory();
 		}
 	}
 	removeOreFromInventory() {
@@ -137,8 +185,75 @@ class Inventory {
 				title: ''
 			}
 			
-			this.removeInventory();
-			this.createInventory();
+			this.reloadInventory();
 		}
+	}
+	addMetallToinventory() {
+		if(!this.containers[1].class || this.containers[1].class == 'metall') {
+			this.containers[1] = {
+				class: 'metall',
+				title: "Металл" + " " + this.getFromStorage('metall')
+			};
+
+			this.reloadInventory();
+		}
+	}
+	removeMetallFromInventory() {
+		if(this.containers[1].class == 'metall') {
+			this.containers[1] = {
+				class: '',
+				title: ''
+			}
+
+			this.reloadInventory();
+		}
+	}
+	addGasToinventory() {
+		if(!this.containers[2].class || this.containers[2].class == 'gas') {
+			this.containers[2] = {
+				class: 'gas',
+				title: "Газ" + " " + this.getFromStorage('gas')
+			};
+
+			this.reloadInventory();
+		}
+	}
+	removeGasFromInventory() {
+		if(this.containers[2].class == 'gas') {
+			this.containers[2] = {
+				class: '',
+				title: ''
+			}
+
+			this.reloadInventory();
+		}
+	}
+	addDiamondsToinventory() {
+		if(!this.containers[3].class || this.containers[3].class == 'diamonds') {
+			this.containers[3] = {
+				class: 'diamonds',
+				title: "Бриллианты" + " " + this.getFromStorage('diamonds')
+			};
+
+			this.reloadInventory();
+		}
+	}
+	removeDiamondsFromInventory() {
+		if(this.containers[3].class == 'diamonds') {
+			this.containers[3] = {
+				class: '',
+				title: ''
+			}
+
+			this.reloadInventory();
+		}
+	}
+	addRefinedMaterialsToInventory() {
+		this.removeOreFromInventory();
+		this.addGasToinventory();
+		this.addDiamondsToinventory();
+		this.addMetallToinventory();
+		this.reloadInventory();
+		this.inventoryContainerElement.style.left = '0%';
 	}
 }

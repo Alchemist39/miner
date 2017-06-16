@@ -2,7 +2,7 @@
 	width: 100%;
 	height: 100%;
 	display: flex;
-	background-image: url('images/fleet.jpg');
+	background-image: url('/images/fleet.jpg');
 	z-index: 1;
 }
 
@@ -46,7 +46,7 @@
 			.smallAsteroid1, .playersShip {
 				position: absolute;
 				cursor: pointer;
-				background-image: url('images/asteroid.png'); 
+				background-image: url('/images/asteroid.png'); 
 			}
 
 			.miningField > .battleField > .mainField > .shipBorder {
@@ -60,7 +60,7 @@
 				padding-top: 13px;
 			}
 			.miningField > .battleField > .mainField > .shipBorder > .playersShip {
-				background-image: url('images/i/wasp.png'); 
+				background-image: url('/images/i/wasp.png'); 
 				width: 115px;
 				height: 115px;
 			}

@@ -22,7 +22,7 @@ class MiningfieldPage {
 		this.courierStatus = true;
 		this.flyAvailable = true;
 		this.overheatAvailable = true;
-		this.oreStorage = this.getOreStorage() || 0;
+		this.oreStorage = game.station.inventory.getFromStorage('ore') || 0;
 		//все созданные поля хранятся в массиве
 		this.miningFields = {};
 
@@ -91,7 +91,7 @@ class MiningfieldPage {
 				self.courierElement.innerHTML = 'Разгрузка';
 				self.courierElement.style.fontSize = '2vmax';
 				self.courierStatus = true;
-				self.addOreToStorage(self.courierCargo);
+				game.station.inventory.moveToStorage('ore', self.courierCargo);
 				game.station.inventory.addOreToinventory();
 			})
 		});
@@ -145,14 +145,14 @@ class MiningfieldPage {
 			});
 		});
 
-	}
+	}/*
 	// руда в хранилище
 	setOreStorage(amount) {
 		localStorage.setItem('oreAtStorage', amount);
 	}
 	getOreStorage() {
 		return parseInt( localStorage.getItem('oreAtStorage') ) || 0;
-	}
+	}*/
 	// руда в карго курьера
 	addOreToCourierCargo(amount) {
 		this.courierCargo += amount;
@@ -163,6 +163,7 @@ class MiningfieldPage {
 
 	addOreToStorage(value) {
 		this.oreStorage += value;
+		game.station.inventory(this.oreStorage);
 		this.setOreStorage(this.oreStorage);
 		console.log(this.oreStorage);
 		this.removeOreFromCourierCargo();
