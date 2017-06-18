@@ -38,6 +38,11 @@ Handlebars.registerHelper("math", function(lvalue, operator, rvalue, options) {
 	}[operator];
 });
 
+// функция полной очистки страницы (удаляет все из дива контейнер)
+var clear = function() {
+	document.querySelector('.container').innerHTML = '';
+};
+
 //хелпер создания таймера обратного отсчета
 //аргументы: длительность отсчета, частота отсчета, быстрый старт
 // в аргументах длительность задаем в секундах, поэтому домножаем ее на тысячу милисекунд

@@ -35,10 +35,16 @@ class MiningfieldPage {
 			</div>
 		`);
 
+		this.renderMiningPage();
+
+	}
+	renderMiningPage() {
+		clear();
 		this.miningFieldElement = createDiv('miningField', this.template());
 		this.courierElement = this.miningFieldElement.querySelector('.courier');
 		this.overheatElement = this.miningFieldElement.querySelector('.overheat');
 		this.starMapElement = this.miningFieldElement.querySelector('.starMap');
+		this.shipElement = this.miningFieldElement.querySelector('.shipBorder');
 
 		// используем стрелочную функцию для исключения .bind(this)
 		this.starMapElement.addEventListener( 'click', () => this.map.show() );
@@ -48,8 +54,8 @@ class MiningfieldPage {
 
 		// кнопка перегрева
 		this.overheatElement.addEventListener('click', () => this.runOverheatSequence() );
-
 	}
+	// запуск очереди функций по разгрузке
 	runTransportationSequence() {
 		if (!this.courierStatus){
 			return;
@@ -61,6 +67,7 @@ class MiningfieldPage {
 			.then( () => this.runTransportationCooldown() )
 			.then( () => this.endOfTransportation() )
 	}
+	// курьер летит на поле
 	runTransportationCountdown() {
 		let waitForCourier = new Timer({
 			duration: this.config.courierDelay
@@ -78,6 +85,7 @@ class MiningfieldPage {
 
 		return waitForCourier.promise;
 	}
+	// крьер возвращается на станцию
 	runTransportationCooldown() {
 		let courierCooldown = new Timer({
 			duration: this.config.courierCooldown
@@ -93,6 +101,7 @@ class MiningfieldPage {
 
 		return courierCooldown.promise;
 	}
+	// конец перевозки руды
 	endOfTransportation() {
 		this.courierElement.innerHTML = 'Разгрузка';
 		this.courierElement.style.fontSize = '2vmax';
@@ -134,13 +143,14 @@ class MiningfieldPage {
 			`;
 		}.bind(this));
 
-		// вызываем свойство promise экземпляра класса Timer, по завершении отсчета активности перегрева
-		// Начинаем новый отсчет отката перегрева с отображением отсчета на странице
-		// устанавливаем цвет текста на белый, уменьшаем мощьность лазерова в 10 раз (к изначальному)
 		return overheatCountdown.promise;
 	}
 	// перегрев откатывается
 	runOverheatCooldown() {
+
+		// вызываем свойство promise экземпляра класса Timer, по завершении отсчета активности перегрева
+		// Начинаем новый отсчет отката перегрева с отображением отсчета на странице
+		// устанавливаем цвет текста на белый, уменьшаем мощность лазерова в 10 раз (к изначальному)
 		let overheatCooldown = new Timer({
 			duration: this.config.overheatCooldown
 		})
@@ -191,7 +201,6 @@ class MiningfieldPage {
 		//присоединяем к странице поле с нужным номером из уже созданных или нового 
 		this.miningFieldElement.appendChild(this.miningFields[pageNumber].battleFieldElement);
 
-		player.ship.show(this.miningFields[this.page].mainFieldElement);
 		this.cargo.show(this.miningFields[this.page].battleFieldElement);
 
 		document.querySelector('.container').appendChild(this.miningFieldElement);

@@ -3,7 +3,6 @@
 class Station {
 	constructor() {
 
-		player.equipShip(ships['truck']);
 		this.map = null;
 		this.shipmarket = null;
 
@@ -24,11 +23,15 @@ class Station {
 				<div class="upgrades"></div>
 			</div>
 		`);
-
+		this.renderStation();
 		// див станции
+	
+	} 
+	renderStation() {
+		clear();
 		this.stationElement = createDiv('station', this.template({
 			ship: player.ship.getShipInHungarHTML()
-		}));
+		}));	
 		this.sellElement = this.stationElement.querySelector('.sellMarket');
 		this.marketElement = this.stationElement.querySelector('.shipsMarket');
 		this.moduleMarket = this.stationElement.querySelector('.weaponsMarket');

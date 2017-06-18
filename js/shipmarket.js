@@ -23,9 +23,11 @@ class ShipMarket {
 		}.bind(this);
 
 		this.waspElement = createAndAppend(this.marketContainerElement, 'div', 'wasp', '');
+		this.waspElement.addEventListener('click', () => this.setWasp() )
 		this.frigateElement = createAndAppend(this.marketContainerElement, 'div', 'frigate', '');
 		this.mirageElement = createAndAppend(this.marketContainerElement, 'div', 'mirage', '');
 		this.transportElement = createAndAppend(this.marketContainerElement, 'div', 'transport', '');
+		this.transportElement.addEventListener('click', () => this.setTruck() )
 		this.cruiserElement = createAndAppend(this.marketContainerElement, 'div', 'cruiser', '');
 		this.battleshipElement = createAndAppend(this.marketContainerElement, 'div', 'battleship', '');
 		this.carrierElement = createAndAppend(this.marketContainerElement, 'div', 'carrier', '');
@@ -98,6 +100,18 @@ class ShipMarket {
 			<p>Базовая мощность двигателей: 20000</p>`
 		);
 
+	}
+	setWasp() {
+		player.equipShip(ships['wasp']);
+		localStorage.setItem('activeShip', 'wasp');
+		game.station.renderStation();
+		pushUrl('/station', 'Станция');
+	}
+	setTruck() {
+		player.equipShip(ships['truck']);
+		localStorage.setItem('activeShip', 'truck');
+		game.station.renderStation();
+		pushUrl('/station', 'Станция');
 	}
 	show() {
 		document.querySelector('.container').appendChild(this.shipmarketElement);	

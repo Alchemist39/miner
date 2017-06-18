@@ -40,7 +40,7 @@ class Ship{
 						<div class="charge">0</div>
 					</div>
 				</div>
-			</div>
+			</div>	
 		`);
 
 		this.shipInHungarTemplate = Handlebars.compile(`
@@ -49,9 +49,6 @@ class Ship{
 				<div class="weaponPlace2"></div>
 			</div>
 		`);
-		this.shipBorderElement = createDiv('shipBorder', this.template());
-		this.chargeBarElement = this.shipBorderElement.querySelector('.chargeBar');
-		this.chargeElement = this.shipBorderElement.querySelector('.charge');
 		// используем хелпер дебаунс, чтобы отложить выполнение действия 
 		// и обновить таймер, если функция повторно вызывается
 		this.multiplierReduction = debounce(function() {
@@ -87,8 +84,8 @@ class Ship{
 
 	renderChargeBar() {
 		var barSize = Math.round((this.multiplier / this.maxCharge) * 100);
-		this.chargeBarElement.style.width = barSize + '%';
-		this.chargeElement.innerHTML = Math.round(this.multiplier) + "/" + this.maxCharge;
+		document.body.querySelector('.chargeBar').style.width = barSize + '%';
+		document.body.querySelector('.charge').innerHTML = Math.round(this.multiplier) + "/" + this.maxCharge;
 	}
 
 	setMultiplier(value) {

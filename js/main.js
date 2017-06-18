@@ -10,7 +10,7 @@ var ships = {
 
 var player = new Player('Alchemist');
 // экипируем в игрока корабль wasp
-player.equipShip(ships['truck']);
+player.equipShip( ships[ localStorage.getItem('activeShip') ] );
 game.station = new Station();
 var shipmarket = new ShipMarket();
 var miningPage = new MiningfieldPage();
@@ -25,10 +25,6 @@ miningPage.map = map;
 
 shipmarket.station = game.station;
 
-// функция полной очистки страницы (удаляет все из дива контейнер)
-var clear = function() {
-	document.querySelector('.container').innerHTML = '';
-};
 //переход на станцию при смене УРЛа
 var stationRoute = crossroads.addRoute('/station', function(){
 	clear();
