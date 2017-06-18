@@ -49,9 +49,9 @@ class Ship{
 				<div class="weaponPlace2"></div>
 			</div>
 		`);
-
-		this.shipBorderElement = document.body.querySelector('.shieldBorder');
-		
+		this.shipBorderElement = createDiv('shipBorder', this.template());
+		this.chargeBarElement = this.shipBorderElement.querySelector('.chargeBar');
+		this.chargeElement = this.shipBorderElement.querySelector('.charge');
 		// используем хелпер дебаунс, чтобы отложить выполнение действия 
 		// и обновить таймер, если функция повторно вызывается
 		this.multiplierReduction = debounce(function() {
@@ -81,7 +81,7 @@ class Ship{
 	}
 
 	show(parentElement) {
-		parentElement.appendChild(this.template());
+		parentElement.appendChild(this.shipBorderElement);
 	}
 
 

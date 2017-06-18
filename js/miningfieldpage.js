@@ -93,56 +93,70 @@ class MiningfieldPage {
 				self.removeOreFromCourierCargo();
 			})
 		});
-		// кнопка перегрева
-		this.overheatElement.addEventListener('click', function() {
-		// если перегрев недоступен (уже активен), то функция не выполняется
-			if(!self.overheatAvailable) {
-				return;
-			}
 
-			self.overheatAvailable = false;
-			self.overheatElement.style.color = 'red';
-			self.overheatElement.style.fontSize = '1vmax';
-			player.ship.laserPower *= 10;
-		// создаем экземпляр класса таймер, устанавливаем ему длительность через конфиг
-			let overheatCountdown = new Timer({
-				duration: self.config.overheatDuration
+		// кнопка перегрева
+		this.overheatElement.addEventListener('click', () => this.runOverheatSequence() );
+
+	}
+	// последовательность
+	runOverheatSequence() {
+		if(!this.overheatAvailable) {
+			return;
+		}
+		this.startOverheat();
+		this.runOverheatCountdown()
+			.then( () => this.runOverheatCooldown() ) 
+			.then( () => this.endOfOverheat() );
+	}
+	// запуск перегрева
+	startOverheat() {
+		this.overheatAvailable = false;
+		this.overheatElement.style.color = 'red';
+		this.overheatElement.style.fontSize = '1vmax';
+		player.ship.laserPower *= 10;
+	}
+	// перегрев активен
+	runOverheatCountdown() {
+		let overheatCountdown = new Timer({
+				duration: this.config.overheatDuration
 			});
 		// вызываем функцию (свойство класса) onTick, передаем в нее функцию с аргументом timer
 		// через свойство класса форматируем время; меняем текст на странице
-			overheatCountdown.onTick(function(timer) {
-				let time = timer.getFormatedLeftTime();
-				self.overheatElement.innerHTML = `
-					Перегрев<br>
-					${time.minutes}:${time.seconds}
-				`;
-			});
+		overheatCountdown.onTick(function(timer) {
+			let time = timer.getFormatedLeftTime();
+			this.overheatElement.innerHTML = `
+				Перегрев<br>
+				${time.minutes}:${time.seconds}
+			`;
+		}.bind(this));
+
 		// вызываем свойство promise экземпляра класса Timer, по завершении отсчета активности перегрева
 		// Начинаем новый отсчет отката перегрева с отображением отсчета на странице
 		// устанавливаем цвет текста на белый, уменьшаем мощьность лазерова в 10 раз (к изначальному)
-			overheatCountdown.promise.then(function() {
-				let overheatCooldown = new Timer({
-					duration: self.config.overheatCooldown
-				})
-				overheatCooldown.onTick(function(timer) {
-					let time = timer.getFormatedLeftTime();
-					self.overheatElement.innerHTML = `
-						Перегрев недоступен<br>
-						${time.minutes}:${time.seconds}
-					`;
-				})
-				self.overheatElement.style.color = 'white';
-				player.ship.laserPower /= 10;
+		return overheatCountdown.promise;
+	}
+	// перегрев откатывается
+	runOverheatCooldown() {
+		let overheatCooldown = new Timer({
+			duration: this.config.overheatCooldown
+		})
+		overheatCooldown.onTick(function(timer) {
+			let time = timer.getFormatedLeftTime();
+			this.overheatElement.innerHTML = `
+				Перегрев недоступен<br>
+				${time.minutes}:${time.seconds}
+			`;
+		}.bind(this));
+		this.overheatElement.style.color = 'white';
+		player.ship.laserPower /= 10;
 
-				return overheatCooldown.promise;
-		// Затем устанавливаем доступность перегрева, меняем текст, увеличиваем шрифт.
-			}).then(function() {
-				self.overheatAvailable = true;
-				self.overheatElement.innerHTML = `Перегрев`;
-				self.overheatElement.style.fontSize = '2vmax';
-			});
-		});
-
+		return overheatCooldown.promise;
+	}
+	// откат перегрева закончился
+	endOfOverheat() {
+		this.overheatAvailable = true;
+		this.overheatElement.innerHTML = `Перегрев`;
+		this.overheatElement.style.fontSize = '2vmax';
 	}
 	addOreToInventory() {
 		game.station.inventory.moveToStorage('ore', this.courierCargo);
