@@ -2,8 +2,6 @@
 
 class MiningfieldPage {
 	constructor() {
-		// сохраняем в self текущий контекст (экземпляр класса MiningPage)
-		let self = this;
 		// конфиг для изменения констант
 		this.config = {
 			// время ожидания курьера
@@ -46,58 +44,64 @@ class MiningfieldPage {
 		this.starMapElement.addEventListener( 'click', () => this.map.show() );
 		
 		// кнопка разгрузки
-		this.courierElement.addEventListener('click', function() {
-			// если курьер недоступен функция дальше не выполняется
-			if (!self.courierStatus){
-				return;
-			}
-
-			self.courierStatus = false;
-
-			let waitForCourier = new Timer({
-				duration: self.config.courierDelay
-			});
-
-			self.courierElement.style.fontSize = '1vmax';
-			
-			waitForCourier.onTick(function(timer) {
-				let time = timer.getFormatedLeftTime(); 
-				self.courierElement.innerHTML = `
-					Курьер летит <br>
-					${time.minutes}:${time.seconds}
-				`;
-			});
-
-			waitForCourier.promise.then(function() {
-				// перенесли руду из карго в курьера
-				self.cargo.removeOre();
-			}).then(function() {
-				let courierCooldown = new Timer({
-					duration: self.config.courierCooldown
-				});
-				// добавляем функцию в массив functionArray хелпера
-				courierCooldown.onTick(function(timer) {
-					let time = timer.getFormatedLeftTime(); 
-					self.courierElement.innerHTML = `
-						Курьер недоступен <br>
-						${time.minutes}:${time.seconds}
-					`;
-				})
-
-				return courierCooldown.promise;
-			}).then(function() {
-				self.courierElement.innerHTML = 'Разгрузка';
-				self.courierElement.style.fontSize = '2vmax';
-				self.courierStatus = true;
-				self.addOreToInventory();
-				self.removeOreFromCourierCargo();
-			})
-		});
+		this.courierElement.addEventListener('click', () => this.runTransportationSequence() );
 
 		// кнопка перегрева
 		this.overheatElement.addEventListener('click', () => this.runOverheatSequence() );
 
 	}
+	runTransportationSequence() {
+		if (!this.courierStatus){
+			return;
+		}
+		this.courierStatus = false;
+
+		this.runTransportationCountdown()
+			.then( () => this.cargo.removeOre() )
+			.then( () => this.runTransportationCooldown() )
+			.then( () => this.endOfTransportation() )
+	}
+	runTransportationCountdown() {
+		let waitForCourier = new Timer({
+			duration: this.config.courierDelay
+		});
+
+		this.courierElement.style.fontSize = '1vmax';
+		
+		waitForCourier.onTick(function(timer) {
+			let time = timer.getFormatedLeftTime(); 
+			this.courierElement.innerHTML = `
+				Курьер летит <br>
+				${time.minutes}:${time.seconds}
+			`;
+		}.bind(this));
+
+		return waitForCourier.promise;
+	}
+	runTransportationCooldown() {
+		let courierCooldown = new Timer({
+			duration: this.config.courierCooldown
+		});
+		// добавляем функцию в массив functionArray хелпера
+		courierCooldown.onTick(function(timer) {
+			let time = timer.getFormatedLeftTime(); 
+			this.courierElement.innerHTML = `
+				Курьер недоступен <br>
+				${time.minutes}:${time.seconds}
+			`;
+		}.bind(this));
+
+		return courierCooldown.promise;
+	}
+	endOfTransportation() {
+		this.courierElement.innerHTML = 'Разгрузка';
+		this.courierElement.style.fontSize = '2vmax';
+		this.courierStatus = true;
+		this.addOreToInventory();
+		this.removeOreFromCourierCargo();
+	}
+
+
 	// последовательность
 	runOverheatSequence() {
 		if(!this.overheatAvailable) {
@@ -118,8 +122,8 @@ class MiningfieldPage {
 	// перегрев активен
 	runOverheatCountdown() {
 		let overheatCountdown = new Timer({
-				duration: this.config.overheatDuration
-			});
+			duration: this.config.overheatDuration
+		});
 		// вызываем функцию (свойство класса) onTick, передаем в нее функцию с аргументом timer
 		// через свойство класса форматируем время; меняем текст на странице
 		overheatCountdown.onTick(function(timer) {
@@ -158,6 +162,8 @@ class MiningfieldPage {
 		this.overheatElement.innerHTML = `Перегрев`;
 		this.overheatElement.style.fontSize = '2vmax';
 	}
+
+
 	addOreToInventory() {
 		game.station.inventory.moveToStorage('ore', this.courierCargo);
 		game.station.inventory.addToInventory('ore');
