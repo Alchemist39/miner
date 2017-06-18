@@ -28,20 +28,20 @@ class Asteroid {
 		this.hpElement.style.visibility = 'hidden';
 
 		this.asteroidElement.addEventListener('click', function() {
-			this.mineAsteroid(miningPage.playerShip.laserPower);
+			this.mineAsteroid(player.ship.laserPower);
 		}.bind(this));
 
 		this.asteroidElement.addEventListener('mousedown', function() {
-			miningPage.playerShip.setTarget(this);
+			player.ship.setTarget(this);
 		}.bind(this));
 		// прослушиваем отпускание на документе, т.к. если зажатую мышь увести с астероида
 		// и отпустить, то добыча не остановится. Если не отлавливать dragend, то при перетягивании
 		// астероида, не отлавливается событие mouseup 
 		document.addEventListener('mouseup', function() {
-			miningPage.playerShip.clearTarget();
+			player.ship.clearTarget();
 		});
 		document.addEventListener('dragend', function() {
-			miningPage.playerShip.clearTarget();
+			player.ship.clearTarget();
 		});
 
 		this.coordinates = {

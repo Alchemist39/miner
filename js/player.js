@@ -1,13 +1,13 @@
 'use strict';
 
 class Player {
-	constructor(playerName) {
+	constructor(playerName, ship) {
 		this.name = playerName;
-		this.ship = 'wasp';
-		this.upgrades = {
-			lasers: parseInt(localStorage.getItem('lasers')) || 1,
-			scanRate: parseInt(localStorage.getItem('scanRate')) || 5,
-			targetQuantity: parseInt(localStorage.getItem('targetQuantity')) || 10,
-		}
+
+		this.ship = null;
+
+	}
+	equipShip(ship) {
+		this.ship = ship;
 	}
 }

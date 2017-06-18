@@ -2,19 +2,26 @@
 var game = {
 
 };
+// создали объект в котором создали экземпляры кораблей
+var ships = {
+	wasp: new Wasp(),
+	truck: new Truck()
+};
 
+var player = new Player('Alchemist');
+// экипируем в игрока корабль wasp
+player.equipShip(ships['truck']);
 game.station = new Station();
 var shipmarket = new ShipMarket();
 var miningPage = new MiningfieldPage();
 var wallet = new Wallet(game.station);
+
 // див карты
 var map = new Map(game.station);
-//var playerShip = new PlayerShip();
 
 game.station.map = map;
 game.station.shipmarket = shipmarket;
 miningPage.map = map;
-//miningPage.playerShip = playerShip;
 
 shipmarket.station = game.station;
 

@@ -40,11 +40,11 @@ class Miningfield {
 			this.asteroids.push(new Asteroid(this.randomValue(), this.mainFieldElement, this));
 		}
 		// 60 / 10 сек. раз в 6 сек
-		this.scaningSpeed = (60 / miningPage.playerShip.scanRate) * 1000;
+		this.scaningSpeed = (60 / player.ship.scanRate) * 1000;
 		setInterval(function(){
 		//если астероидов меньше targetQuantity, спауним новый астероид раз в this.scaningSpeed сек.
 		//и записываем его в массив
-			if(this.asteroids.length < miningPage.playerShip.targetQuantity){
+			if(this.asteroids.length < player.ship.targetQuantity){
 				this.asteroids.push(new Asteroid(this.randomValue(), this.mainFieldElement, this));
 			}
 		}.bind(this), this.scaningSpeed)

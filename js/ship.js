@@ -1,19 +1,16 @@
 'use strict';
 
-var player = new Player('Alchemist');
-class PlayerShip{
+class Ship{
 	constructor() {
 		this.config = {
 			reductionTimer: 3
 		};
 		//корабль игрока на поле
-		this.laserPower = player.upgrades.lasers;
-		// мощь движка единиц в секунду
-		this.enginePower = 20;
+		this.laserPower = 2;
 		// скорость сканирования 10 астероидов в минуту
-		this.scanRate = player.upgrades.scanRate;
+		this.scanRate = 15;
 		// количество одновременно удерживаемых астероидов
-		this.targetQuantity = player.upgrades.targetQuantity;
+		this.targetQuantity = 15;
 
 		this.cargoCapacity = 2000;
 
@@ -24,30 +21,37 @@ class PlayerShip{
 		this.target = null;
 		
 		this.template = Handlebars.compile(`
-			<div class="playersShip">
-				<div class="shieldBorder">
-					<div class="shieldBar"></div>
-					<div class="shield">30</div>
-				</div>
-				<div class="armorBorder">
-					<div class="armorBar"></div>
-					<div class="armor">30</div>
-				</div>
-				<div class="hpBorder">
-					<div class="hpBar"></div>
-					<div class="HP">30</div>
-				</div>
-				<div class="chargeBorder">
-					<div class="chargeBar"></div>
-					<div class="charge">0</div>
+			<div class="shipBorder">
+				<div class="playersShip {{type}}">
+					<div class="shieldBorder">
+						<div class="shieldBar"></div>
+						<div class="shield">30</div>
+					</div>
+					<div class="armorBorder">
+						<div class="armorBar"></div>
+						<div class="armor">30</div>
+					</div>
+					<div class="hpBorder">
+						<div class="hpBar"></div>
+						<div class="HP">30</div>
+					</div>
+					<div class="chargeBorder">
+						<div class="chargeBar"></div>
+						<div class="charge">0</div>
+					</div>
 				</div>
 			</div>
 		`);
-		
-		this.shipBorderElement = createDiv('shipBorder', this.template());
-		this.chargeBarElement = this.shipBorderElement.querySelector('.chargeBar');
-		this.chargeElement = this.shipBorderElement.querySelector('.charge');
 
+		this.shipInHungarTemplate = Handlebars.compile(`
+			<div class="playersShip {{type}}">
+				<div class="weaponPlace1"></div>				
+				<div class="weaponPlace2"></div>
+			</div>
+		`);
+
+		this.shipBorderElement = document.body.querySelector('.shieldBorder');
+		
 		// используем хелпер дебаунс, чтобы отложить выполнение действия 
 		// и обновить таймер, если функция повторно вызывается
 		this.multiplierReduction = debounce(function() {
@@ -65,13 +69,21 @@ class PlayerShip{
 			}.bind(this), 1000);
 		}, 1000 * this.config.reductionTimer);
 	}
+	getShipInFieldHTML() {
+		return this.template({
+			type: this.type
+		})
+	}
+	getShipInHungarHTML() {
+		return this.shipInHungarTemplate({
+			type: this.type
+		});
+	}
 
 	show(parentElement) {
-		parentElement.appendChild(this.shipBorderElement);
+		parentElement.appendChild(this.template());
 	}
-	remove(parentElement) {
-		parentElement.removeChild(this.shipBorderElement);
-	}
+
 
 	renderChargeBar() {
 		var barSize = Math.round((this.multiplier / this.maxCharge) * 100);

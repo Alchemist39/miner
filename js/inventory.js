@@ -4,6 +4,8 @@ var inventoryId = 1;
 class Inventory {
 	constructor(parentElement, slots = 48) {
 		this.parentElement = parentElement;
+		this.slots = slots;
+		this.id = inventoryId++;
 		//все контейнеры храним в массиве
 		this.containers = [];
 		this.inventoryHidden = true;
@@ -11,12 +13,7 @@ class Inventory {
 		this.nextEmptyContainer = 0;
 		this.itemsArray = ['ore', 'metall', 'diamonds', 'gas'];
 
-		//this.containers[this.itemToContainers['metall']]
-
-		this.slots = slots;
-		this.id = inventoryId++;
 		//темплейт создания слотов
-		
 		// массив контейнеров, каждый контейнер
 		// в класс передаем свойство объекта из массива
 		this.template = Handlebars.compile(`
@@ -29,7 +26,7 @@ class Inventory {
 			{{/each}}
 		`);
 
-		//создаем циклом слоты
+		//создаем циклом слоты, в массив контейнеров помещаем пустые объекты
 		for(var i = 0; i < this.slots; i++){
 			this.containers.push({});
 		}
@@ -91,7 +88,6 @@ class Inventory {
 	findEmptySlot() {
 		for(var i = 0; i < this.containers.length; i++) {
 			if(!this.containers[i].class) {
-				console.log(i);
 				return i;
 			}
 		}
@@ -123,7 +119,6 @@ class Inventory {
 			this.parentElement,
 			'div', 
 			'inventoryContainer',
-			//разобраться с синтаксисом
 			// в темплейт передаем объект со свойством контейнерс, который равен нашему массиву
 			this.template({containers: this.containers})
 		);
@@ -199,7 +194,11 @@ class Inventory {
 	reloadInventory() {
 		this.removeInventory();
 		this.createInventory();
-		this.inventoryHidden = true;
+		if (!this.inventoryHidden) {
+			this.inventoryContainerElement.style.left = '0%';
+		} else {
+			this.inventoryContainerElement.style.left = '-100%';
+		}
 	}
 
 	removeInventory() {

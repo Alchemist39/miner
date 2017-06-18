@@ -43,7 +43,7 @@
 			width: 100%;
 			position: relative;
 		}
-			.smallAsteroid1, .playersShip {
+			.smallAsteroid1, .shipBorder, .playersShip {
 				position: absolute;
 				cursor: pointer;
 				background-image: url('/images/asteroid.png'); 
@@ -60,9 +60,15 @@
 				padding-top: 13px;
 			}
 			.miningField > .battleField > .mainField > .shipBorder > .playersShip {
-				background-image: url('/images/i/wasp.png'); 
 				width: 115px;
 				height: 115px;
+				background-image: url('/images/i/wasp.png');
+			}
+			.miningField > .battleField > .mainField > .shipBorder > .playersShip.wasp {
+				background-image: url('/images/i/wasp.png');
+			}
+			.miningField > .battleField > .mainField > .shipBorder > .playersShip.truck {
+				background-image: url('/images/i/truck.png'); 
 			}
 			.miningField > .battleField > .mainField > .smallAsteroid1 {
 				width: 50px;
@@ -87,16 +93,16 @@
 						height: 100%;
 						background-color: red;
 					}
-						.playersShip .hpBar {
+						.shipBorder .hpBar {
 							width: 20%;
 						} 
-						.playersShip .shieldBar {
+						.shipBorder .shieldBar {
 							width: 15%;
 						}
-						.playersShip .armorBar {
+						.shipBorder .armorBar {
 							width: 30%;
 						}
-						.playersShip .chargeBar {
+						.shipBorder .chargeBar {
 							width: 0%;
 						}
 					.hpBorder .HP, .shieldBorder .shield, .armorBorder .armor, .chargeBorder .charge {

@@ -17,7 +17,6 @@ class MiningfieldPage {
 		};
 		this.map = null;
 		this.page = null;
-		this.playerShip = null;
 		this.courierCargo = 0;
 		this.courierStatus = true;
 		this.flyAvailable = true;
@@ -26,8 +25,7 @@ class MiningfieldPage {
 		//все созданные поля хранятся в массиве
 		this.miningFields = {};
 
-		this.playerShip = new PlayerShip ();
-		this.cargo = new Cargoholder(this.playerShip.cargoCapacity);
+		this.cargo = new Cargoholder(player.ship.cargoCapacity);
 
 		this.template = Handlebars.compile(`
 			<div class="controllPanel">
@@ -105,7 +103,7 @@ class MiningfieldPage {
 			self.overheatAvailable = false;
 			self.overheatElement.style.color = 'red';
 			self.overheatElement.style.fontSize = '1vmax';
-			self.playerShip.laserPower *= 10;
+			player.ship.laserPower *= 10;
 		// создаем экземпляр класса таймер, устанавливаем ему длительность через конфиг
 			let overheatCountdown = new Timer({
 				duration: self.config.overheatDuration
@@ -134,7 +132,7 @@ class MiningfieldPage {
 					`;
 				})
 				self.overheatElement.style.color = 'white';
-				self.playerShip.laserPower /= 10;
+				player.ship.laserPower /= 10;
 
 				return overheatCooldown.promise;
 		// Затем устанавливаем доступность перегрева, меняем текст, увеличиваем шрифт.
@@ -173,7 +171,7 @@ class MiningfieldPage {
 		//присоединяем к странице поле с нужным номером из уже созданных или нового 
 		this.miningFieldElement.appendChild(this.miningFields[pageNumber].battleFieldElement);
 
-		this.playerShip.show(this.miningFields[this.page].mainFieldElement);
+		player.ship.show(this.miningFields[this.page].mainFieldElement);
 		this.cargo.show(this.miningFields[this.page].battleFieldElement);
 
 		document.querySelector('.container').appendChild(this.miningFieldElement);

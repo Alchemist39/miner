@@ -2,6 +2,8 @@
 
 class Station {
 	constructor() {
+
+		player.equipShip(ships['truck']);
 		this.map = null;
 		this.shipmarket = null;
 
@@ -18,16 +20,15 @@ class Station {
 			</div>
 			<div class="hungarContainer">
 				<div class="stationName">Станция: Земляне люминатые</div>
-				<div class="playersShip">
-					<div class="weaponPlace1"></div>				
-					<div class="weaponPlace2"></div>
-				</div>
+				{{{ship}}}
 				<div class="upgrades"></div>
 			</div>
 		`);
 
 		// див станции
-		this.stationElement = createDiv('station', this.template());
+		this.stationElement = createDiv('station', this.template({
+			ship: player.ship.getShipInHungarHTML()
+		}));
 		this.sellElement = this.stationElement.querySelector('.sellMarket');
 		this.marketElement = this.stationElement.querySelector('.shipsMarket');
 		this.moduleMarket = this.stationElement.querySelector('.weaponsMarket');
@@ -52,44 +53,34 @@ class Station {
 		this.inventory = new Inventory(this.stationElement.querySelector('.hungarContainer'));
 		this.inventory.initialize();
 
-		this.upgradesSlots = new Inventory(this.stationElement.querySelector('.upgrades'), 20);
-		//this.upgradesSlots.setUpgrades();
-
 		this.upgradeLasersElement = this.stationElement.querySelector('.cruiser');
 		this.upgradeTargetQuantityElement = this.stationElement.querySelector('.carrier');
 		this.upgradeScaningSpeedElement = this.stationElement.querySelector('.truck');
-/*
-		// кнопка апгрейда лазеров
-		this.upgradeLasersElement.addEventListener('click', () => this.upgradeLasers1() );
-		// кнопка апгрейда количества целей
-		this.upgradeTargetQuantityElement.addEventListener( 'click', () => this.upgradeTargetQuantity1() );
-		// кнопка апгрейда скорости сканирования
-		this.upgradeScaningSpeedElement.addEventListener('click', () => this.upgradeScaningSpeed1() );
-*/
+
 		this.show();
 	}
 
 	upgradeScaningSpeed1() {
-		if(miningPage.playerShip.scanRate == 15) {
+		if(player.ship.scanRate == 15) {
 			return;
 		}
-		miningPage.playerShip.scanRate = 15;
+		player.ship.scanRate = 15;
 		console.log('Скорость сканеров увеличена до 15');
 		localStorage.setItem('scanRate', 15);
 	}
 	upgradeTargetQuantity1() {
-		if(miningPage.playerShip.targetQuantity == 15) {
+		if(player.ship.targetQuantity == 15) {
 			return;
 		}
-		miningPage.playerShip.targetQuantity = 15;
+		player.ship.targetQuantity = 15;
 		console.log('Количество целей увеличено до 15');
 		localStorage.setItem('targetQuantity', 15);
 	}
 	upgradeLasers1() {
-		if(miningPage.playerShip.laserPower == 2 && miningPage.overheatAvailable == false) {
+		if(player.ship.laserPower == 2 && miningPage.overheatAvailable == false) {
 			return;
 		}
-		miningPage.playerShip.laserPower = 2;
+		player.ship.laserPower = 2;
 		console.log('Лазеры усилены до 2');
 		localStorage.setItem('lasers', 2);
 	}
