@@ -11,7 +11,10 @@ class Wasp extends Ship{
 			width: 524 + 'px',
 			height: 330 + 'px'
 		};
-		this.cargo = 2000;
+		this.cargoCapacity = 2000;
+		this.laserPower = 2;
+
+		this.maxCharge = 200;
 	}
 }
 
@@ -26,7 +29,9 @@ class Truck extends Ship{
 			width: 585 + 'px',
 			height: 385 + 'px'
 		};
-		this.cargo = 10000;
+		this.cargoCapacity = 10000;
+		this.laserPower = 20;
 
+		this.maxCharge = 500;
 	}
 }

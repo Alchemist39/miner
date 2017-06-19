@@ -12,8 +12,6 @@ class Ship{
 		// количество одновременно удерживаемых астероидов
 		this.targetQuantity = 15;
 
-		this.cargoCapacity = 2000;
-
 		this.maxCharge = 200;
 
 		this.multiplier = 0;
@@ -84,8 +82,10 @@ class Ship{
 
 	renderChargeBar() {
 		var barSize = Math.round((this.multiplier / this.maxCharge) * 100);
-		document.body.querySelector('.chargeBar').style.width = barSize + '%';
-		document.body.querySelector('.charge').innerHTML = Math.round(this.multiplier) + "/" + this.maxCharge;
+		if(document.body.querySelector('.chargeBar') && document.body.querySelector('.charge') ) {
+			document.body.querySelector('.chargeBar').style.width = barSize + '%';
+			document.body.querySelector('.charge').innerHTML = Math.round(this.multiplier) + "/" + this.maxCharge;
+		}
 	}
 
 	setMultiplier(value) {
