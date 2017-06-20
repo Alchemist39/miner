@@ -1,0 +1,25 @@
+{
+  "name": "miner",
+  "version": "1.0.0",
+  "description": "miner",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alchemist39/Clicker.git"
+  },
+  "author": "Andrey Kalitin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Alchemist39/Clicker/issues"
+  },
+  "homepage": "https://github.com/Alchemist39/Clicker#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-minify": "^1.0.0",
+    "gulp-uglifyjs": "^0.6.2"
+  },
+  "dependencies": {
+    "express": "^4.15.3",
+    "gulp-uglifycss": "^1.0.8"
+  }
+}
