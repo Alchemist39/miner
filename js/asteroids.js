@@ -10,9 +10,7 @@ class Asteroid {
 		this.parentElement = parentElement;
 		this.field = field;
 
-		this.asteroidElement = createAndAppend(
-			parentElement,
-			'div',
+		this.asteroidElement = createDiv(
 			'smallAsteroid1',
 			`
 			<div class="hpBorder">
@@ -51,11 +49,11 @@ class Asteroid {
 		this.setHpVisible();
 		if(this.currentVolume > 1 && newVolume > 0) {
 			this.currentVolume -= power;
-			miningPage.cargo.addOre(power);
+			player.ship.cargo.addOre(power);
 			// TODO ретурн power||currentVolume
 			this.changeVolumeBar();
 		} else {
-			miningPage.cargo.addOre(this.currentVolume);
+			player.ship.cargo.addOre(this.currentVolume);
 			this.kill();
 			this.currentVolume = 0;
 			this.changeVolumeBar();
@@ -82,7 +80,6 @@ class Asteroid {
 		this.asteroidElement.style.top = this.coordinates.y + '%';
 	}
 	kill() {
-		this.parentElement.removeChild(this.asteroidElement);
 		this.field.onKill(this);
 	}
 
@@ -99,6 +96,13 @@ class Asteroid {
 		} else {
 			this.coordinates.y = y;
 		}
+	}
+
+	showAsteroid(parentElement) {
+		parentElement.appendChild(this.asteroidElement);
+	}
+	removeAsteroid(parentElement) {
+		parentElement.removeChild(this.asteroidElement);
 	}
 
 }

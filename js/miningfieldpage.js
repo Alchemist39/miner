@@ -23,8 +23,6 @@ class MiningfieldPage {
 		//все созданные поля хранятся в массиве
 		this.miningFields = {};
 
-		this.cargo = new Cargoholder(player.ship.cargoCapacity);
-
 		this.template = Handlebars.compile(`
 			<div class="controllPanel">
 				<div class="courier">Разгрузка</div>
@@ -196,11 +194,14 @@ class MiningfieldPage {
 		for(let i = 0; i < battlefields.length; i++) {
 			this.miningFieldElement.removeChild(battlefields[i]);
 		}
+
 		//присоединяем к странице поле с нужным номером из уже созданных или нового 
+		this.miningFields[pageNumber].renderMiningField();
 		this.miningFieldElement.appendChild(this.miningFields[pageNumber].battleFieldElement);
 
-		this.cargo.show(this.miningFields[this.page].battleFieldElement);
+		player.ship.cargo.show(this.miningFields[this.page].battleFieldElement);
 
 		document.querySelector('.container').appendChild(this.miningFieldElement);
 	}
+
 }

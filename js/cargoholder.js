@@ -6,6 +6,9 @@ class Cargoholder {
 		this.currentCargo = this.getOre();
 
 		this.id = cargoID++;
+		this.renderCargo();
+	}
+	renderCargo() {
 		this.holdElement = createDiv(
 			'hold', 
 			`
@@ -16,6 +19,7 @@ class Cargoholder {
 			</div>
 			`
 		);
+		
 		this.currentCargoBarElement = this.holdElement.querySelector('.holdBar');
 		this.currentCargoElement = this.holdElement.querySelector('.holdStatus');
 		this.displayCargoVolume();

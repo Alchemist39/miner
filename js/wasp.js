@@ -13,6 +13,7 @@ class Wasp extends Ship{
 		};
 		this.cargoCapacity = 2000;
 		this.laserPower = 2;
+		this.cargo = new Cargoholder(this.cargoCapacity);
 
 		this.maxCharge = 200;
 	}
@@ -31,6 +32,7 @@ class Truck extends Ship{
 		};
 		this.cargoCapacity = 10000;
 		this.laserPower = 20;
+		this.cargo = new Cargoholder(this.cargoCapacity);
 
 		this.maxCharge = 500;
 	}

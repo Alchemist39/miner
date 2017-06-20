@@ -3,7 +3,12 @@
 class Ship{
 	constructor() {
 		this.config = {
-			reductionTimer: 3
+			reductionTimer: 3,
+
+			// длительность перегрева
+			overheatDuration: 5,
+			// кулдаун перегрева
+			overheatCooldown: 5
 		};
 		//корабль игрока на поле
 		this.laserPower = 2;
@@ -17,6 +22,9 @@ class Ship{
 		this.multiplier = 0;
 		this.mineInterval = null;
 		this.target = null;
+
+
+		this.isOverheatAvailable = true;
 		
 		this.template = Handlebars.compile(`
 			<div class="shipBorder">
@@ -146,5 +154,65 @@ class Ship{
 	stopMining() {
 		clearInterval(this.mineInterval);
 	}
+
+/*
+	runOverheatSequence() {
+		if(!this.isOverheatAvailable) {
+			return;
+		}
+
+		this.startOverheat();
+		this.runOverheatCountdown()
+			.then( () => this.runOverheatCooldown() ) 
+			.then( () => this.endOfOverheat() );
+	}
+	startOverheat() {
+		this.overheatAvailable = false;
+		this.laserPower *= 10;
+	}
+
+	// перегрев активен
+	runOverheatCountdown() {
+		let overheatCountdown = new Timer({
+			duration: this.config.overheatDuration
+		});
+		// вызываем функцию (свойство класса) onTick, передаем в нее функцию с аргументом timer
+		// через свойство класса форматируем время; меняем текст на странице
+		overheatCountdown.onTick(function(timer) {
+			let time = timer.getFormatedLeftTime();
+			this.overheatElement.innerHTML = `
+				Перегрев<br>
+				${time.minutes}:${time.seconds}
+			`;
+		}.bind(this));
+
+		return overheatCountdown.promise;
+	}
+
+	// перегрев откатывается
+	runOverheatCooldown() {
+		// вызываем свойство promise экземпляра класса Timer, по завершении отсчета активности перегрева
+		// Начинаем новый отсчет отката перегрева с отображением отсчета на странице
+		// устанавливаем цвет текста на белый, уменьшаем мощность лазерова в 10 раз (к изначальному)
+		let overheatCooldown = new Timer({
+			duration: this.config.overheatCooldown
+		})
+		overheatCooldown.onTick(function(timer) {
+			let time = timer.getFormatedLeftTime();
+			this.overheatElement.innerHTML = `
+				Перегрев недоступен<br>
+				${time.minutes}:${time.seconds}
+			`;
+		}.bind(this));
+		this.overheatElement.style.color = 'white';
+		this.laserPower /= 10;
+
+		return overheatCooldown.promise;
+	}
+
+	setOverheatAvailable() {
+		this.overheatAvailable = true;
+	}
+*/
 
 }
