@@ -10,11 +10,10 @@ var ships = {
 
 var player = new Player('Alchemist');
 // экипируем в игрока корабль wasp
-player.equipShip( ships[ localStorage.getItem('activeShip') ] );
+player.equipShip( ships[ localStorage.getItem('activeShip') ] || ships['wasp']);
 game.station = new Station();
 var shipmarket = new ShipMarket();
 var miningPage = new MiningfieldPage();
-var wallet = new Wallet(game.station);
 
 // див карты
 var map = new Map(game.station);

@@ -59,10 +59,9 @@ class Station {
 		this.upgradeLasersElement = this.stationElement.querySelector('.cruiser');
 		this.upgradeTargetQuantityElement = this.stationElement.querySelector('.carrier');
 		this.upgradeScaningSpeedElement = this.stationElement.querySelector('.truck');
-
 		this.show();
 	}
-
+/*
 	upgradeScaningSpeed1() {
 		if(player.ship.scanRate == 15) {
 			return;
@@ -86,7 +85,7 @@ class Station {
 		player.ship.laserPower = 2;
 		console.log('Лазеры усилены до 2');
 		localStorage.setItem('lasers', 2);
-	}
+	}*/
 	sell() {
 		wallet.addMoney(this.inventory.getFromStorage('ore'));
 		this.inventory.clearStorage('ore');

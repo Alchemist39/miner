@@ -60,7 +60,7 @@ class MiningfieldPage {
 		this.courierStatus = false;
 
 		this.runTransportationCountdown()
-			.then( () => this.cargo.removeOre() )
+			.then( () => player.ship.cargo.removeOre() )
 			.then( () => this.runTransportationCooldown() )
 			.then( () => this.endOfTransportation() )
 	}
