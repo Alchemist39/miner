@@ -27,13 +27,9 @@ class Asteroid {
 
 		this.hpElement.style.visibility = 'hidden';
 
-		this.asteroidElement.addEventListener('click', function() {
-			this.mineAsteroid(player.ship.laserPower);
-		}.bind(this));
+		this.asteroidElement.addEventListener('click', () => this.mineAsteroid(player.ship.laserPower));
 
-		this.asteroidElement.addEventListener('mousedown', function() {
-			player.ship.setTarget(this);
-		}.bind(this));
+		this.asteroidElement.addEventListener('mousedown', () => player.ship.setTarget(this));
 		// прослушиваем отпускание на документе, т.к. если зажатую мышь увести с астероида
 		// и отпустить, то добыча не остановится. Если не отлавливать dragend, то при перетягивании
 		// астероида, не отлавливается событие mouseup 

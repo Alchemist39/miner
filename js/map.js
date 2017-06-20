@@ -11,7 +11,6 @@ class Map{
 
 		this.mapElement = createDiv('map', this.template());
 	
-
 		this.stationButtonElement = this.mapElement.querySelector('.stationButton');
 		this.field_342Element = this.mapElement.querySelector('.field_342');
 		this.mapCloseElement = this.mapElement.querySelector('.closeMap');

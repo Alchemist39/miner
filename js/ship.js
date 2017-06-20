@@ -47,6 +47,10 @@ class Ship{
 				<div class="weaponPlace2"></div>
 			</div>
 		`);
+		this.hitTunnelDamage();
+	}
+	// нанесение урона при удерживании кнопки мыши
+	hitTunnelDamage() {
 		// используем хелпер дебаунс, чтобы отложить выполнение действия 
 		// и обновить таймер, если функция повторно вызывается
 		this.multiplierReduction = debounce(function() {

@@ -36,7 +36,6 @@ class MiningfieldPage {
 		`);
 
 		this.renderMiningPage();
-
 	}
 	renderMiningPage() {
 		clear();
@@ -111,7 +110,7 @@ class MiningfieldPage {
 	}
 
 
-	// последовательность
+	// последовательность пергрева
 	runOverheatSequence() {
 		if(!this.overheatAvailable) {
 			return;
@@ -147,7 +146,6 @@ class MiningfieldPage {
 	}
 	// перегрев откатывается
 	runOverheatCooldown() {
-
 		// вызываем свойство promise экземпляра класса Timer, по завершении отсчета активности перегрева
 		// Начинаем новый отсчет отката перегрева с отображением отсчета на странице
 		// устанавливаем цвет текста на белый, уменьшаем мощность лазерова в 10 раз (к изначальному)
