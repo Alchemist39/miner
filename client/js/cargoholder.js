@@ -43,10 +43,11 @@ class Cargoholder {
 		}
 	}
 	setOre(amount) {
-		localStorage.setItem('ore', amount);
+		localStorage.setItem('ore' + ' ' + localStorage.getItem('activeShip'), amount);
 	}
 	getOre() {
-		return parseInt(localStorage.getItem('ore')) || 0;
+		let shipCargo = 'ore' + ' ' + localStorage.getItem('activeShip');
+		return parseInt(localStorage.getItem(shipCargo)) || 0;
 	}
 	removeOre() {
 		miningPage.addOreToCourierCargo(this.currentCargo);
@@ -64,7 +65,12 @@ class Cargoholder {
 		this.changeCargoBar();
 		this.currentCargoElement.innerHTML = Math.round(this.currentCargo) + " / " + this.shipCargoHolder;
 	}
+	// для того чтобы карго обновлялось при смене корабля сразу
+	// необходимо удалить содержимое элемента карго
+	// отрендерить его заново и присоединить к родительскому элементу
 	show(parentElement) {
+		this.holdElement.innerHTML = '';
+		this.renderCargo();
 		parentElement.appendChild(this.holdElement);
 	}
 	remove(parentElement) {

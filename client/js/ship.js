@@ -4,25 +4,23 @@ class Ship{
 	constructor() {
 		this.config = {
 			reductionTimer: 3,
-
 			// длительность перегрева
 			overheatDuration: 5,
 			// кулдаун перегрева
 			overheatCooldown: 5
 		};
 		//корабль игрока на поле
-		this.laserPower = 2;
+		this.laserPower = null;
 		// скорость сканирования 10 астероидов в минуту
-		this.scanRate = 15;
+		this.scanRate = null;
 		// количество одновременно удерживаемых астероидов
-		this.targetQuantity = 15;
+		this.targetQuantity = null;
 
-		this.maxCharge = 200;
+		this.maxCharge = null;
 
-		this.multiplier = 0;
+		this.multiplier = null;
 		this.mineInterval = null;
 		this.target = null;
-
 
 		this.isOverheatAvailable = true;
 		
@@ -56,6 +54,15 @@ class Ship{
 			</div>
 		`);
 		this.hitTunnelDamage();
+	}
+	turnOffLasers() {
+		if(this.multiplier == 0) {
+			return;
+		}
+		this.multiplier = 0;
+	}
+	getActiveShip() {
+		return localStorage.getItem('activeShip');
 	}
 	// нанесение урона при удерживании кнопки мыши
 	hitTunnelDamage() {

@@ -23,11 +23,15 @@ game.station.shipmarket = shipmarket;
 miningPage.map = map;
 
 shipmarket.station = game.station;
-
+var stationRoute = crossroads.addRoute('/', function(){
+	clear();
+	game.station.show();
+});
 //переход на станцию при смене УРЛа
 var stationRoute = crossroads.addRoute('/station', function(){
 	clear();
 	game.station.show();
+	player.ship.turnOffLasers();
 });
 
 var marketRoute = crossroads.addRoute('/market', function(){
