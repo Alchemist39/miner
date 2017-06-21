@@ -1,4 +1,6 @@
 'use strict';
+
+console.log('map');
 class Map{
 	constructor(station) {
 		this.station = station;

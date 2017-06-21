@@ -1,5 +1,6 @@
 'use strict'
 
+console.log('market');
 class ShipMarket {
 	constructor(station) {
 		this.station = station;

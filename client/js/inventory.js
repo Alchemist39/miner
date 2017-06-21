@@ -1,4 +1,5 @@
 'use strict';
+console.log('inventory');
 var inventoryId = 1;
 
 class Inventory {

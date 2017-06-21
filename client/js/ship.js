@@ -1,5 +1,6 @@
 'use strict';
 
+console.log('ships');
 class Ship{
 	constructor() {
 		this.config = {

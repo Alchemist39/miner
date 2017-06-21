@@ -4,6 +4,7 @@
  * v0.12.2 (2015/07/31 18:37)
  */
 
+console.log('crossroads');
 (function () {
 var factory = function (signals) {
 

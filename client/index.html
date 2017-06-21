@@ -2,30 +2,50 @@
 	<head>
 		<title>Miner</title>
 		<meta charset="utf-8">
-		<link href="/styles/general.css" rel="stylesheet">
-		<link href="/styles/station.css" rel="stylesheet">
-		<link href="/styles/map.css" rel="stylesheet">
-		<link href="/styles/leftpanel.css" rel="stylesheet">
-		<link href="/styles/shipmarket.css" rel="stylesheet">
-		<link href="/styles/miningfield.css" rel="stylesheet">
+
+		<link href="/main.min.css" rel="stylesheet"> 
 	</head>
 	<body>
 		<div class="container"></div>
-		<script src="/js/player.js"></script>
-		<script src="/lib/signals.js"></script>
-		<script src="/lib/crossroads.js"></script>
-		<script src="/lib/handlebars-v4.0.10.js"></script>
-		<script src="/js/helpers.js"></script>
-		<script src="/js/station.js"></script>
-		<script src="/js/shipmarket.js"></script>
-		<script src="/js/miningfield.js"></script>
-		<script src="/js/miningfieldpage.js"></script>
-		<script src="/js/map.js"></script>
-		<script src="/js/asteroids.js"></script>
-		<script src="/js/cargoholder.js"></script>
-		<script src="/js/inventory.js"></script>
-		<script src="/js/ship.js"></script>
-		<script src="/js/wasp.js"></script>
-		<script src="/js/main.js"></script>
+
+		<script>
+			'use strict';
+			// true - рабочая версия, false - собранная
+			var flag = true;
+
+			var scripts = [
+				"/lib/signals.js",
+				"/lib/crossroads.js",
+				"/lib/handlebars-v4.0.10.js",
+				"/js/helpers.js",
+				"/js/player.js",
+				"/js/station.js",
+				"/js/shipmarket.js",
+				"/js/miningfield.js",
+				"/js/miningfieldpage.js",
+				"/js/map.js",
+				"/js/asteroids.js",
+				"/js/cargoholder.js",
+				"/js/inventory.js",
+				"/js/ship.js",
+				"/js/wasp.js",
+				"/js/main.js"
+			];
+			// используем write вместо создания и аппенда ссылки на скрипт
+			// иначе нарушается очередность подключения и выполнения скриптов
+			var including = function() {
+				if(flag) {
+					for(let i = 0; i < scripts.length; i++) {
+						document.write('\<script src="' + scripts[i] + '"\>\<\/script\>');
+					}
+				} else {
+					for(let i = 0; i < 3; i++) {
+						document.write('\<script src="' + scripts[i] + '"\>\<\/script\>');
+					}
+					document.write('\<script src="/allgame.min.js"\>\<\/script\>');
+				}
+			}
+			including();
+		</script>
 	</body>
 </html>

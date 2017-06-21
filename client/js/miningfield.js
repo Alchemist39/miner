@@ -1,5 +1,6 @@
 'use strict';
 
+console.log('field');
 class Miningfield {
 	constructor(page) {
 		//конструктор принимает аргумент страницы из функции, из УРЛ

@@ -1,5 +1,6 @@
 'use strict'
 
+console.log('station');
 class Station {
 	constructor() {
 

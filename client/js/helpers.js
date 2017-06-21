@@ -1,4 +1,6 @@
 'use strict'
+
+console.log('helpers');
 //создание и прикрепление дива (и не только дива)
 var createAndAppend = function (parentElement, tag, className, text) {
 	var element = document.createElement(tag);

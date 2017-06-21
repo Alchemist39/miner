@@ -1,7 +1,7 @@
 'use strict';
 
 let asteroidID = 0;
-
+console.log('asteroids');
 class Asteroid {
 	constructor(size, parentElement, field) {
 		this.id = asteroidID++;

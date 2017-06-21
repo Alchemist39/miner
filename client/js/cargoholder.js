@@ -1,4 +1,6 @@
 'use strict';
+
+console.log('cargo');
 let cargoID = 0;
 class Cargoholder {
 	constructor(shipCargoHolder) {

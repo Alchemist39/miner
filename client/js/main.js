@@ -1,4 +1,6 @@
 'use strict';
+
+console.log('main');
 var game = {
 
 };

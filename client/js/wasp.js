@@ -1,5 +1,6 @@
 'use strict';
 
+console.log('wasp');
 class Wasp extends Ship{
 	constructor() {
 		super();

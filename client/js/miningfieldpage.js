@@ -1,5 +1,6 @@
 'use strict';
 
+console.log('miningPage');
 class MiningfieldPage {
 	constructor() {
 		// конфиг для изменения констант
