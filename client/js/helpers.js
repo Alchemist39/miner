@@ -118,7 +118,7 @@ function debounce(func, delay) {
 		}.bind(this), delay);
 	}
 }
-
+// установка корабля коллбеками
 var ajaxGetShip = function(callback) {
 	var request = new XMLHttpRequest();
 
@@ -126,13 +126,29 @@ var ajaxGetShip = function(callback) {
 		if(request.readyState == 4 && request.status == 200) {
 			console.log(request);
 			let ship = JSON.parse(request.response);
-			if(callback) {
-				callback( player.equipShip(ships[ship.shipType]) );
-			}
-		//console.log('корабль экипируется');
+			callback(ship.shipType);
 		}
 	}
 
 	request.open('GET', '/app/currentShip/');
 	request.send();
+}
+// установка корабля промисами
+var httpGet = function(url) {
+
+	let promise = new Promise(function(resolve, reject) {
+
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', url, true);
+
+		xhr.onload = function() {
+			if (this.status == 200) {
+				this.ship = JSON.parse(this.response);
+				resolve(this.ship.shipType);
+			}
+		};
+
+		xhr.send();
+	});
+	return promise;
 }

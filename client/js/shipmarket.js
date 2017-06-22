@@ -19,7 +19,7 @@ class ShipMarket {
 			'Назад'
 		);
 
-		this.backElement.addEventListener( 'click', () => pushUrl('/station', 'Станция') );
+		this.backElement.addEventListener( 'click', () => this.backToStation() );
 
 		this.waspElement = createAndAppend(this.marketContainerElement, 'div', 'wasp', '');
 		this.waspElement.addEventListener('click', () => this.setWasp() )
@@ -103,44 +103,29 @@ class ShipMarket {
 		);
 
 	}
-	
-	setWasp() {
-	//	player.equipShip(ships['wasp']);
-		//localStorage.setItem('activeShip', 'wasp');
-		this.ajaxSetShip('wasp');
-		ajaxGetShip(function(){});
+	backToStation() {
 		game.station.renderStation();
 		pushUrl('/station', 'Станция');
 	}
+	// осу устанавливаем через промисы
+	setWasp() {
+		this.ajaxSetShip('wasp');
+		httpGet('/app/currentShip/')
+			.then(shipType => player.equipShip(ships[shipType]));
+	}
+	// трак устанавливаем через коллбек
+	setTruck() {
+		this.ajaxSetShip('truck');
+		ajaxGetShip(function(ship) {
+			player.equipShip(ships[ship]);
+		});
+	}
+	// при установке корабля записываем новое значение активного корабля
 	ajaxSetShip(params) {
 		var request = new XMLHttpRequest();
 
 		request.open('POST', '/app/equipShip/' + params);
 		request.send(params);
-	}
-/*	ajaxGetShip(callback) {
-		var request = new XMLHttpRequest();
-
-		request.onreadystatechange = function() {
-			if(request.readyState == 4 && request.status == 200) {
-				console.log(request);
-				let ship = JSON.parse(request.response);
-				if(callback) {
-					callback( player.equipShip(ships[ship.shipType]) );
-				}
-				//console.log('корабль экипируется');
-			}
-		}
-
-		request.open('GET', '/app/currentShip/');
-		request.send();
-	}*/
-	setTruck() {
-		this.ajaxSetShip('truck');
-		player.equipShip(ships['truck']);
-		localStorage.setItem('activeShip', 'truck');
-		game.station.renderStation();
-		pushUrl('/station', 'Станция');
 	}
 	show() {
 		document.querySelector('.container').appendChild(this.shipmarketElement);	
