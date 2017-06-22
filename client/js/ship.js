@@ -63,7 +63,7 @@ class Ship{
 		this.multiplier = 0;
 	}
 	getActiveShip() {
-		return localStorage.getItem('activeShip');
+		ajaxGetShip(function(){});
 	}
 	// нанесение урона при удерживании кнопки мыши
 	hitTunnelDamage() {

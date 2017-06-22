@@ -105,12 +105,38 @@ class ShipMarket {
 	}
 	
 	setWasp() {
-		player.equipShip(ships['wasp']);
-		localStorage.setItem('activeShip', 'wasp');
+	//	player.equipShip(ships['wasp']);
+		//localStorage.setItem('activeShip', 'wasp');
+		this.ajaxSetShip('wasp');
+		ajaxGetShip(function(){});
 		game.station.renderStation();
 		pushUrl('/station', 'Станция');
 	}
+	ajaxSetShip(params) {
+		var request = new XMLHttpRequest();
+
+		request.open('POST', '/app/equipShip/' + params);
+		request.send(params);
+	}
+/*	ajaxGetShip(callback) {
+		var request = new XMLHttpRequest();
+
+		request.onreadystatechange = function() {
+			if(request.readyState == 4 && request.status == 200) {
+				console.log(request);
+				let ship = JSON.parse(request.response);
+				if(callback) {
+					callback( player.equipShip(ships[ship.shipType]) );
+				}
+				//console.log('корабль экипируется');
+			}
+		}
+
+		request.open('GET', '/app/currentShip/');
+		request.send();
+	}*/
 	setTruck() {
+		this.ajaxSetShip('truck');
 		player.equipShip(ships['truck']);
 		localStorage.setItem('activeShip', 'truck');
 		game.station.renderStation();

@@ -118,3 +118,21 @@ function debounce(func, delay) {
 		}.bind(this), delay);
 	}
 }
+
+var ajaxGetShip = function(callback) {
+	var request = new XMLHttpRequest();
+
+	request.onreadystatechange = function() {
+		if(request.readyState == 4 && request.status == 200) {
+			console.log(request);
+			let ship = JSON.parse(request.response);
+			if(callback) {
+				callback( player.equipShip(ships[ship.shipType]) );
+			}
+		//console.log('корабль экипируется');
+		}
+	}
+
+	request.open('GET', '/app/currentShip/');
+	request.send();
+}

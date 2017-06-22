@@ -12,6 +12,7 @@ var ships = {
 
 var player = new Player('Alchemist');
 // экипируем в игрока корабль wasp
+ajaxGetShip(function(){});
 player.equipShip( ships[ localStorage.getItem('activeShip') ] || ships['wasp']);
 game.station = new Station();
 var shipmarket = new ShipMarket();

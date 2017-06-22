@@ -87,8 +87,16 @@ class Station {
 		console.log('Лазеры усилены до 2');
 		localStorage.setItem('lasers', 2);
 	}*/
+
+	ajaxRemove() {
+		var request = new XMLHttpRequest();
+
+		request.open('POST', '/app/removeOre');
+		request.send();
+	}
 	sell() {
-		wallet.addMoney(this.inventory.getFromStorage('ore'));
+		//wallet.addMoney(this.inventory.getFromStorage('ore'));
+		this.ajaxRemove(0);
 		this.inventory.clearStorage('ore');
 		this.inventory.removeFromInventory('ore');
 		this.inventory.inventoryContainerElement.style.left = '0%';

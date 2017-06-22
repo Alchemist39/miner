@@ -6,9 +6,9 @@ class MiningfieldPage {
 		// конфиг для изменения констант
 		this.config = {
 			// время ожидания курьера
-			courierDelay: 3,
+			courierDelay: 0,
 			// кулдаун курьера
-			courierCooldown: 3,
+			courierCooldown: 0,
 			// длительность перегрева
 			overheatDuration: 5,
 			// кулдаун перегрева
@@ -101,13 +101,21 @@ class MiningfieldPage {
 	}
 	// конец перевозки руды
 	endOfTransportation() {
+		this.ajaxPost(this.courierCargo);
 		this.courierElement.innerHTML = 'Разгрузка';
 		this.courierElement.style.fontSize = '2vmax';
 		this.courierStatus = true;
 		this.addOreToInventory();
 		this.removeOreFromCourierCargo();
-	}
 
+
+	}
+	ajaxPost(params) {
+		var request = new XMLHttpRequest();
+
+		request.open('POST', '/app/addOre/' + params);
+		request.send(params);
+	}
 
 	// последовательность пергрева
 	runOverheatSequence() {
