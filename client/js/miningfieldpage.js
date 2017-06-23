@@ -181,7 +181,7 @@ class MiningfieldPage {
 
 	addOreToInventory() {
 		game.station.inventory.moveToStorage('ore', this.courierCargo);
-		game.station.inventory.addToInventory('ore');
+		game.station.inventory.addToInventory(game.station.inventory.itemsArray[0]);
 	}
 	// руда в карго курьера
 	addOreToCourierCargo(amount) {
@@ -200,8 +200,8 @@ class MiningfieldPage {
 		//передаем в переменную полей боя все элементы с классом battlefield
 		//если их 1 и более, отсоединяем их от страницы
 		let battlefields = this.miningFieldElement.querySelectorAll('.battleField');
-		for(let i = 0; i < battlefields.length; i++) {
-			this.miningFieldElement.removeChild(battlefields[i]);
+		for(let field of battlefields) {
+			this.miningFieldElement.removeChild(field);
 		}
 
 		//присоединяем к странице поле с нужным номером из уже созданных или нового 

@@ -77,8 +77,8 @@ class Timer {
 	action() {
 		this.currentTime = Date.now();
 		if( this.currentTime < (this.startTime + this.duration) ) {
-			for(let i = 0; i < this.functionArray.length; i++) {
-				this.functionArray[i](this);
+			for(let foo of this.functionArray) {
+				foo(this);
 			}
 		} else {
 			clearInterval(this.interval);
@@ -138,16 +138,24 @@ var httpGet = function(url) {
 
 	let promise = new Promise(function(resolve, reject) {
 
-		var xhr = new XMLHttpRequest();
-		xhr.open('GET', url, true);
+		let xhr = new XMLHttpRequest();
 
 		xhr.onload = function() {
 			if (this.status == 200) {
 				this.ship = JSON.parse(this.response);
 				resolve(this.ship.shipType);
-			}
+			} else {
+			let error = new Error(this.statusText);
+			error.code = this.status;
+			reject(error);
+    		}
 		};
+		
+		xhr.onerror = function() {
+    		reject(new Error("Network Error"));
+    	};
 
+		xhr.open('GET', url, true);
 		xhr.send();
 	});
 	return promise;

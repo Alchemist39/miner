@@ -56,8 +56,8 @@ class Miningfield {
 	}
 
 	showAsteroids() {
-		for (var i = 0; i < this.asteroids.length; i++) {
-			this.asteroids[i].showAsteroid(this.mainFieldElement);
+		for(let asteroid of this.asteroids) {
+			asteroid.showAsteroid(this.mainFieldElement);
 		}
 	}
 	respawnAsteroids() {
@@ -75,8 +75,8 @@ class Miningfield {
 	}
 	// астероид == this в классе астероидов
 	onKill(asteroid) {
-		// обходим массив астероидов циклом
-		for(let i = 0; i < this.asteroids.length; i++){
+		// обходим массив астероидов по номерам
+		for(let i in this.asteroids) {
 			// если ID астероида номер i в массиве совпадает с ID астерода, который мы добываем
 			// то из массива выпиливается кусок астероидов номер i длиной в 1, т.е. текущий астероид
 			if(this.asteroids[i].id == asteroid.id) {

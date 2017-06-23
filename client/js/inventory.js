@@ -12,7 +12,30 @@ class Inventory {
 		this.inventoryHidden = true;
 		this.itemToContainers = {};
 		this.nextEmptyContainer = 0;
-		this.itemsArray = ['ore', 'metall', 'diamonds', 'gas'];
+
+		this.itemsArray = [
+			{
+				id: 0,
+				name: 'ore',
+				amount: this.getFromStorage('ore'),
+				ruName: 'Руда'
+			}, {
+				id: 1,
+				name: 'metall',
+				amount: this.getFromStorage('metall'),
+				ruName: 'Металл'
+			}, {
+				id: 2,
+				name: 'diamonds',
+				amount: this.getFromStorage('diamonds'),
+				ruName: 'Алмазы'
+			}, {
+				id: 3,
+				name: 'gas',
+				amount: this.getFromStorage('gas'),
+				ruName: 'Газ'
+			}
+		];
 
 		//темплейт создания слотов
 		// массив контейнеров, каждый контейнер
@@ -53,25 +76,18 @@ class Inventory {
 		this.containers[2] = {class: 'truck', title: 'Ускорение сканера'};
 		
 	}*/
-
-	// TODO добавить методы 
-	// 1) добавить в инвентарь v
-	// 2) убрать из инвентаря v
-	// 3) перемемстить из одной ячейки в другую 
-	//  3.1) свап ячеек
-	
 	addToInventory(item) {
 		let i = null;
 
-		if(this.itemToContainers[item] !== undefined) {
-			i = this.itemToContainers[item];
+		if(this.itemToContainers[item.name] !== undefined) {
+			i = this.itemToContainers[item.name];
 		} else {
 			i = this.findEmptySlot();
-			this.itemToContainers[item] = i;
+			this.itemToContainers[item.name] = i;
 		}
 		this.containers[i] = {
-			class: item,
-			title: item + " " + this.getFromStorage(item)
+			class: item.name,
+			title: item.ruName + " " + this.getFromStorage(item.name)
 		};
 		this.reloadInventory();	
 	}
@@ -87,7 +103,7 @@ class Inventory {
 	}
 	// функция возвращает номер ячейки
 	findEmptySlot() {
-		for(var i = 0; i < this.containers.length; i++) {
+		for(let i in this.containers) {
 			if(!this.containers[i].class) {
 				return i;
 			}
@@ -132,8 +148,8 @@ class Inventory {
 		// slots = массив дивов в инвентаре
 		// обходим массив, при драгстарте создаем объект с трансферной информацией
 		var innerSlots = this.inventoryContainerElement.querySelectorAll('.inventorySlot div');
-		for(let i = 0; i < innerSlots.length; i++) {
-			innerSlots[i].addEventListener('dragstart', function(e) {
+		for(let slot of innerSlots) {
+			slot.addEventListener('dragstart', function(e) {
 				// сохраняем исходную точку (див) в ранее созданную вне функций переменную
 				// если не сохранить ее тут, то при вызове дропа e.target будет равен цели дропа
 				dragged = e.currentTarget;
@@ -148,12 +164,12 @@ class Inventory {
 
 		// если конечная ячейка содержит какой-то предмет
 		var slots = this.inventoryContainerElement.querySelectorAll('.inventorySlot');
-		for(let i = 0; i < slots.length; i++) {
-			slots[i].addEventListener('dragover', function(e) {
+		for(let slot of slots) {
+			slot.addEventListener('dragover', function(e) {
 				e.preventDefault();
 			});
 
-			slots[i].addEventListener('drop', function(e) {
+			slot.addEventListener('drop', function(e) {
 				// получаем Id инвентаря из которого перемещаем предмет
 				// сравниваем Id исходного инвентаря и Id конечного инвентаря
 				// если они не совпадают, то перенос не происходит
@@ -210,11 +226,10 @@ class Inventory {
 	}
 
 	initialize() {
-		for(let i = 0; i < this.itemsArray.length; i++) {
-			if(this.getFromStorage(this.itemsArray[i]) > 0) {
-				this.addToInventory(this.itemsArray[i]);
+		for(let item of this.itemsArray) {
+			if(item.amount > 0) {
+				this.addToInventory(item);
 			}
 		}
-		this.reloadInventory();
 	}
 }
