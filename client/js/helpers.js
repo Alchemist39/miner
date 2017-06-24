@@ -142,12 +142,11 @@ var httpGet = function(url) {
 
 		xhr.onload = function() {
 			if (this.status == 200) {
-				this.ship = JSON.parse(this.response);
-				resolve(this.ship.shipType);
+				resolve(JSON.parse(this.response));
 			} else {
-			let error = new Error(this.statusText);
-			error.code = this.status;
-			reject(error);
+				let error = new Error(this.statusText);
+				error.code = this.status;
+				reject(error);
     		}
 		};
 		
@@ -157,6 +156,32 @@ var httpGet = function(url) {
 
 		xhr.open('GET', url, true);
 		xhr.send();
+	});
+	return promise;
+}
+var httpPOST = function(url, data) {
+
+	let promise = new Promise(function(resolve, reject) {
+
+		let xhr = new XMLHttpRequest();
+
+		xhr.onload = function() {
+			if (this.status == 200) {
+				resolve(JSON.parse(this.response));
+			} else {
+				let error = new Error(this.statusText);
+				error.code = this.status;
+				reject(error);
+    		}
+		};
+		
+		xhr.onerror = function() {
+    		reject(new Error("Network Error"));
+    	};
+
+		xhr.open('POST', url, true);
+		xhr.setRequestHeader("Content-Type", "application/json");
+		xhr.send(JSON.stringify(data));
 	});
 	return promise;
 }

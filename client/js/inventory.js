@@ -30,10 +30,6 @@ class Inventory {
 		`);
 
 		this.createInventory();
-		this.addToInventory(new Ore(1000));
-		this.addToInventory(new Gas(1000));
-		this.addToInventory(new Metall(1000));
-		this.addToInventory(new Diamonds(1000));
 	}
 
 	moveToStorage(item, count) {

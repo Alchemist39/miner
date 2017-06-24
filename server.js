@@ -6,8 +6,8 @@ var bodyParser = require('body-parser');
 var app = express();
 
 app.use(express.static('client'));
-app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(bodyParser.json()); // for parsing application/json
 // создаём маршрут для главной страницы
 // http://localhost:8080/
 
@@ -26,9 +26,6 @@ app.post('/app/addOre/:value', function(req, res) {
 		}, {
 			upsert: true
 		});
-		findDocuments(db, function() {
-			db.close();
-		})
 	});
 });
 // удаляем всю руду из базы
@@ -39,6 +36,38 @@ app.post('/app/removeOre', function(req, res) {
 		})
 	});
 });
+
+
+app.post('/save', function(req, res) {
+	console.log(req.body);
+	let data = req.body;
+
+	MongoClient.connect(url, function(err, db) {
+		db.collection('player').update({
+			name: 'Andrey'
+		}, {
+			$set: data
+		}, {
+			upsert: true
+		}, function() {
+			res.json({
+				status: 'ok'
+			})
+		});
+	});
+});
+
+app.get('/load', function(req, res) {
+
+	MongoClient.connect(url, function(err, db) {
+		db.collection('player').findOne({
+			name: 'Andrey'
+		}, function(err, player) {
+			res.json(player);
+		});
+	})
+})
+
 // передаем в базу текущий тип корабля
 app.post('/app/equipShip/:value', function(req, res) {
 	res.json(req.body);

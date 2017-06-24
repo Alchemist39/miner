@@ -29,13 +29,33 @@ var main = function() {
 	shipmarket.station = game.station;
 }
 
-httpGet('/app/currentShip/')
-	.then(shipType => player.equipShip(ships[shipType]))
-	// функция main вызывается только после отработки предыдущего .then
-	// если сразу вызывать исполнение функции main(), то она выполняется раньше, чем 
-	// происходит ответ от базы
-	.then(main)
-	.then( () => window.dispatchEvent(new Event('popstate')) );
+httpGet('/load')
+	.then(function(data) {
+		if(!data) {
+			data = {
+				ship: {
+					type: 'wasp',
+					cargo: 0
+				},
+				storage: {}
+			}
+		}
+		player.equipShip(ships[data.ship.type]);
+		player.ship.cargo.currentCargo = data.ship.cargo;
+
+		main();
+
+		let inventory = game.station.inventory;
+		for(let itemName in data.storage) {
+			inventory.addToInventory(Item.createByName({
+				name: itemName,
+				amount: data.storage[itemName]
+			}));
+		}
+
+		window.dispatchEvent(new Event('popstate'))
+	})
+
 
 
 var stationRoute = crossroads.addRoute('/', function(){

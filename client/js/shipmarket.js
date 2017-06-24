@@ -110,8 +110,9 @@ class ShipMarket {
 	setShip(shipType) {
 		this.ajaxSetShip(shipType);
 		httpGet('/app/currentShip/')
-			.then(shipType => player.equipShip(ships[shipType]))
+			.then( ship =>	player.equipShip(ships[ship.shipType]))
 			.then(this.backToStation);
+
 	}
 	// при установке корабля записываем новое значение активного корабля
 	ajaxSetShip(params) {
