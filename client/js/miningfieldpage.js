@@ -105,7 +105,7 @@ class MiningfieldPage {
 		this.courierElement.innerHTML = 'Разгрузка';
 		this.courierElement.style.fontSize = '2vmax';
 		this.courierStatus = true;
-		this.addOreToInventory();
+		game.station.inventory.addToInventory(new Ore(this.courierCargo));
 		this.removeOreFromCourierCargo();
 
 
@@ -178,11 +178,6 @@ class MiningfieldPage {
 		this.overheatElement.style.fontSize = '2vmax';
 	}
 
-
-	addOreToInventory() {
-		game.station.inventory.moveToStorage('ore', this.courierCargo);
-		game.station.inventory.addToInventory(game.station.inventory.itemsArray[0]);
-	}
 	// руда в карго курьера
 	addOreToCourierCargo(amount) {
 		this.courierCargo += amount;

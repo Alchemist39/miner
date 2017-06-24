@@ -55,7 +55,6 @@ class Station {
 
 		// инвентарь
 		this.inventory = new Inventory(this.stationElement.querySelector('.hungarContainer'));
-		this.inventory.initialize();
 
 		this.upgradeLasersElement = this.stationElement.querySelector('.cruiser');
 		this.upgradeTargetQuantityElement = this.stationElement.querySelector('.carrier');

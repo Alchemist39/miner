@@ -3,59 +3,37 @@ console.log('inventory');
 var inventoryId = 1;
 
 class Inventory {
-	constructor(parentElement, slots = 48) {
+	constructor(parentElement, slotCount = 48) {
 		this.parentElement = parentElement;
-		this.slots = slots;
+		this.slotCount = slotCount;
 		this.id = inventoryId++;
+		this.inventoryHidden = true;
+		this.nextEmptyContainer = 0;
 		//все контейнеры храним в массиве
 		this.containers = [];
-		this.inventoryHidden = true;
+		//создаем циклом слоты, в массив контейнеров помещаем пустые объекты
+		for( ; this.containers.length < this.slotCount; ){
+			this.containers.push(null);
+		}
 		this.itemToContainers = {};
-		this.nextEmptyContainer = 0;
-
-		this.itemsArray = [
-			{
-				id: 0,
-				name: 'ore',
-				amount: this.getFromStorage('ore'),
-				ruName: 'Руда'
-			}, {
-				id: 1,
-				name: 'metall',
-				amount: this.getFromStorage('metall'),
-				ruName: 'Металл'
-			}, {
-				id: 2,
-				name: 'diamonds',
-				amount: this.getFromStorage('diamonds'),
-				ruName: 'Алмазы'
-			}, {
-				id: 3,
-				name: 'gas',
-				amount: this.getFromStorage('gas'),
-				ruName: 'Газ'
-			}
-		];
-
 		//темплейт создания слотов
 		// массив контейнеров, каждый контейнер
 		// в класс передаем свойство объекта из массива
 		this.template = Handlebars.compile(`
 			{{#each containers as |container slot|}}
 				<div class="inventorySlot">
-					{{#if container.class}}
-						<div class="{{container.class}}" draggable="true" title="{{container.title}}"></div>
+					{{#if container}}
+						{{{container.html}}}
 					{{/if}}
 				</div>
 			{{/each}}
 		`);
 
-		//создаем циклом слоты, в массив контейнеров помещаем пустые объекты
-		for(var i = 0; i < this.slots; i++){
-			this.containers.push({});
-		}
-
 		this.createInventory();
+		this.addToInventory(new Ore(1000));
+		this.addToInventory(new Gas(1000));
+		this.addToInventory(new Metall(1000));
+		this.addToInventory(new Diamonds(1000));
 	}
 
 	moveToStorage(item, count) {
@@ -69,64 +47,53 @@ class Inventory {
 	clearStorage(item) {
 		localStorage.removeItem(item + 'AtStorage');
 	}
-/*
-	setUpgrades() {
-		this.containers[0] = {class: 'cruiser', title: 'Усиление лазеров'};
-		this.containers[1] = {class: 'carrier', title: 'Расширение сканера'};
-		this.containers[2] = {class: 'truck', title: 'Ускорение сканера'};
-		
-	}*/
-	addToInventory(item) {
-		let i = null;
 
-		if(this.itemToContainers[item.name] !== undefined) {
-			i = this.itemToContainers[item.name];
+	addToInventory(item) {
+		let key = this.itemToContainers[item.name];
+		if(key !== undefined) {
+			this.containers[key].amount += item.amount;
 		} else {
-			i = this.findEmptySlot();
-			this.itemToContainers[item.name] = i;
+			key = this.findEmptySlot();
+			this.itemToContainers[item.name] = key;
+			this.containers[key] = item;
 		}
-		this.containers[i] = {
-			class: item.name,
-			title: item.ruName + " " + this.getFromStorage(item.name)
-		};
+
+		if(this.containers[key].amount <= 0) {
+			this.removeFromInventory(name);
+		}
+
 		this.reloadInventory();	
 	}
 	// удаляем из ячейки предмет с именем item
-	removeFromInventory(item) {
-		if(this.itemToContainers[item] === undefined) {
+	removeFromInventory(itemName) {
+		if(this.itemToContainers[itemName] === undefined) {
 			return;
 		}
-		this.containers[this.itemToContainers[item]] = {};
-		delete this.itemToContainers[item];
+		this.containers[this.itemToContainers[itemName]] = null;
+		delete this.itemToContainers[itemName];
 
 		this.reloadInventory();
 	}
 	// функция возвращает номер ячейки
 	findEmptySlot() {
 		for(let i in this.containers) {
-			if(!this.containers[i].class) {
+			if(!this.containers[i]) {
 				return i;
 			}
 		}
+		return false;
 	}
 
 	runRefining() {
-		if( this.getFromStorage('ore') <= 0 ) {
+		let ore = this.containers[this.itemToContainers['ore']];
+		if(!ore || ore.amount <= 0) {
 			return;
 		}
 		// [10, 25, 35, 30];
-		let totalVolumeOre = this.getFromStorage('ore');
-		this.diamonds = totalVolumeOre * 0.1;
-		this.metall = totalVolumeOre * 0.35;
-		this.gas = totalVolumeOre * 0.25;
-		this.moveToStorage('diamonds', this.diamonds);
-		this.moveToStorage('metall', this.metall);
-		this.moveToStorage('gas', this.gas);
-		this.addToInventory('diamonds');
-		this.addToInventory('metall');
-		this.addToInventory('gas');
+		this.addToInventory(new Diamonds(ore.amount * 0.1));
+		this.addToInventory(new Metall(ore.amount * 0.35));
+		this.addToInventory(new Gas(ore.amount * 0.25));
 		this.removeFromInventory('ore');
-		this.clearStorage('ore');
 	}
 
 	createInventory() {
@@ -220,16 +187,10 @@ class Inventory {
 
 	removeInventory() {
 		this.parentElement.removeChild(this.inventoryContainerElement);
+
 	}
 	appendInventory() {
 		this.parentElement.appendChild(this.inventoryContainerElement);
 	}
 
-	initialize() {
-		for(let item of this.itemsArray) {
-			if(item.amount > 0) {
-				this.addToInventory(item);
-			}
-		}
-	}
 }

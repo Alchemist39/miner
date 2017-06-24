@@ -19,16 +19,16 @@ class ShipMarket {
 			'Назад'
 		);
 
-		this.backElement.addEventListener( 'click', () => this.backToStation() );
+		this.backElement.addEventListener( 'click', () => pushUrl('/station', 'Станция') );
 
 		this.waspElement = createAndAppend(this.marketContainerElement, 'div', 'wasp', '');
-		this.waspElement.addEventListener('click', () => this.setWasp() )
+		this.waspElement.addEventListener('click', () => this.setShip('wasp') )
 
 		this.frigateElement = createAndAppend(this.marketContainerElement, 'div', 'frigate', '');
 		this.mirageElement = createAndAppend(this.marketContainerElement, 'div', 'mirage', '');
 
 		this.transportElement = createAndAppend(this.marketContainerElement, 'div', 'transport', '');
-		this.transportElement.addEventListener('click', () => this.setTruck() )
+		this.transportElement.addEventListener('click', () => this.setShip('truck') )
 
 		this.cruiserElement = createAndAppend(this.marketContainerElement, 'div', 'cruiser', '');
 		this.battleshipElement = createAndAppend(this.marketContainerElement, 'div', 'battleship', '');
@@ -107,18 +107,11 @@ class ShipMarket {
 		game.station.renderStation();
 		pushUrl('/station', 'Станция');
 	}
-	// осу устанавливаем через промисы
-	setWasp() {
-		this.ajaxSetShip('wasp');
+	setShip(shipType) {
+		this.ajaxSetShip(shipType);
 		httpGet('/app/currentShip/')
-			.then(shipType => player.equipShip(ships[shipType]));
-	}
-	// трак устанавливаем через коллбек
-	setTruck() {
-		this.ajaxSetShip('truck');
-		ajaxGetShip(function(ship) {
-			player.equipShip(ships[ship]);
-		});
+			.then(shipType => player.equipShip(ships[shipType]))
+			.then(this.backToStation);
 	}
 	// при установке корабля записываем новое значение активного корабля
 	ajaxSetShip(params) {
