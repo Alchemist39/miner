@@ -5,10 +5,11 @@ let cargoID = 0;
 class Cargoholder {
 	constructor(shipCargoHolder) {
 		this.shipCargoHolder = shipCargoHolder;
-		this.currentCargo = this.getOre();
+		this.currentCargo = null;
 
 		this.id = cargoID++;
 		this.renderCargo();
+		this.saveOreInterval = null;
 	}
 	renderCargo() {
 		this.holdElement = createDiv(
@@ -17,7 +18,7 @@ class Cargoholder {
 			<div class="holdText">Загруженность трюма</div>
 			<div class="holdBorder">
 				<div class="holdBar"></div>
-				<div class="holdStatus"> ${this.getOre()} / ${this.shipCargoHolder}</div>
+				<div class="holdStatus"> ${this.currentCargo} / ${this.shipCargoHolder}</div>
 			</div>
 			`
 		);
@@ -26,36 +27,25 @@ class Cargoholder {
 		this.currentCargoElement = this.holdElement.querySelector('.holdStatus');
 		this.displayCargoVolume();
 	}
-
 	// добавляем руду в трюм
 	// создаем переменную отражающую новое значение содержимого трюма
 	// если в трюме есть место И новое значение содержимого трюма не превышает размер трюма
 	// добавляем к содержимому трюма количество руды
 	// если новое значение превышает вместимость трюма, то трюм заполняется на 100% без излишка
 	addOre(value) {
-		var newCargoValue = this.getOre() + value;
-		if(this.getOre() < this.shipCargoHolder && newCargoValue <= this.shipCargoHolder) {
+		var newCargoValue = this.currentCargo + value;
+		if(this.currentCargo < this.shipCargoHolder && newCargoValue <= this.shipCargoHolder) {
 			this.currentCargo += value;
 			this.displayCargoVolume();
-			this.setOre(this.currentCargo);
 		} else if(this.currentCargo < this.shipCargoHolder && newCargoValue > this.shipCargoHolder) {
 			this.currentCargo = this.shipCargoHolder;
 			this.displayCargoVolume();
-			this.setOre(this.currentCargo);
 		}
-	}
-	setOre(amount) {
-		localStorage.setItem('ore' + ' ' + localStorage.getItem('activeShip'), amount);
-	}
-	getOre() {
-		let shipCargo = 'ore' + ' ' + localStorage.getItem('activeShip');
-		return parseInt(localStorage.getItem(shipCargo)) || 0;
 	}
 	removeOre() {
 		miningPage.addOreToCourierCargo(this.currentCargo);
 		this.currentCargo = 0;
 		this.displayCargoVolume();
-		this.setOre(this.currentCargo);
 	}
 
 	changeCargoBar() {

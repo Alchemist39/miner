@@ -62,9 +62,6 @@ class Ship{
 		}
 		this.multiplier = 0;
 	}
-	getActiveShip() {
-		ajaxGetShip(function(){});
-	}
 	// нанесение урона при удерживании кнопки мыши
 	hitTunnelDamage() {
 		// используем хелпер дебаунс, чтобы отложить выполнение действия 

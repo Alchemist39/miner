@@ -22,13 +22,13 @@ class ShipMarket {
 		this.backElement.addEventListener( 'click', () => pushUrl('/station', 'Станция') );
 
 		this.waspElement = createAndAppend(this.marketContainerElement, 'div', 'wasp', '');
-		this.waspElement.addEventListener('click', () => this.setShip('wasp') )
+		this.waspElement.addEventListener('click', () => this.setShip('wasp') );
 
 		this.frigateElement = createAndAppend(this.marketContainerElement, 'div', 'frigate', '');
 		this.mirageElement = createAndAppend(this.marketContainerElement, 'div', 'mirage', '');
 
 		this.transportElement = createAndAppend(this.marketContainerElement, 'div', 'transport', '');
-		this.transportElement.addEventListener('click', () => this.setShip('truck') )
+		this.transportElement.addEventListener('click', () => this.setShip('truck') );
 
 		this.cruiserElement = createAndAppend(this.marketContainerElement, 'div', 'cruiser', '');
 		this.battleshipElement = createAndAppend(this.marketContainerElement, 'div', 'battleship', '');
@@ -108,19 +108,12 @@ class ShipMarket {
 		pushUrl('/station', 'Станция');
 	}
 	setShip(shipType) {
-		this.ajaxSetShip(shipType);
-		httpGet('/app/currentShip/')
-			.then( ship =>	player.equipShip(ships[ship.shipType]))
-			.then(this.backToStation);
-
+		player.equipShip(ships[shipType]);
+		player.saveAll();
+		pushUrl('/station', 'Станция');
+		game.station.renderStation();
 	}
-	// при установке корабля записываем новое значение активного корабля
-	ajaxSetShip(params) {
-		var request = new XMLHttpRequest();
 
-		request.open('POST', '/app/equipShip/' + params);
-		request.send(params);
-	}
 	show() {
 		document.querySelector('.container').appendChild(this.shipmarketElement);	
 	}

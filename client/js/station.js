@@ -53,45 +53,10 @@ class Station {
 		// очистка
 		this.refineElement.addEventListener( 'click', () => this.inventory.runRefining() );
 
-		// инвентарь
 		this.inventory = new Inventory(this.stationElement.querySelector('.hungarContainer'));
+		//this.inventory.appendInventory(this.stationElement.querySelector('.hungarContainer'));
 
-		this.upgradeLasersElement = this.stationElement.querySelector('.cruiser');
-		this.upgradeTargetQuantityElement = this.stationElement.querySelector('.carrier');
-		this.upgradeScaningSpeedElement = this.stationElement.querySelector('.truck');
 		this.show();
-	}
-/*
-	upgradeScaningSpeed1() {
-		if(player.ship.scanRate == 15) {
-			return;
-		}
-		player.ship.scanRate = 15;
-		console.log('Скорость сканеров увеличена до 15');
-		localStorage.setItem('scanRate', 15);
-	}
-	upgradeTargetQuantity1() {
-		if(player.ship.targetQuantity == 15) {
-			return;
-		}
-		player.ship.targetQuantity = 15;
-		console.log('Количество целей увеличено до 15');
-		localStorage.setItem('targetQuantity', 15);
-	}
-	upgradeLasers1() {
-		if(player.ship.laserPower == 2 && miningPage.overheatAvailable == false) {
-			return;
-		}
-		player.ship.laserPower = 2;
-		console.log('Лазеры усилены до 2');
-		localStorage.setItem('lasers', 2);
-	}*/
-
-	ajaxRemove() {
-		var request = new XMLHttpRequest();
-
-		request.open('POST', '/app/removeOre');
-		request.send();
 	}
 	sell() {
 		//wallet.addMoney(this.inventory.getFromStorage('ore'));

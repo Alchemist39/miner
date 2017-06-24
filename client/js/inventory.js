@@ -31,19 +31,6 @@ class Inventory {
 
 		this.createInventory();
 	}
-
-	moveToStorage(item, count) {
-		let fillerValue = this.getFromStorage(item);
-		fillerValue += count;
-		localStorage.setItem(item + 'AtStorage', fillerValue);
-	}
-	getFromStorage(item) {
-		return parseInt( localStorage.getItem(item + 'AtStorage') ) || 0;
-	}
-	clearStorage(item) {
-		localStorage.removeItem(item + 'AtStorage');
-	}
-
 	addToInventory(item) {
 		let key = this.itemToContainers[item.name];
 		if(key !== undefined) {

@@ -57,6 +57,25 @@ app.post('/save', function(req, res) {
 	});
 });
 
+app.post('/save/ore', function(req, res) {
+	console.log(req.body);
+	let data = req.body;
+
+	MongoClient.connect(url, function(err, db) {
+		db.collection('player').update({
+			name: 'Andrey'
+		}, {
+			$set: data
+		}, {
+			upsert: true
+		}, function() {
+			res.json({
+				status: 'ok'
+			})
+		});
+	});
+});
+
 app.get('/load', function(req, res) {
 
 	MongoClient.connect(url, function(err, db) {

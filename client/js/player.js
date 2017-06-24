@@ -6,7 +6,8 @@ class Player {
 		this.name = playerName;
 
 		this.ship = null;
-
+		this.saveInterval = null;
+	//	setInterval( () => this.saveAll(), 5000);
 	}
 	equipShip(ship) {
 		this.ship = ship;
@@ -28,6 +29,7 @@ class Player {
 				cargo: this.ship.cargo.currentCargo
 			}
 		}
+
 		httpPOST('/save', save)
 			.then( () => console.log('Сохранено') );
 	}

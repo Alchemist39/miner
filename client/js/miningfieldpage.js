@@ -20,7 +20,6 @@ class MiningfieldPage {
 		this.courierStatus = true;
 		this.flyAvailable = true;
 		this.overheatAvailable = true;
-		this.oreStorage = game.station.inventory.getFromStorage('ore') || 0;
 		//все созданные поля хранятся в массиве
 		this.miningFields = {};
 
