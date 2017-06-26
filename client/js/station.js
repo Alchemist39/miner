@@ -26,13 +26,22 @@ class Station {
 		`);
 		this.renderStation();
 		// див станции
-	
+		
+		this.inventory = new Inventory(this.stationElement.querySelector('.hungarContainer'));
 	} 
 	renderStation() {
-		clear();
+		//clear();
+		if(document.body.querySelector('.station')) {
+			this.hideStation();
+		}
 		this.stationElement = createDiv('station', this.template({
 			ship: player.ship.getShipInHungarHTML()
 		}));	
+		if(this.inventory) {
+			this.inventory.appendInventory(this.stationElement.querySelector('.hungarContainer'));
+		}
+
+
 		this.sellElement = this.stationElement.querySelector('.sellMarket');
 		this.marketElement = this.stationElement.querySelector('.shipsMarket');
 		this.moduleMarket = this.stationElement.querySelector('.weaponsMarket');
@@ -53,8 +62,6 @@ class Station {
 		// очистка
 		this.refineElement.addEventListener( 'click', () => this.inventory.runRefining() );
 
-		this.inventory = new Inventory(this.stationElement.querySelector('.hungarContainer'));
-		//this.inventory.appendInventory(this.stationElement.querySelector('.hungarContainer'));
 
 		this.show();
 	}

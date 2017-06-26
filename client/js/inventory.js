@@ -44,8 +44,9 @@ class Inventory {
 		if(this.containers[key].amount <= 0) {
 			this.removeFromInventory(name);
 		}
-
 		this.reloadInventory();	
+		
+		
 	}
 	// удаляем из ячейки предмет с именем item
 	removeFromInventory(itemName) {
@@ -82,9 +83,7 @@ class Inventory {
 	createInventory() {
 		let self = this;
 
-		this.inventoryContainerElement = createAndAppend(
-			this.parentElement,
-			'div', 
+		this.inventoryContainerElement = createDiv(
 			'inventoryContainer',
 			// в темплейт передаем объект со свойством контейнерс, который равен нашему массиву
 			this.template({containers: this.containers})
@@ -147,6 +146,7 @@ class Inventory {
 				}
 			});
 		}
+		this.appendInventory(this.parentElement);
 	}
 
 	inventoryAppear() {
@@ -170,10 +170,11 @@ class Inventory {
 
 	removeInventory() {
 		this.parentElement.removeChild(this.inventoryContainerElement);
-
 	}
-	appendInventory() {
-		this.parentElement.appendChild(this.inventoryContainerElement);
+	appendInventory(element) {
+		if(element) {
+			element.appendChild(this.inventoryContainerElement);
+		}
 	}
 
 }
