@@ -3,8 +3,7 @@ console.log('inventory');
 var inventoryId = 1;
 
 class Inventory {
-	constructor(parentElement, slotCount = 48) {
-		this.parentElement = parentElement;
+	constructor(slotCount = 48) {
 		this.slotCount = slotCount;
 		this.id = inventoryId++;
 		this.inventoryHidden = true;
@@ -20,13 +19,15 @@ class Inventory {
 		// массив контейнеров, каждый контейнер
 		// в класс передаем свойство объекта из массива
 		this.template = Handlebars.compile(`
-			{{#each containers as |container slot|}}
-				<div class="inventorySlot">
-					{{#if container}}
-						{{{container.html}}}
-					{{/if}}
-				</div>
-			{{/each}}
+			<div class="inventoryContainer">
+				{{#each containers as |container slot|}}
+					<div class="inventorySlot">
+						{{#if container}}
+							{{{container.html}}}
+						{{/if}}
+					</div>
+				{{/each}}
+			</div>
 		`);
 
 		this.createInventory();
@@ -44,9 +45,12 @@ class Inventory {
 		if(this.containers[key].amount <= 0) {
 			this.removeFromInventory(name);
 		}
-		this.reloadInventory();	
-		
-		
+		this.reload();
+	}
+	html() {
+		return this.template({
+			containers: this.containers
+		});
 	}
 	// удаляем из ячейки предмет с именем item
 	removeFromInventory(itemName) {
@@ -56,7 +60,7 @@ class Inventory {
 		this.containers[this.itemToContainers[itemName]] = null;
 		delete this.itemToContainers[itemName];
 
-		this.reloadInventory();
+		this.reload();
 	}
 	// функция возвращает номер ячейки
 	findEmptySlot() {
@@ -81,22 +85,14 @@ class Inventory {
 	}
 
 	createInventory() {
-		let self = this;
 
-		this.inventoryContainerElement = createDiv(
-			'inventoryContainer',
-			// в темплейт передаем объект со свойством контейнерс, который равен нашему массиву
-			this.template({containers: this.containers})
-		);
-		this.inventoryContainerElement.setAttribute('id', this.id);
-		this.inventorySlots = this.inventoryContainerElement.querySelectorAll('.inventorySlot');
-		this.filledInventorySlots = this.inventoryContainerElement.querySelectorAll('.inventorySlot div');
+		let self = this;
 
 		// создаем переменную, в которую в дальнейшем передаем отправную точку (див) для драга
 		var dragged;
 		// slots = массив дивов в инвентаре
 		// обходим массив, при драгстарте создаем объект с трансферной информацией
-		var innerSlots = this.inventoryContainerElement.querySelectorAll('.inventorySlot div');
+		var innerSlots = document.body.querySelectorAll('.inventorySlot div');
 		for(let slot of innerSlots) {
 			slot.addEventListener('dragstart', function(e) {
 				// сохраняем исходную точку (див) в ранее созданную вне функций переменную
@@ -112,7 +108,7 @@ class Inventory {
 		// при дропе отлавливаем событие
 
 		// если конечная ячейка содержит какой-то предмет
-		var slots = this.inventoryContainerElement.querySelectorAll('.inventorySlot');
+		var slots = document.body.querySelectorAll('.inventorySlot');
 		for(let slot of slots) {
 			slot.addEventListener('dragover', function(e) {
 				e.preventDefault();
@@ -146,35 +142,23 @@ class Inventory {
 				}
 			});
 		}
-		this.appendInventory(this.parentElement);
 	}
 
 	inventoryAppear() {
 		if (this.inventoryHidden) {
-			this.inventoryContainerElement.style.left = '0%';
+			document.body.querySelector('.inventoryContainer').style.left = '0%';
 			this.inventoryHidden = false;
 		} else {
-			this.inventoryContainerElement.style.left = '-100%';
+			document.body.querySelector('.inventoryContainer').style.left = '-100%';
 			this.inventoryHidden = true;
 		}
 	}
-	reloadInventory() {
-		this.removeInventory();
-		this.createInventory();
+	reload() {
+		game.station.renderStation();
 		if (!this.inventoryHidden) {
-			this.inventoryContainerElement.style.left = '0%';
+			document.body.querySelector('.inventoryContainer').style.left = '0%';
 		} else {
-			this.inventoryContainerElement.style.left = '-100%';
+			document.body.querySelector('.inventoryContainer').style.left = '-100%';
 		}
 	}
-
-	removeInventory() {
-		this.parentElement.removeChild(this.inventoryContainerElement);
-	}
-	appendInventory(element) {
-		if(element) {
-			element.appendChild(this.inventoryContainerElement);
-		}
-	}
-
 }

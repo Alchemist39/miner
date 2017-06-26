@@ -84,7 +84,7 @@ class Ship{
 	getShipInFieldHTML() {
 		return this.template({
 			type: this.type
-		})
+		});
 	}
 	getShipInHungarHTML() {
 		return this.shipInHungarTemplate({

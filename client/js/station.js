@@ -3,7 +3,6 @@
 console.log('station');
 class Station {
 	constructor() {
-
 		this.map = null;
 		this.shipmarket = null;
 
@@ -22,25 +21,22 @@ class Station {
 				<div class="stationName">Станция: Земляне люминатые</div>
 				{{{ship}}}
 				<div class="upgrades"></div>
+				{{{inventory}}}
 			</div>
 		`);
+		this.inventory = new Inventory();
 		this.renderStation();
 		// див станции
 		
-		this.inventory = new Inventory(this.stationElement.querySelector('.hungarContainer'));
 	} 
 	renderStation() {
-		//clear();
 		if(document.body.querySelector('.station')) {
 			this.hideStation();
 		}
 		this.stationElement = createDiv('station', this.template({
-			ship: player.ship.getShipInHungarHTML()
-		}));	
-		if(this.inventory) {
-			this.inventory.appendInventory(this.stationElement.querySelector('.hungarContainer'));
-		}
-
+			ship: player.ship.getShipInHungarHTML(),
+			inventory: this.inventory.html()
+		}));
 
 		this.sellElement = this.stationElement.querySelector('.sellMarket');
 		this.marketElement = this.stationElement.querySelector('.shipsMarket');
@@ -54,7 +50,7 @@ class Station {
 		// показать модули
 		this.moduleMarket.addEventListener( 'click', () => this.showModules() );
 		// кнопка продажи
-		this.sellElement.addEventListener( 'click', () => this.sell() );
+		//this.sellElement.addEventListener();
 		// кнопка карты
 		this.starMapElement.addEventListener( 'click', () => this.map.show() );
 		// открыть инвентарь
@@ -62,15 +58,7 @@ class Station {
 		// очистка
 		this.refineElement.addEventListener( 'click', () => this.inventory.runRefining() );
 
-
 		this.show();
-	}
-	sell() {
-		//wallet.addMoney(this.inventory.getFromStorage('ore'));
-		this.ajaxRemove(0);
-		this.inventory.clearStorage('ore');
-		this.inventory.removeFromInventory('ore');
-		this.inventory.inventoryContainerElement.style.left = '0%';
 	}
 	showModules() {
 		this.hideStation();
