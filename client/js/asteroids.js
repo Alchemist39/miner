@@ -47,6 +47,7 @@ class Asteroid {
 	mineAsteroid(power) {
 		var newVolume = this.currentVolume - power
 		this.setHpVisible();
+		player.ship.drawCanvas(this.coordinates.x, this.coordinates.y);
 		if(this.currentVolume > 1 && newVolume > 0) {
 			this.currentVolume -= power;
 			player.ship.cargo.addOre(power);

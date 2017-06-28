@@ -6,7 +6,7 @@ html,body{margin:0;padding:0}.controllPanel{width:20%;display:flex;flex-directio
 .stationButton{left:40%;top:30%;width:40px;height:40px;border-radius:23px;background-image:url('/images/artefacts.png')}
 .field_342{left:80%;top:50%;width:68px;height:68px;border-radius:34px;background-image:url('/images/asteroid2.png')}
 .miningField{width:100%;height:100%;display:flex;background-image:url('/images/fleet.jpg');z-index:1}
-.miningField>.battleField{width:80%;display:flex;flex-direction:column;height:100%;justify-content:center;align-items:center;font-size:1vmax}
+#laserLine{width:100%;height:100%}.miningField>.battleField{width:80%;display:flex;flex-direction:column;height:100%;justify-content:center;align-items:center;font-size:1vmax}
 .miningField>.battleField>.locationName{display:flex;margin:0;width:40%;height:40px;justify-content:center;align-items:center;color:white}
 .miningField>.battleField>.arrowblock{display:flex;color:white;cursor:pointer}.arrowblock a{color:white;text-decoration:none}
 .miningField>.battleField>.localStatus{color:green}.miningField>.battleField>.mainField{height:73%;width:100%;position:relative}

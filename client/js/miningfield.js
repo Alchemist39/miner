@@ -23,7 +23,10 @@ class Miningfield {
 				{{/if}}
 			</div> 
 			<div class="localStatus">Безопасный сектор</div>
-			<div class="mainField">{{{ship}}}</div>
+			<div class="mainField" onselectstart="return false">
+				{{{ship}}}
+				<canvas id="laserLine" width="100%" height="100%"></canvas>
+			</div>
 		`);
 
 		//обходим массив астероидов
@@ -38,7 +41,6 @@ class Miningfield {
 
 		this.renderMiningField();
 	}
-	
 	renderMiningField() {
 		clear();
 		this.battleFieldElement = createDiv('battleField', this.template({

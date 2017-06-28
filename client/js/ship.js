@@ -23,6 +23,7 @@ class Ship{
 		this.mineInterval = null;
 		this.target = null;
 
+
 		this.isOverheatAvailable = true;
 		
 		this.template = Handlebars.compile(`
@@ -54,7 +55,7 @@ class Ship{
 				<div class="weaponPlace2"></div>
 			</div>
 		`);
-		this.hitTunnelDamage();
+		this.decreaseMultiplier();
 	}
 	turnOffLasers() {
 		if(this.multiplier == 0) {
@@ -62,8 +63,8 @@ class Ship{
 		}
 		this.multiplier = 0;
 	}
-	// нанесение урона при удерживании кнопки мыши
-	hitTunnelDamage() {
+	// обнуление мультиплкатора при простое
+	decreaseMultiplier() {
 		// используем хелпер дебаунс, чтобы отложить выполнение действия 
 		// и обновить таймер, если функция повторно вызывается
 		this.multiplierReduction = debounce(function() {
@@ -118,6 +119,26 @@ class Ship{
 		} else {
 			return this.maxCharge;
 		}
+	}
+	// отрисовка лазера
+	drawCanvas(x, y) {
+		// стартовые координаты (корабль)
+		let shipX = 50;
+		let shipY = 60;
+		// корректировка координат цели
+		let targetX = x + 2;
+		let targetY = y + 5;
+		this.canvas = document.getElementById('laserLine');
+		this.ctx = this.canvas.getContext('2d');
+		this.ctx.strokeStyle = "red";
+		//сама отрисовка
+		this.ctx.beginPath(); 
+		this.ctx.moveTo(shipX, shipY);
+		this.ctx.lineTo(targetX, targetY);
+		this.ctx.stroke();
+		// удаление линии лазера
+		setTimeout( () => this.ctx.clearRect(0, 0, 100, 100) , 50);
+
 	}
 	// функция непрерывной добычи руды при зажатии кнопки мыши
 	// если есть цель запускается таймер

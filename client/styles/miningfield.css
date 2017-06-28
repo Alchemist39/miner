@@ -5,6 +5,10 @@
 	background-image: url('/images/fleet.jpg');
 	z-index: 1;
 }
+	#laserLine {
+		width: 100%;
+		height: 100%;
+	}
 
 	.miningField > .battleField {
 		width: 80%;
