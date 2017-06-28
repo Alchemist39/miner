@@ -1,5 +1,25 @@
 'use strict';
 
+
+class MinedOre {
+	constructor(x, y) {
+		this.targetX = x + 1;
+		this.targetY = y - 25;
+		this.parentElement = document.body.querySelector('.mainField');
+		this.element = createDiv('oreDiv');	
+		this.element.style.left = this.targetX + '%';
+		this.element.style.top = this.targetY + '%';
+		this.element.innerHTML = Math.round(player.ship.laserPower + player.ship.multiplier);
+		this.parentElement.appendChild(this.element);
+		this.runDuration();
+	}
+	runDuration() {
+		setTimeout(function() {
+			this.parentElement.removeChild(this.element);
+		}.bind(this), 1000);
+	}
+}
+
 let asteroidID = 0;
 console.log('asteroids');
 class Asteroid {
@@ -49,6 +69,7 @@ class Asteroid {
 		this.setHpVisible();
 		player.ship.drawCanvas(this.coordinates.x, this.coordinates.y);
 		if(this.currentVolume > 1 && newVolume > 0) {
+			new MinedOre(this.coordinates.x, this.coordinates.y);
 			this.currentVolume -= power;
 			player.ship.cargo.addOre(power);
 			// TODO ретурн power||currentVolume

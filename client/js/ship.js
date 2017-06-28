@@ -122,23 +122,27 @@ class Ship{
 	}
 	// отрисовка лазера
 	drawCanvas(x, y) {
-		// стартовые координаты (корабль)
-		let shipX = 50;
-		let shipY = 60;
-		// корректировка координат цели
-		let targetX = x + 2;
-		let targetY = y + 5;
 		this.canvas = document.getElementById('laserLine');
+		this.width = this.canvas.clientWidth;
+		this.height = this.canvas.clientHeight;
+
+		// стартовые координаты (корабль)
+		let shipX = (50 * this.width) / 100;
+		let shipY = (60 * this.height) / 100;
+		// корректировка координат цели
+		let targetX = ((x * this.width) / 100) + 25;
+		let targetY = ((y * this.height) / 100) + 25;
+
 		this.ctx = this.canvas.getContext('2d');
 		this.ctx.strokeStyle = "red";
+		this.ctx.lineWidth = 2;
 		//сама отрисовка
 		this.ctx.beginPath(); 
 		this.ctx.moveTo(shipX, shipY);
 		this.ctx.lineTo(targetX, targetY);
 		this.ctx.stroke();
 		// удаление линии лазера
-		setTimeout( () => this.ctx.clearRect(0, 0, 100, 100) , 50);
-
+		setTimeout( () => this.ctx.clearRect(0, 0, this.width, this.height) , 50);
 	}
 	// функция непрерывной добычи руды при зажатии кнопки мыши
 	// если есть цель запускается таймер
@@ -180,65 +184,4 @@ class Ship{
 	stopMining() {
 		clearInterval(this.mineInterval);
 	}
-
-/*
-	runOverheatSequence() {
-		if(!this.isOverheatAvailable) {
-			return;
-		}
-
-		this.startOverheat();
-		this.runOverheatCountdown()
-			.then( () => this.runOverheatCooldown() ) 
-			.then( () => this.endOfOverheat() );
-	}
-	startOverheat() {
-		this.overheatAvailable = false;
-		this.laserPower *= 10;
-	}
-
-	// перегрев активен
-	runOverheatCountdown() {
-		let overheatCountdown = new Timer({
-			duration: this.config.overheatDuration
-		});
-		// вызываем функцию (свойство класса) onTick, передаем в нее функцию с аргументом timer
-		// через свойство класса форматируем время; меняем текст на странице
-		overheatCountdown.onTick(function(timer) {
-			let time = timer.getFormatedLeftTime();
-			this.overheatElement.innerHTML = `
-				Перегрев<br>
-				${time.minutes}:${time.seconds}
-			`;
-		}.bind(this));
-
-		return overheatCountdown.promise;
-	}
-
-	// перегрев откатывается
-	runOverheatCooldown() {
-		// вызываем свойство promise экземпляра класса Timer, по завершении отсчета активности перегрева
-		// Начинаем новый отсчет отката перегрева с отображением отсчета на странице
-		// устанавливаем цвет текста на белый, уменьшаем мощность лазерова в 10 раз (к изначальному)
-		let overheatCooldown = new Timer({
-			duration: this.config.overheatCooldown
-		})
-		overheatCooldown.onTick(function(timer) {
-			let time = timer.getFormatedLeftTime();
-			this.overheatElement.innerHTML = `
-				Перегрев недоступен<br>
-				${time.minutes}:${time.seconds}
-			`;
-		}.bind(this));
-		this.overheatElement.style.color = 'white';
-		this.laserPower /= 10;
-
-		return overheatCooldown.promise;
-	}
-
-	setOverheatAvailable() {
-		this.overheatAvailable = true;
-	}
-*/
-
 }

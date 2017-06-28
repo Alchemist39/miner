@@ -25,7 +25,6 @@ class Miningfield {
 			<div class="localStatus">Безопасный сектор</div>
 			<div class="mainField" onselectstart="return false">
 				{{{ship}}}
-				<canvas id="laserLine" width="100%" height="100%"></canvas>
 			</div>
 		`);
 
@@ -41,6 +40,18 @@ class Miningfield {
 
 		this.renderMiningField();
 	}
+	renderCanvas(parent) {
+		if(this.canv) {
+			parent.removeChild(this.canv)
+		}
+		this.canv = createAndAppend(
+			parent,
+			'div',
+			'laserLine',
+			`
+			<canvas id="laserLine" width="${parent.clientWidth}" height="${parent.clientHeight}"></canvas>
+		`);
+	}
 	renderMiningField() {
 		clear();
 		this.battleFieldElement = createDiv('battleField', this.template({
@@ -51,9 +62,8 @@ class Miningfield {
 			ship: player.ship.getShipInFieldHTML()
 		}));
 		this.mainFieldElement = this.battleFieldElement.querySelector('.mainField');
-
+		setTimeout( () => this.renderCanvas(this.mainFieldElement), 0);
 		this.showAsteroids();
-
 		this.displayPage();
 	}
 
