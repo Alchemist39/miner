@@ -26,6 +26,7 @@ class Miningfield {
 			<div class="mainField" onselectstart="return false">
 				{{{ship}}}
 			</div>
+			{{{cargo}}}
 		`);
 
 		//обходим массив астероидов
@@ -41,9 +42,6 @@ class Miningfield {
 		this.renderMiningField();
 	}
 	renderCanvas(parent) {
-		if(this.canv) {
-			parent.removeChild(this.canv)
-		}
 		this.canv = createAndAppend(
 			parent,
 			'div',
@@ -59,10 +57,11 @@ class Miningfield {
 			//создаем свойства-ограничители для отображения/скрытия ссылок в темплейте
 			canGoBack: this.page >= 2,
 			canGoForward: this.page < 10,
-			ship: player.ship.getShipInFieldHTML()
+			ship: player.ship.getShipInFieldHTML(),
+			cargo: player.ship.cargo.html()
 		}));
 		this.mainFieldElement = this.battleFieldElement.querySelector('.mainField');
-		setTimeout( () => this.renderCanvas(this.mainFieldElement), 0);
+		setTimeout( () => this.renderCanvas(this.mainFieldElement));
 		this.showAsteroids();
 		this.displayPage();
 	}

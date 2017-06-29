@@ -23,7 +23,6 @@ class Ship{
 		this.mineInterval = null;
 		this.target = null;
 
-
 		this.isOverheatAvailable = true;
 		
 		this.template = Handlebars.compile(`
@@ -93,11 +92,6 @@ class Ship{
 		});
 	}
 
-	show(parentElement) {
-		parentElement.appendChild(this.shipBorderElement);
-	}
-
-
 	renderChargeBar() {
 		var barSize = Math.round((this.multiplier / this.maxCharge) * 100);
 		if(document.body.querySelector('.chargeBar') && document.body.querySelector('.charge') ) {
@@ -122,27 +116,30 @@ class Ship{
 	}
 	// отрисовка лазера
 	drawCanvas(x, y) {
-		this.canvas = document.getElementById('laserLine');
-		this.width = this.canvas.clientWidth;
-		this.height = this.canvas.clientHeight;
-
+		let canvas = document.getElementById('laserLine');
+		let width = canvas.clientWidth;
+		let height = canvas.clientHeight;
+		let laserWidth = 2;
 		// стартовые координаты (корабль)
-		let shipX = (50 * this.width) / 100;
-		let shipY = (60 * this.height) / 100;
+		let shipX = (50 * width) / 100;
+		let shipY = (60 * height) / 100;
 		// корректировка координат цели
-		let targetX = ((x * this.width) / 100) + 25;
-		let targetY = ((y * this.height) / 100) + 25;
+		let targetX = ((x * width) / 100) + 25;
+		let targetY = ((y * height) / 100) + 25;
 
-		this.ctx = this.canvas.getContext('2d');
-		this.ctx.strokeStyle = "red";
-		this.ctx.lineWidth = 2;
+		let randomX = Math.random() * ((targetX + 25) - (targetX - 25)) + (targetX - 25)
+		let randomY = Math.random() * ((targetY + 10) - (targetY - 10)) + (targetY - 10)
+
+		let ctx = canvas.getContext('2d');
+		ctx.strokeStyle = "red";
+		ctx.lineWidth = laserWidth;
 		//сама отрисовка
-		this.ctx.beginPath(); 
-		this.ctx.moveTo(shipX, shipY);
-		this.ctx.lineTo(targetX, targetY);
-		this.ctx.stroke();
+		ctx.beginPath(); 
+		ctx.moveTo(shipX, shipY);
+		ctx.lineTo(randomX, randomY);
+		ctx.stroke();
 		// удаление линии лазера
-		setTimeout( () => this.ctx.clearRect(0, 0, this.width, this.height) , 50);
+		setTimeout( () => ctx.clearRect(0, 0, width, height) , 50);
 	}
 	// функция непрерывной добычи руды при зажатии кнопки мыши
 	// если есть цель запускается таймер
@@ -153,11 +150,11 @@ class Ship{
 	// в ином случае наносим уров в размере оставшихся хп, получаем руду и запускаем таймер
 	// для обнуления мультиплаера
 	startMiningLaser() {
-		if(this.target) {
+		if(this.target && this.target.currentVolume != null) {
 			this.mineInterval = setInterval(function(){
 				clearInterval(this.reductionTick);
 				this.multiplierReduction();
-				if(this.target.currentVolume > 1 && this.target.currentVolume > ((this.laserPower + this.multiplier) / 4)) {
+				if(this.target.currentVolume > ((this.laserPower + this.multiplier) / 4)) {
 					this.target.mineAsteroid((this.laserPower + this.getMultiplier()) / 4);
 					if( this.getMultiplier() < this.maxCharge) {
 						this.setMultiplier(this.laserPower / 16);

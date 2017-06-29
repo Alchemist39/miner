@@ -1,15 +1,16 @@
 'use strict';
 
-
 class MinedOre {
-	constructor(x, y) {
+	constructor(x, y, numbers) {
 		this.targetX = x + 1;
 		this.targetY = y - 25;
 		this.parentElement = document.body.querySelector('.mainField');
 		this.element = createDiv('oreDiv');	
-		this.element.style.left = this.targetX + '%';
+		//метод рандомного распределения в заданных пределах 
+		this.x = Math.random() * ((this.targetX + 5) - (this.targetX - 5)) + (this.targetX - 5);
+		this.element.style.left = this.x + '%';
 		this.element.style.top = this.targetY + '%';
-		this.element.innerHTML = Math.round(player.ship.laserPower + player.ship.multiplier);
+		this.element.innerHTML = Math.round(numbers);
 		this.parentElement.appendChild(this.element);
 		this.runDuration();
 	}
@@ -45,7 +46,7 @@ class Asteroid {
 
 		this.hpElement.style.visibility = 'hidden';
 
-		this.asteroidElement.addEventListener('click', () => this.mineAsteroid(player.ship.laserPower));
+		this.asteroidElement.addEventListener('click', () => this.mineAsteroid(player.ship.multiplier + player.ship.laserPower));
 
 		this.asteroidElement.addEventListener('mousedown', () => player.ship.setTarget(this));
 		// прослушиваем отпускание на документе, т.к. если зажатую мышь увести с астероида
@@ -69,7 +70,7 @@ class Asteroid {
 		this.setHpVisible();
 		player.ship.drawCanvas(this.coordinates.x, this.coordinates.y);
 		if(this.currentVolume > 1 && newVolume > 0) {
-			new MinedOre(this.coordinates.x, this.coordinates.y);
+			new MinedOre(this.coordinates.x, this.coordinates.y, power);
 			this.currentVolume -= power;
 			player.ship.cargo.addOre(power);
 			// TODO ретурн power||currentVolume

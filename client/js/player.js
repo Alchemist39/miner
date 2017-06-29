@@ -7,7 +7,7 @@ class Player {
 
 		this.ship = null;
 		this.saveInterval = null;
-	//	setInterval( () => this.saveAll(), 5000);
+		setInterval( () => this.saveAll(), 60000);
 	}
 	equipShip(ship) {
 		this.ship = ship;

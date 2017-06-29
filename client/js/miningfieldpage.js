@@ -199,10 +199,9 @@ class MiningfieldPage {
 		}
 
 		//присоединяем к странице поле с нужным номером из уже созданных или нового 
-		this.miningFields[pageNumber].renderMiningField();
 		this.miningFieldElement.appendChild(this.miningFields[pageNumber].battleFieldElement);
 
-		player.ship.cargo.show(this.miningFields[this.page].battleFieldElement);
+		//player.ship.cargo.show(this.miningFields[this.page].battleFieldElement);
 
 		document.querySelector('.container').appendChild(this.miningFieldElement);
 	}
