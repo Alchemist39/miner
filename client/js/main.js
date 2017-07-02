@@ -56,17 +56,18 @@ httpGet('/load')
 		window.dispatchEvent(new Event('popstate'))
 	})
 
-
-
 var stationRoute = crossroads.addRoute('/', function(){
 	clear();
 	game.station.show();
 	});
 	//переход на станцию при смене УРЛа
 var stationRoute = crossroads.addRoute('/station', function(){
-	clear();
-	game.station.show();
-	player.ship.turnOffLasers();
+	if(document.body.querySelector('.shipMarket')) {
+		insertWarpFiller(0, () => game.station.show() );
+	} else {
+		player.ship.turnOffLasers();
+		insertWarpFiller(0, () => game.station.show() );
+	}
 });
 
 var marketRoute = crossroads.addRoute('/market', function(){
@@ -76,9 +77,7 @@ var marketRoute = crossroads.addRoute('/market', function(){
 
 //передаем в фнкцию номер страницы из УРЛ
  var fieldRoute = crossroads.addRoute('/field/{page}', function(page){
-	clear();
-	//в функцию отрисовки поля передаем номер страницы из функции
-	miningPage.show(page);
+ 	insertWarpFiller(0, () => miningPage.show(page) );
 });
 //улушаем изменение УРЛа
 window.addEventListener('popstate', function() {

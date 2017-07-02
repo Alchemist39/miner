@@ -1,5 +1,50 @@
 'use strict';
+class Warpjump {
+	constructor(delay) {
+		if(delay != undefined) {
+			this.delay = delay;
+		} else {
+			this.delay = 2;
+		}
+		this.render();
+	}
+	render() {
+		clear();
+		this.element = createAndAppend(
+			document.body.querySelector('.container'),
+			'div',
+			'warp',
+			""
+		);
 
+		let warpDuration = new Timer({
+			duration: this.delay
+		});
+		// вызываем функцию (свойство класса) onTick, передаем в нее функцию с аргументом timer
+		// через свойство класса форматируем время; меняем текст на странице
+		warpDuration.onTick(function(timer) {
+			let time = timer.getFormatedLeftTime();
+			this.element.innerHTML = `
+				Перелет<br>
+				${time.minutes}:${time.seconds}
+			`;
+		}.bind(this));
+	}
+	runJump() {
+		let warpDuration = new Timer({
+			duration: this.delay
+		});
+		// вызываем функцию (свойство класса) onTick, передаем в нее функцию с аргументом timer
+		// через свойство класса форматируем время; меняем текст на странице
+		warpDuration.onTick(function(timer) {
+			let time = timer.getFormatedLeftTime();
+			this.element.innerHTML = `
+				Перелет<br>
+				${time.minutes}:${time.seconds}
+			`;
+		}.bind(this));
+	}
+}
 console.log('field');
 class Miningfield {
 	constructor(page) {

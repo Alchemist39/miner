@@ -45,6 +45,15 @@ var clear = function() {
 	document.querySelector('.container').innerHTML = '';
 };
 
+var insertWarpFiller = function(delay, func) {
+	clear();
+	let jump = new Warpjump(delay);
+	setTimeout(function() {
+		clear();
+		func();
+	}.bind(this), (jump.delay * 1000) - 1000);
+}
+
 //хелпер создания таймера обратного отсчета
 //аргументы: длительность отсчета, частота отсчета, быстрый старт
 // в аргументах длительность задаем в секундах, поэтому домножаем ее на тысячу милисекунд

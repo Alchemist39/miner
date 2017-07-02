@@ -5,6 +5,7 @@ html,body{margin:0;padding:0}.controllPanel{width:20%;display:flex;flex-directio
 .closeMap,.stationButton,.field_342{cursor:pointer;position:absolute}.closeMap{left:88%;width:12%;height:7%;display:flex;font-size:2vw;color:white;justify-content:center;background-image:url('/images/green_button.png')}
 .stationButton{left:40%;top:30%;width:40px;height:40px;border-radius:23px;background-image:url('/images/artefacts.png')}
 .field_342{left:80%;top:50%;width:68px;height:68px;border-radius:34px;background-image:url('/images/asteroid2.png')}
+.warp{width:100%;height:100%;background-image:url('/images/space.jpg');text-align:center;vertical-align:center;color:white;size:2vmax}
 .miningField{width:100%;height:100%;display:flex;background-image:url('/images/fleet.jpg');z-index:1}
 .oreDiv{position:absolute;margin-top:80px;width:35px;height:20px;color:yellow;animation:goUp 2s alternate}
 @keyframes goUp{to{margin-top:0}}.miningField>.battleField{width:80%;display:flex;flex-direction:column;height:100%;justify-content:center;align-items:center;font-size:1vmax}

@@ -19,9 +19,9 @@ class Inventory {
 		// массив контейнеров, каждый контейнер
 		// в класс передаем свойство объекта из массива
 		this.template = Handlebars.compile(`
-			<div class="inventoryContainer">
+			<div class="inventoryContainer" id="inventoryContainer-${this.id}">
 				{{#each containers as |container slot|}}
-					<div class="inventorySlot">
+					<div class="inventorySlot" draggable='true'>
 						{{#if container}}
 							{{{container.html}}}
 						{{/if}}
@@ -29,7 +29,6 @@ class Inventory {
 				{{/each}}
 			</div>
 		`);
-
 		this.createInventory();
 	}
 	addToInventory(item) {
@@ -85,16 +84,15 @@ class Inventory {
 	}
 
 	createInventory() {
-
 		let self = this;
-
 		// создаем переменную, в которую в дальнейшем передаем отправную точку (див) для драга
 		var dragged;
+		this.inventoryContainerElement = document.body.querySelector('.inventoryContainer');
 		// slots = массив дивов в инвентаре
 		// обходим массив, при драгстарте создаем объект с трансферной информацией
 		var innerSlots = document.body.querySelectorAll('.inventorySlot div');
 		for(let slot of innerSlots) {
-			slot.addEventListener('dragstart', function(e) {
+			document.body.addEventListener('dragstart', function(e) {
 				// сохраняем исходную точку (див) в ранее созданную вне функций переменную
 				// если не сохранить ее тут, то при вызове дропа e.target будет равен цели дропа
 				dragged = e.currentTarget;

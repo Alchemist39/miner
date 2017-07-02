@@ -37,3 +37,12 @@
 		border-radius: 34px;
 		background-image: url('/images/asteroid2.png');
 	}
+.warp {
+	width: 100%;
+	height: 100%;
+	background-image: url('/images/space.jpg');
+	text-align: center;
+	vertical-align: center;
+	color: white;
+	size: 2vmax;
+}

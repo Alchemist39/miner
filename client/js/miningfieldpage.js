@@ -106,8 +106,6 @@ class MiningfieldPage {
 		this.courierStatus = true;
 		game.station.inventory.addToInventory(new Ore(this.courierCargo));
 		this.removeOreFromCourierCargo();
-
-
 	}
 	ajaxPost(params) {
 		var request = new XMLHttpRequest();
