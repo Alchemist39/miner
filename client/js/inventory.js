@@ -21,7 +21,7 @@ class Inventory {
 		this.template = Handlebars.compile(`
 			<div class="inventoryContainer" id="inventoryContainer-${this.id}">
 				{{#each containers as |container slot|}}
-					<div class="inventorySlot" draggable='true'>
+					<div class="inventorySlot">
 						{{#if container}}
 							{{{container.html}}}
 						{{/if}}
@@ -84,62 +84,41 @@ class Inventory {
 	}
 
 	createInventory() {
-		let self = this;
 		// создаем переменную, в которую в дальнейшем передаем отправную точку (див) для драга
 		var dragged;
-		this.inventoryContainerElement = document.body.querySelector('.inventoryContainer');
-		// slots = массив дивов в инвентаре
-		// обходим массив, при драгстарте создаем объект с трансферной информацией
-		var innerSlots = document.body.querySelectorAll('.inventorySlot div');
-		for(let slot of innerSlots) {
-			document.body.addEventListener('dragstart', function(e) {
-				// сохраняем исходную точку (див) в ранее созданную вне функций переменную
-				// если не сохранить ее тут, то при вызове дропа e.target будет равен цели дропа
-				dragged = e.currentTarget;
-				// сохраняем Id текущего инвентаря в дататрансфер
-				e.dataTransfer.setData("inventoryId", this.inventoryContainerElement.id);
-			}.bind(this));
-		}
-		// создаем массив, который хранит все родительские дивы слотов
-		// обходим массив, предотвращаем действия по умолчанию
 
-		// при дропе отлавливаем событие
+		document.body.addEventListener('dragstart', function(e) {
+			if(e.target.parentNode.parentNode.getAttribute('id') != ('inventoryContainer-' + this.id) ||
+				e.target.parentNode.parentNode.getAttribute('id') == null) {
+				dragged = null;
+				return;
+			} else {
+				dragged = e.target;
+			}
+		}.bind(this));
+		
+		document.body.addEventListener('dragover', function(e) {
+			e.preventDefault();
+		}.bind(this));
 
-		// если конечная ячейка содержит какой-то предмет
-		var slots = document.body.querySelectorAll('.inventorySlot');
-		for(let slot of slots) {
-			slot.addEventListener('dragover', function(e) {
-				e.preventDefault();
-			});
-
-			slot.addEventListener('drop', function(e) {
-				// получаем Id инвентаря из которого перемещаем предмет
-				// сравниваем Id исходного инвентаря и Id конечного инвентаря
-				// если они не совпадают, то перенос не происходит
-				var inventoryID = e.dataTransfer.getData("inventoryId");
-				if(inventoryID != self.inventoryContainerElement.id) {
-					return;
-				}
-				e.preventDefault();
-				// родитель элемента в исходной точке
-				var draggedParent = dragged.parentNode;
-				// див, уже находящийся в точке назначения
-				var destinationContent = e.currentTarget.firstElementChild;
-				// если конечная ячейка пустая, 
-				// то отцепляем див от исходной ячейки 
-				// и цепляем к конечной ячейке
-				if(e.currentTarget.childElementCount == 0) {
-					draggedParent.removeChild(dragged);
-					e.target.appendChild(dragged);
-				} else if(e.currentTarget.childElementCount == 1) {
-					// в точке назначения заменяем новым (dragged) дивом старый (dest.Cont) див.
-					e.currentTarget.replaceChild(dragged, destinationContent);
-					// в исходной точке, а точнее к родителю элемента в исходной точке 
-					// аппендим старый див (который был в точке назначения до замены)
-					draggedParent.appendChild(destinationContent);
-				}
-			});
-		}
+		document.body.addEventListener('drop', function(e) {
+			e.preventDefault();
+			if(e.target.parentNode.getAttribute('id') != ('inventoryContainer-' + this.id) ) {
+				return;
+			}
+			var draggedParent = dragged.parentNode;
+			var destinationContent = e.target.childNodes[0];
+			
+			if(e.target.childElementCount == 0) {
+				draggedParent.removeChild(dragged);
+				e.target.appendChild(dragged);
+				dragged = null;
+			} else {
+				e.target.replaceChild(dragged, destinationContent);
+				draggedParent.appendChild(destinationContent);
+				dragged = null;
+			}
+		}.bind(this));
 	}
 
 	inventoryAppear() {

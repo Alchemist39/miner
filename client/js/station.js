@@ -26,8 +26,6 @@ class Station {
 		`);
 		this.inventory = new Inventory();
 		this.renderStation();
-		// див станции
-		
 	} 
 	renderStation() {
 		if(document.body.querySelector('.station')) {
